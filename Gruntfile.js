@@ -19,28 +19,31 @@ module.exports = function(grunt) {
         copy: {
           dev: {
             files: [
-              {src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/phaser.js'},
+              {src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/js/phaser.js'},
               {src: 'src/index-dev.html', dest: 'public/index.html'},
-              {src: 'src/css/style.css', dest: 'public/style.css'}
+              {src: 'src/css/style.css', dest: 'public/css/style.css'}
             ]
           },
           prod: {
             files: [
-              {src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/phaser.min.js'},
+              {src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/js/phaser.min.js'},
               {src: 'src/index-prod.html', dest: 'public/index.html'}
             ]
+          },
+          assets: {
+            files: [{expand: true, src: ['assets/*'], dest: 'public/'}]
           }
         },
         concat: {
           src: {
             src: jsSources,
-            dest: 'public/bundle.js'
+            dest: 'public/js/bundle.js'
           }
         },
         uglify: {
           compile: {
             src: jsSources,
-            dest: 'public/bundle.min.js'
+            dest: 'public/js/bundle.min.js'
           }
         },
         cssmin: {
@@ -49,7 +52,7 @@ module.exports = function(grunt) {
               expand: true,
               cwd: 'src/css',
               src: ['*.css'],
-              dest: 'public',
+              dest: 'public/css',
               ext: '.min.css'
             }]
           }
@@ -63,9 +66,9 @@ module.exports = function(grunt) {
       });
     
       // Tasks definition
-      grunt.registerTask('default', ['dev', 'watch']);
-      grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev']);
-      grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin']);
+      grunt.registerTask('default', ['dev']);
+      grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets']);
+      grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
     
       grunt.registerTask('scripts:dev', ['concat:src']);
       grunt.registerTask('scripts:prod', ['uglify:compile']);
