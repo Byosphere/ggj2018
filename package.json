@@ -1,0 +1,30 @@
+{
+  "name": "ggj2018",
+  "version": "0.0.1",
+  "description": "Our video-game for the 2018 edition of the global game jam",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/campignon/ggj2018.git"
+  },
+  "keywords": [
+    "video-game",
+    "game",
+    "javascript",
+    "global",
+    "game",
+    "jam"
+  ],
+  "author": "cpignon, ycaillon, jpicard, epiquet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/campignon/ggj2018/issues"
+  },
+  "homepage": "https://github.com/campignon/ggj2018#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
