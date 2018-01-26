@@ -10,6 +10,7 @@ module.exports = function(grunt) {
       grunt.loadNpmTasks('grunt-contrib-copy');
       grunt.loadNpmTasks('grunt-contrib-concat');
       grunt.loadNpmTasks('grunt-contrib-uglify');
+      grunt.loadNpmTasks('grunt-contrib-cssmin');
       grunt.loadNpmTasks('grunt-contrib-watch');
     
       // Grunt configuration
@@ -18,14 +19,15 @@ module.exports = function(grunt) {
         copy: {
           dev: {
             files: [
+              {src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/phaser.js'},
               {src: 'src/index-dev.html', dest: 'public/index.html'},
-              {src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/phaser.js'}
+              {src: 'src/css/style.css', dest: 'public/style.css'}
             ]
           },
           prod: {
             files: [
-              {src: 'src/index-prod.html', dest: 'public/index.html'},
-              {src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/phaser.min.js'}
+              {src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/phaser.min.js'},
+              {src: 'src/index-prod.html', dest: 'public/index.html'}
             ]
           }
         },
@@ -41,6 +43,17 @@ module.exports = function(grunt) {
             dest: 'public/bundle.min.js'
           }
         },
+        cssmin: {
+          target: {
+            files: [{
+              expand: true,
+              cwd: 'src/css',
+              src: ['*.css'],
+              dest: 'public',
+              ext: '.min.css'
+            }]
+          }
+        },
         watch: {
           scripts: {
             files: 'src/js/*.js',
@@ -52,9 +65,9 @@ module.exports = function(grunt) {
       // Tasks definition
       grunt.registerTask('default', ['dev', 'watch']);
       grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev']);
-      grunt.registerTask('dist', ['clean', 'copy:prod', 'scripts:dist']);
+      grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin']);
     
-      grunt.registerTask('scripts:dev', ['concat:src'])
-      grunt.registerTask('scripts:dist', ['uglify:compile'])
+      grunt.registerTask('scripts:dev', ['concat:src']);
+      grunt.registerTask('scripts:prod', ['uglify:compile']);
     
     };

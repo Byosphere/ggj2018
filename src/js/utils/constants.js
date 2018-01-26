@@ -1,2 +1,2 @@
 /* Place the game constants here */
-const BACKGROUND_COLOR = '#c49de0';
+const BACKGROUND_COLOR = '#ff0000';
