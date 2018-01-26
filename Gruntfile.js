@@ -18,12 +18,14 @@ module.exports = function(grunt) {
         copy: {
           dev: {
             files: [
-              {src: 'src/index-dev.html', dest: 'public/index.html'}
+              {src: 'src/index-dev.html', dest: 'public/index.html'},
+              {src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/phaser.js'}
             ]
           },
           prod: {
             files: [
-              {src: 'src/index-prod.html', dest: 'public/index.html'}
+              {src: 'src/index-prod.html', dest: 'public/index.html'},
+              {src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/phaser.min.js'}
             ]
           }
         },
