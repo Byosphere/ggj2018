@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Game</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="This is a description">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+        <script type="text/javascript" src="./../node_modules/phaser-ce/build/phaser.min.js"></script>
+        <script type="text/javascript" src="bundle.min.js"></script>
+        <script type="text/javascript">
+            window.onload = function() {
+                var gameBuilder = new GameBuilder();
+                gameBuilder.init();
+            };
+        </script>
+    </body>
+</html>
