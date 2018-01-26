@@ -19,6 +19,8 @@ GameBuilder.prototype = {
     // Adding the states to the game state manager
     game.state.add('boot', GameBooter);
     game.state.add('loader', GameLoader);
+    game.state.add('menu', GameMenu);
+    game.state.add('scene', GameScene);
 
     // Starting the first state
     game.state.start('boot');

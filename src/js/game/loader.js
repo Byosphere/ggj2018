@@ -10,6 +10,10 @@ GameLoader.prototype = {
   
     preload: function() {
         this.game.stage.backgroundColor = BACKGROUND_COLOR;
+    },
+
+    create: function() {
+        this.game.state.start('menu');
     }
   
 };

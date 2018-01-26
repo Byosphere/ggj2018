@@ -10,7 +10,6 @@ GameBooter.prototype = {
   
     create: function() {
       this.game.state.start('loader');
-      Client.askNewPlayer();
     }
   
 };
