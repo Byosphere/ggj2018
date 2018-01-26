@@ -2,10 +2,11 @@
   "name": "ggj2018",
   "version": "0.0.1",
   "description": "Our video-game for the 2018 edition of the global game jam",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node node_modules/http-server/bin/http-server",
-    "build": "node node_modules/grunt/bin/grunt"
+    "build": "node node_modules/grunt/bin/grunt",
+    "serve": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -35,5 +36,9 @@
     "grunt-contrib-watch": "^1.0.0",
     "http-server": "^0.11.1",
     "phaser-ce": "^2.10.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
   }
 }
