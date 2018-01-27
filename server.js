@@ -20,19 +20,20 @@ server.lastPlayerID = 0;
 io.on('connection', function (socket) {
 
     socket.on('newplayer', function () {
-        if (server.lastPlayerID === 1) return;
+        if (server.lastPlayerID > 1) return;
 
         socket.player = {
             id: server.lastPlayerID++,
             ready: false
         };
-        socket.emit('allplayers', getAllPlayers());
-        socket.broadcast.emit('newplayer', socket.player);
+        socket.emit('selfplayer', {self: socket.player.id, others: getAllPlayers()});
+        socket.broadcast.emit('otherplayer',  socket.player.id);
         console.log('New player connected !');       
     });
 
-    socket.on('playerready', function(id) {
-        socket.broadcast.emit('playerready', id);
+    socket.on('playerready', function() {
+        socket.broadcast.emit('playerready', socket.player.id);
+        console.log('player ready sent !');
     });
 
     socket.on('disconnect', function () {
