@@ -31,6 +31,9 @@ class GameLoader {
         //spritesheets
         game.load.spritesheet('fleur', 'assets/sprites/fleur.png', HEROWIDTH, HEROHEIGHT);
         game.load.spritesheet('coli', 'assets/sprites/coli.png', HEROWIDTH, HEROHEIGHT);
+        game.load.spritesheet('background_title', 'assets/sprites/background_title.png', 1280, 896);
+        game.load.spritesheet('bulle', 'assets/sprites/bulle.png', 64, 64);
+        game.load.spritesheet('anim_title', 'assets/sprites/titre_anim.png', 444, 276);
     }
 
     loadTilemaps() {
