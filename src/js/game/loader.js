@@ -18,6 +18,7 @@ class GameLoader {
     loadAssets() {
         this.loadImages();
         this.loadSpritesheets();
+        this.loadTilemaps();
         this.loadAudio();
     }
 
@@ -27,8 +28,12 @@ class GameLoader {
 
     loadSpritesheets() {
         //spritesheets
-        this.load.spritesheet('fleur', 'assets/sprites/fleur.png', HEROWIDTH, HEROHEIGHT);
-        this.load.spritesheet('coli', 'assets/sprites/coli.png', HEROWIDTH, HEROHEIGHT);
+        game.load.spritesheet('fleur', 'assets/sprites/fleur.png', HEROWIDTH, HEROHEIGHT);
+        game.load.spritesheet('coli', 'assets/sprites/coli.png', HEROWIDTH, HEROHEIGHT);
+    }
+
+    loadTilemaps() {
+        game.load.tilemap('level1', 'assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
     }
 
     loadAudio() {

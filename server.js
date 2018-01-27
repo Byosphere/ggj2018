@@ -35,6 +35,10 @@ io.on('connection', function (socket) {
     socket.on('playerready', function() {
         socket.player.ready = true;
         socket.broadcast.emit('playerready', socket.player);
+        if (getPlayersReady().length === 2) {
+            socket.emit('startgame');
+            socket.broadcast.emit('startgame');
+        }
     });
 
     socket.on('disconnect', function () {
@@ -51,4 +55,15 @@ function getAllPlayers() {
         if (player) players.push(player);
     });
     return players;
+}
+
+function getPlayersReady() {
+    var playersReady = [];
+    for (const socketID of Object.keys(io.sockets.connected)) {
+        var player = io.sockets.connected[socketID].player;
+        if (player && player.ready) {
+            playersReady.push(player);
+        }
+    }
+    return playersReady;
 }
