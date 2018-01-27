@@ -3,7 +3,7 @@ class GameLoader {
     constructor() { }
 
     preload() {
-        game.stage.backgroundColor = BACKGROUND_COLOR;
+        game.stage.backgroundColor = LOADER_BACKGROUND;
 
         // Displaying the title of the game
         game.add.sprite(game.world.centerX, 0, 'title');

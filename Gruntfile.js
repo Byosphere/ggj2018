@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             ]
           },
           assets: {
-            files: [{expand: true, src: ['assets/**'], dest: 'public/'}]
+            files: [{expand: true, src: ['assets/**'], dest: 'public/'}, {expand: true, src: ['fonts/**'], dest: 'public/'}]
           }
         },
         concat: {
