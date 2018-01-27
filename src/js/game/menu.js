@@ -39,8 +39,8 @@ class GameMenu {
             }
         });
         game.socket.on('startgame', function () {
-            this.camera.fade('#000000', 4000);
-            this.camera.onFadeComplete.add(function () {
+            game.camera.fade('#000000', 4000);
+            game.camera.onFadeComplete.add(function () {
                 game.state.start('scene');
             }, this);
         });
