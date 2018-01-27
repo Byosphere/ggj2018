@@ -1,15 +1,9 @@
-var GameScene = function(game) {
-    this.game = game;
+var GameScene = {};
+  
+GameScene.preload = function() {
+
 };
-  
-GameScene.prototype = {
-  
-    preload: function() {
 
-    },
+GameScene.create = function() {
 
-    create: function() {
-
-    }
-  
 };

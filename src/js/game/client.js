@@ -12,7 +12,7 @@ Client.socket.on('newplayer',function(data){
 });
 
 Client.socket.on('allplayers',function(data){
-    
+    console.log(data);
     for(var i = 0; i < data.length; i++){
         GameMenu.setNewPlayer(data[i]);
     }
