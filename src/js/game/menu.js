@@ -1,8 +1,8 @@
 class GameMenu {
 
     constructor() {
-        this.fleur = {data:null, ready:false};
-        this.coli = {data:null, ready:false};
+        this.fleur = { data: null, ready: false };
+        this.coli = { data: null, ready: false };
     }
 
     preload() {
@@ -15,12 +15,12 @@ class GameMenu {
         this.createCharacters();
         let that = this;
         game.socket.emit('newplayer');
-        game.socket.on('newplayer',function(data){
+        game.socket.on('newplayer', function (data) {
             that.setNewPlayer(data);
         });
-        game.socket.on('allplayers',function(data){
+        game.socket.on('allplayers', function (data) {
             console.log(data);
-            for(var i = 0; i < data.length; i++){
+            for (var i = 0; i < data.length; i++) {
                 that.setNewPlayer(data[i]);
             }
         });
@@ -37,15 +37,16 @@ class GameMenu {
             console.log('error : 2 players are already connected');
         }
     }
-    
+
     activateHero(hero) {
         switch (hero) {
             case 'fleur':
-                console.log('ajout de fleur');
+                this.fleurSprite.alpha = 1;
+
                 break;
 
             case 'coli':
-                console.log('ajout de coli');
+                this.coliSprite.alpha = 1;
                 break;
         }
     }
@@ -55,8 +56,10 @@ class GameMenu {
     }
 
     createCharacters() {
-        this.fleur = game.add.sprite(300, 200, 'fleur');
-        this.coli = game.add.sprite(800, 200, 'coli');
+        this.coliSprite = game.add.sprite((game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'coli');
+        this.fleurSprite = game.add.sprite(game.world.centerX + (game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'fleur');
+        this.coliSprite.alpha = 0.3;
+        this.fleurSprite.alpha = 0.3;
     }
 
     createTitle() {
