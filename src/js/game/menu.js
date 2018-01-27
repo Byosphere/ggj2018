@@ -39,24 +39,14 @@ class GameMenu {
             }
         });
         game.socket.on('startgame', function () {
-            this.camera.fade('#000000', 4000);
-            this.camera.onFadeComplete.add(function () {
+            game.camera.fade('#000000', 4000);
+            game.camera.onFadeComplete.add(function () {
                 game.state.start('scene');
             }, this);
         });
     }
 
-    // temp() {
-    //     this.camera.fade('#000000', 4000);
-    //     game.add.tween(this.player1Sprite).to({ x: this.player1Sprite.x + 200 }, 200, Phaser.Easing.Linear.None).start();
-    //     game.add.tween(this.player2Sprite).to({ x: this.player2Sprite.x + 200 }, 200, Phaser.Easing.Linear.None).start();
-    //     this.camera.onFadeComplete.add(function () {
-    //         game.state.start('scene');
-    //     }, this);
-    // }
-
     update() {
-        //this.temp();
         if (!this.sentReadyInfo && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
             console.log('sent ready info !')
             this.sentReadyInfo = true;
@@ -80,10 +70,10 @@ class GameMenu {
         console.log(player);
         player.ready = true;
         player.sprite.alpha = 1;
-        if(player.id === 0) {
-            game.add.tween(this.bulle1).to({alpha:0}, 500, "Quart.easeInOut").start();
+        if (player.id === 0) {
+            game.add.tween(this.bulle1).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         } else {
-            game.add.tween(this.bulle2).to({alpha:0}, 500, "Quart.easeInOut").start();
+            game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         }
         // Animation of the hero
         player.sprite.animations.play('ready');

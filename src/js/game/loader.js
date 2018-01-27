@@ -6,10 +6,12 @@ class GameLoader {
         game.stage.backgroundColor = LOADER_BACKGROUND;
 
         // Displaying the title of the game
-        game.add.sprite(game.world.centerX, 0, 'title');
+        this.title = game.add.sprite(game.world.centerX, 20, 'title');
+        this.title.anchor.setTo(0.5, 0);
 
         let preloadBar = game.add.sprite(game.world.centerX, game.world.centerY, 'preloadbar');
         game.load.setPreloadSprite(preloadBar);
+        preloadBar.anchor.setTo(0.5, 0);
 
         // Loading the assets
         this.loadAssets();
@@ -45,7 +47,7 @@ class GameLoader {
     }
 
     create() {
-        game.state.start('scene');
+        game.state.start('menu');
     }
 
 }
