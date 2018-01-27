@@ -1,12 +1,12 @@
 module.exports = function(grunt) {
 
     var jsSources = ['src/js/utils/constants.js', 
-                      'src/js/game/client.js',
                      'src/js/game/builder.js',
                      'src/js/game/booter.js', 
                      'src/js/game/loader.js',
                      'src/js/game/scene.js',
-                     'src/js/game/menu.js'];
+                     'src/js/game/menu.js',
+                     'src/js/game/client.js'];
     
       // Load modules
       grunt.loadNpmTasks('grunt-contrib-clean');
