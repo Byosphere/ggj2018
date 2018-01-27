@@ -16,14 +16,15 @@ class GameLoader {
     }
 
     loadAssets() {
+        this.loadTilemaps();
         this.loadImages();
         this.loadSpritesheets();
-        this.loadTilemaps();
         this.loadAudio();
     }
 
     loadImages() {
         //simple images
+        game.load.image('decor', 'assets/tilemaps/tiles/decor.png');
     }
 
     loadSpritesheets() {
@@ -33,7 +34,7 @@ class GameLoader {
     }
 
     loadTilemaps() {
-        game.load.tilemap('level1', 'assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level1chou', 'assets/tilemaps/maps/level1_chou.json', null, Phaser.Tilemap.TILED_JSON);
     }
 
     loadAudio() {
@@ -41,7 +42,7 @@ class GameLoader {
     }
 
     create() {
-        game.state.start('menu');
+        game.state.start('scene');
     }
 
 }

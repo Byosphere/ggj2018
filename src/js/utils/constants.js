@@ -10,3 +10,5 @@ const MENU_TITLE_HEIGHT = 50;
 const HEROWIDTH = 64;
 const HEROHEIGHT = 64;
 const MENU_HEROS_POS_Y = 250;
+
+const SCENE_BACKGROUND = '#1d2b53';
