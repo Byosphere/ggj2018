@@ -38,6 +38,9 @@ class GameMenu {
                 that.activateHero(that.other);
             }
         });
+        game.socket.on('startgame', function() {
+            game.state.start('scene');
+        });
     }
 
     update() {
@@ -56,7 +59,7 @@ class GameMenu {
         player.sprite = player.id === 0 ? this.player1Sprite : this.player2Sprite;
         player.ready = playerData.ready;
         if (player.ready) {
-            activateHero(player);
+            this.activateHero(player);
         }
     }
     
