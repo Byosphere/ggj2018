@@ -1,8 +1,8 @@
 class GameMenu {
 
     constructor() {
-        this.player1 = {name: 'Fleur', data:null, ready:false};
-        this.player2 = {name: 'Coli', data:null, ready:false};
+        this.player1 = {name: 'Fleur', data:null, ready:false, sprite: null};
+        this.player2 = {name: 'Coli', data:null, ready:false, sprite: null};
     }
 
     preload() {
@@ -17,12 +17,12 @@ class GameMenu {
         this.initInputs();
         let that = this;
         game.socket.emit('newplayer');
-        game.socket.on('newplayer',function(data){
+        game.socket.on('newplayer', function (data) {
             that.setNewPlayer(data);
         });
-        game.socket.on('allplayers',function(data){
+        game.socket.on('allplayers', function (data) {
             console.log(data);
-            for(var i = 0; i < data.length; i++){
+            for (var i = 0; i < data.length; i++) {
                 that.setNewPlayer(data[i]);
             }
         });
@@ -46,6 +46,7 @@ class GameMenu {
         console.log('ajout de ' + player.name);
         player.data = data;
         player.ready = true;
+        player.sprite.alpha = 1;
         // Animation of the hero
     }
 
@@ -54,8 +55,10 @@ class GameMenu {
     }
 
     createCharacters() {
-        game.add.sprite(300, 200, 'fleur');
-        game.add.sprite(800, 200, 'coli');
+        this.player1.sprite = game.add.sprite(game.world.centerX + (game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'fleur');
+        this.player2.sprite = game.add.sprite((game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'coli');
+        this.player1.sprite.alpha = 0.3;
+        this.player2.sprite.alpha = 0.3;
     }
 
     createTitle() {

@@ -27,8 +27,8 @@ class GameLoader {
 
     loadSpritesheets() {
         //spritesheets
-        game.load.spritesheet('fleur', 'assets/sprites/fleur.png', 32, 32);
-        game.load.spritesheet('coli', 'assets/sprites/coli.png', 32, 32);
+        this.load.spritesheet('fleur', 'assets/sprites/fleur.png', HEROWIDTH, HEROHEIGHT);
+        this.load.spritesheet('coli', 'assets/sprites/coli.png', HEROWIDTH, HEROHEIGHT);
     }
 
     loadAudio() {
