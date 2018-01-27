@@ -1,5 +1,5 @@
 /* Place the game constants here */
-const LOADER_BACKGROUND = '#777777';
+const LOADER_BACKGROUND = '#000';
 const MENU_BACKGROUND = '#1d2b53';
 const MENU_TEXT_WAITING = 'Waiting for players...';
 const MENU_TEXT_WAITING_FONT = 'normal 32px uni0553';
