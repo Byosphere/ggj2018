@@ -41,22 +41,12 @@ class GameMenu {
         game.socket.on('startgame', function () {
             game.camera.fade('#000000', 4000);
             game.camera.onFadeComplete.add(function () {
-                game.state.start('scene');
+                game.state.start('scene', true, false, that.self.id);
             }, this);
         });
     }
 
-    // temp() {
-    //     this.camera.fade('#000000', 4000);
-    //     game.add.tween(this.player1Sprite).to({ x: this.player1Sprite.x + 200 }, 200, Phaser.Easing.Linear.None).start();
-    //     game.add.tween(this.player2Sprite).to({ x: this.player2Sprite.x + 200 }, 200, Phaser.Easing.Linear.None).start();
-    //     this.camera.onFadeComplete.add(function () {
-    //         game.state.start('scene');
-    //     }, this);
-    // }
-
     update() {
-        //this.temp();
         if (!this.sentReadyInfo && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
             console.log('sent ready info !')
             this.sentReadyInfo = true;

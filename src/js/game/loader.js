@@ -34,10 +34,13 @@ class GameLoader {
         game.load.spritesheet('background_title', 'assets/sprites/background_title.png', 1280, 896);
         game.load.spritesheet('bulle', 'assets/sprites/bulle.png', 64, 64);
         game.load.spritesheet('anim_title', 'assets/sprites/titre_anim.png', 444, 276);
+        game.load.spritesheet('door', 'assets/sprites/door.png', 320, 192);
+        game.load.spritesheet('button', 'assets/sprites/button.png', 64, 64);
     }
 
     loadTilemaps() {
-        game.load.tilemap('level1chou', 'assets/tilemaps/maps/level1_chou.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level1fleur', 'assets/tilemaps/maps/level1_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level1coli', 'assets/tilemaps/maps/level1_coli.json', null, Phaser.Tilemap.TILED_JSON);
     }
 
     loadAudio() {

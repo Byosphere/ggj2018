@@ -1,11 +1,21 @@
 class GameScene {
 
+    constructor() {
+        this.playerId = null;
+    }
+
+    init(playerId) {
+        this.playerId = playerId;
+        this.characterName = null;
+    }
+
     preload() {
         game.stage.backgroundColor = SCENE_BACKGROUND;
     }
 
     create() {
-        this.map = game.add.tilemap('level1chou');
+        this.characterName = this.playerId === 0 ? 'fleur' : 'coli';
+        this.map = game.add.tilemap('level1' + this.characterName);
 
         this.map.addTilesetImage('decor');
 
@@ -14,12 +24,11 @@ class GameScene {
 
         this.map.setCollisionBetween(3, 4, true, 'Walls');
 
-        this.character = game.add.sprite(256, 512, 'fleur');
-        this.character.anchor.setTo(0, 1);
-
-        game.physics.arcade.enable(this.character);
-
-        this.character.body.setSize(64, 64, 0, 0);
+        // Adding map objects
+        const mapObjects = this.map.objects['Objects'];
+        for (let i = 0; i < mapObjects.length; i++) {
+            this.createObject(mapObjects[i]);
+        }
 
         game.input.gamepad.start();
         this.pad = game.input.gamepad.pad1;
@@ -51,4 +60,28 @@ class GameScene {
         }
     }
 
+    createObject(obj) {
+        const type = obj.properties.Type;
+        switch(type) {
+            case 'character': this.createCharacter(obj.x, obj.y);
+                break;
+            case 'button': this.createButton(obj);
+                break;
+            default: break;
+        }
+    }
+
+    createCharacter(posX, posY) {
+        // Creating the character and placing it on the map
+        this.character = game.add.sprite(posX, posY, this.characterName);
+        this.character.anchor.setTo(0, 1);
+        game.physics.arcade.enable(this.character);
+        this.character.body.setSize(64, 64, 0, 0);
+    }
+
+    createButton(button) {
+        let buttonSprite = game.add.sprite(button.x, button.y, 'button');
+        buttonSprite.anchor.setTo(0, 1);
+        buttonSprite.frame = 0;
+    }
 }
