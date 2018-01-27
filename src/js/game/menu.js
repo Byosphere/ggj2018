@@ -31,7 +31,7 @@ class GameMenu {
         game.socket.on('otherplayer', function (player) {
             that.setPlayer(that.other, player);
         });
-        game.socket.on('playerready', function(player) {
+        game.socket.on('playerready', function (player) {
             if (that.self.id === player.id) {
                 that.activateHero(that.self);
             } else {
@@ -65,6 +65,10 @@ class GameMenu {
         player.ready = true;
         player.sprite.alpha = 1;
         // Animation of the hero
+        player.sprite.animations.play('ready');
+        player.sprite.animations.currentAnim.onComplete.add(function () {
+            player.sprite.animations.play('walk');
+        });
 
     }
 
@@ -75,17 +79,26 @@ class GameMenu {
     createCharacters() {
         this.player1Sprite = game.add.sprite(game.world.centerX + (game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'fleur');
         this.player2Sprite = game.add.sprite((game.world.centerX / 2) - (HEROWIDTH / 2), game.world.height - MENU_HEROS_POS_Y, 'coli');
-        this.player1Sprite.alpha = 0.3;
-        this.player2Sprite.alpha = 0.3;
+        this.player1Sprite.alpha = 0.6;
+        this.player2Sprite.alpha = 0.6;
+        this.player1Sprite.frame = 8;
+        this.player2Sprite.frame = 8;
+        this.player1Sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
+        this.player2Sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
+        this.player1Sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
+        this.player2Sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
     }
 
     createTitle() {
-        game.add.sprite(0, 0, 'title');
+        this.title = game.add.sprite(game.world.centerX, MENU_TITLE_HEIGHT, 'title');
+        this.title.anchor.set(0.5, 0);
     }
 
     createTexts() {
         this.waitingText = game.add.text(game.world.centerX, game.world.centerY + MENU_TEXT_WAITING_HEIGHT, MENU_TEXT_WAITING, { font: MENU_TEXT_WAITING_FONT, fill: MENU_TEXT_WAITING_COLOR });
         this.waitingText.anchor.set(0.5);
+        game.add.tween(this.waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
+
         this.readyText = game.add.text(16, 16, 'Press ?? to start !', { fontSize: '32px', fill: '#000' });
         this.readyText.alpha = 0;
     }
