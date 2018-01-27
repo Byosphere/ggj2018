@@ -55,7 +55,8 @@ class GameMenu {
     }
 
     createCharacters() {
-
+        this.fleur = game.add.sprite(300, 200, 'fleur');
+        this.coli = game.add.sprite(800, 200, 'coli');
     }
 
     createTitle() {
