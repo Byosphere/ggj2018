@@ -6,7 +6,7 @@ class GameBuilder {
     // Game configuration object
     var gameConfig = {
       width: 1280,
-      height: 720,
+      height: 896,
       renderer: Phaser.AUTO,
       parent: ''
     };
