@@ -33,7 +33,6 @@ io.on('connection', function (socket) {
 
     socket.on('playerready', function() {
         socket.broadcast.emit('playerready', socket.player.id);
-        console.log('player ready sent !');
     });
 
     socket.on('disconnect', function () {
