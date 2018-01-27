@@ -19,10 +19,13 @@ class GameMenu {
         this.createCharacters();
         this.createTexts();
         this.initInputs();
+
+        this.music = this.add.audio('menu_theme');
+        this.music.loop = true;
+        this.music.play();
         let that = this;
         game.socket.emit('newplayer');
         game.socket.on('selfplayer', function (data) {
-            console.log(data.self);
             that.setPlayer(that.self, data.self);
             if (that.self.id === 1) {
                 that.setPlayer(that.other, data.others[0]);
@@ -41,6 +44,7 @@ class GameMenu {
         game.socket.on('startgame', function () {
             game.camera.fade('#000000', 4000);
             game.camera.onFadeComplete.add(function () {
+                this.music.stop();
                 game.state.start('scene', true, false, that.self.id);
             }, this);
         });
@@ -70,10 +74,10 @@ class GameMenu {
         console.log(player);
         player.ready = true;
         player.sprite.alpha = 1;
-        if(player.id === 0) {
-            game.add.tween(this.bulle1).to({alpha:0}, 500, "Quart.easeInOut").start();
+        if (player.id === 0) {
+            game.add.tween(this.bulle1).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         } else {
-            game.add.tween(this.bulle2).to({alpha:0}, 500, "Quart.easeInOut").start();
+            game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         }
         // Animation of the hero
         player.sprite.animations.play('ready');
@@ -122,6 +126,10 @@ class GameMenu {
 
         this.readyText = game.add.text(16, 16, 'Press ?? to start !', { fontSize: '32px', fill: '#000' });
         this.readyText.alpha = 0;
+
+        this.fleurText = game.add.text(0 + MENU_TEXT_FLEUR_WIDTH, game.world.centerY + MENU_TEXT_FLEUR_HEIGHT, MENU_TEXT_FLEUR, { font: MENU_TEXT_FLEUR_FONT, fill: MENU_TEXT_FLEUR_COLOR });
+        this.ColiText = game.add.text(game.world.centerX + MENU_TEXT_COLI_WIDTH, game.world.centerY + MENU_TEXT_COLI_HEIGHT, MENU_TEXT_COLI, { font: MENU_TEXT_COLI_FONT, fill: MENU_TEXT_COLI_COLOR });
+
     }
 
     initInputs() {
