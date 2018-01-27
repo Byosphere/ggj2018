@@ -22,17 +22,17 @@ class GameMenu {
         let that = this;
         game.socket.emit('newplayer');
         game.socket.on('selfplayer', function (data) {
-            console.log(data);
+            console.log(data.self);
             that.setPlayer(that.self, data.self);
             if (that.self.id === 1) {
-                that.setPlayer(that.other, data.others[0].id);
+                that.setPlayer(that.other, data.others[0]);
             }
         });
-        game.socket.on('otherplayer', function (id) {
-            that.setPlayer(that.other, id);
+        game.socket.on('otherplayer', function (player) {
+            that.setPlayer(that.other, player);
         });
-        game.socket.on('playerready', function(id) {
-            if (that.self.id === id) {
+        game.socket.on('playerready', function(player) {
+            if (that.self.id === player.id) {
                 that.activateHero(that.self);
             } else {
                 that.activateHero(that.other);
@@ -42,16 +42,22 @@ class GameMenu {
 
     update() {
         if (!this.sentReadyInfo && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
+            console.log('sent ready info !')
             this.sentReadyInfo = true;
             this.activateHero(this.self);
             game.socket.emit('playerready');
         }
     }
 
-    setPlayer(player, id) {
-        player.id = id;
-        player.name = id === 0 ? 'Fleur' : 'Coli';
-        player.sprite = id === 0 ? this.player1Sprite : this.player2Sprite;
+    setPlayer(player, playerData) {
+        console.log(player);
+        player.id = playerData.id;
+        player.name = player.id === 0 ? 'Fleur' : 'Coli';
+        player.sprite = player.id === 0 ? this.player1Sprite : this.player2Sprite;
+        player.ready = playerData.ready;
+        if (player.ready) {
+            activateHero(player);
+        }
     }
     
     activateHero(player) {
