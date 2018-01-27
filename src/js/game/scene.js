@@ -1,9 +1,11 @@
-var GameScene = {};
-  
-GameScene.preload = function() {
+class GameScene {
 
-};
+    preload() {
 
-GameScene.create = function() {
+    }
 
-};
+    create() {
+
+    }
+
+}

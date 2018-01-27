@@ -5,8 +5,7 @@ module.exports = function(grunt) {
                      'src/js/game/booter.js', 
                      'src/js/game/loader.js',
                      'src/js/game/scene.js',
-                     'src/js/game/menu.js',
-                     'src/js/game/client.js'];
+                     'src/js/game/menu.js'];
     
       // Load modules
       grunt.loadNpmTasks('grunt-contrib-clean');

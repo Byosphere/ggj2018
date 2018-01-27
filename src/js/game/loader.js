@@ -1,9 +1,13 @@
-var GameLoader = {};
-  
-GameLoader.preload = function() {
-    game.stage.backgroundColor = BACKGROUND_COLOR;
-};
+class GameLoader {
 
-GameLoader.create = function() {
-    game.state.start('menu');
-};
+    constructor() {}
+  
+    preload() {
+        game.stage.backgroundColor = BACKGROUND_COLOR;
+    }
+
+    create() {
+        game.state.start('menu');
+    }
+
+}

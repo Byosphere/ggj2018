@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node node_modules/http-server/bin/http-server",
     "build": "node node_modules/grunt/bin/grunt",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "publish": "node node_modules/grunt/bin/grunt && node server.js"
   },
   "repository": {
     "type": "git",

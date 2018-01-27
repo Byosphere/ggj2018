@@ -1,49 +1,65 @@
-var GameMenu = {};
+class GameMenu {
 
-GameMenu.preload = function () {
-    GameMenu.fleur = {data:null, ready:false};
-    GameMenu.coli = {data:null, ready:false};
-};
-
-GameMenu.create = function () {
-    this.createBackground();
-    this.createTitle();
-    this.createCharacters();
-    Client.askNewPlayer();
-};
-
-GameMenu.setNewPlayer = function (data) {
-    if (GameMenu.fleur.data == null) {
-        GameMenu.fleur.data = data;
-        GameMenu.activateHero('fleur');
-    } else if (GameMenu.coli.data == null) {
-        GameMenu.coli.data = data;
-        GameMenu.activateHero('coli');
-    } else {
-        console.log('error : 2 players are already connected');
+    constructor() {
+        this.fleur = {data:null, ready:false};
+        this.coli = {data:null, ready:false};
     }
-};
+
+    preload() {
+
+    }
+
+    create() {
+        this.createBackground();
+        this.createTitle();
+        this.createCharacters();
+        let that = this;
+        game.socket.emit('newplayer');
+        game.socket.on('newplayer',function(data){
+            that.setNewPlayer(data);
+        });
+        game.socket.on('allplayers',function(data){
+            console.log(data);
+            for(var i = 0; i < data.length; i++){
+                that.setNewPlayer(data[i]);
+            }
+        });
+    }
+
+    setNewPlayer(data) {
+        if (this.fleur.data == null) {
+            this.fleur.data = data;
+            this.activateHero('fleur');
+        } else if (this.coli.data == null) {
+            this.coli.data = data;
+            this.activateHero('coli');
+        } else {
+            console.log('error : 2 players are already connected');
+        }
+    }
     
-GameMenu.activateHero = function (hero) {
-    switch (hero) {
-        case 'fleur':
-            console.log('ajout de fleur');
-            break;
+    activateHero(hero) {
+        switch (hero) {
+            case 'fleur':
+                console.log('ajout de fleur');
+                break;
 
-        case 'coli':
-            console.log('ajout de coli');
-            break;
+            case 'coli':
+                console.log('ajout de coli');
+                break;
+        }
     }
-};
 
-GameMenu.createBackground = function() {
+    createBackground() {
 
-};
+    }
 
-GameMenu.createCharacters = function() {
+    createCharacters() {
 
-};
+    }
 
-GameMenu.createTitle = function() {
+    createTitle() {
 
-};
+    }
+
+}
