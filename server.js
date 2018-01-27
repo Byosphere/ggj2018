@@ -20,13 +20,15 @@ server.lastPlayerID = 0;
 io.on('connection', function (socket) {
 
     socket.on('newplayer', function () {
+        if (server.lastPlayerID === 1) {
+            return;
+        }
         socket.player = {
             id: server.lastPlayerID++
         };
         socket.emit('allplayers', getAllPlayers());
         socket.broadcast.emit('newplayer', socket.player);
-        console.log('newPlayer ' + socket.player.id);
-       
+        console.log('New player connected !');       
     });
     socket.on('disconnect', function () {
         if(socket.player)

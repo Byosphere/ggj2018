@@ -5,6 +5,13 @@ class GameLoader {
     preload() {
         game.stage.backgroundColor = BACKGROUND_COLOR;
 
+        // Displaying the title of the game
+        game.add.sprite(game.world.centerX, 0, 'title');
+
+        let preloadBar = game.add.sprite(game.world.centerX, game.world.centerY, 'preloadbar');
+        game.load.setPreloadSprite(preloadBar);
+
+        // Loading the assets
         this.loadAssets();
     }
 
@@ -16,7 +23,6 @@ class GameLoader {
 
     loadImages() {
         //simple images
-        game.add.sprite(0, 0, 'title');
     }
 
     loadSpritesheets() {

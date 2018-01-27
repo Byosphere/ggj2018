@@ -1,8 +1,8 @@
 class GameMenu {
 
     constructor() {
-        this.fleur = {data:null, ready:false};
-        this.coli = {data:null, ready:false};
+        this.player1 = {name: 'Fleur', data:null, ready:false};
+        this.player2 = {name: 'Coli', data:null, ready:false};
     }
 
     preload() {
@@ -13,6 +13,8 @@ class GameMenu {
         this.createBackground();
         this.createTitle();
         this.createCharacters();
+        this.createTexts();
+        this.initInputs();
         let that = this;
         game.socket.emit('newplayer');
         game.socket.on('newplayer',function(data){
@@ -26,28 +28,25 @@ class GameMenu {
         });
     }
 
+    update() {
+        
+    }
+
     setNewPlayer(data) {
-        if (this.fleur.data == null) {
-            this.fleur.data = data;
-            this.activateHero('fleur');
-        } else if (this.coli.data == null) {
-            this.coli.data = data;
-            this.activateHero('coli');
+        if (this.player1.data == null) {
+            this.activateHero(this.player1, data);
+        } else if (this.player2.data == null) {
+            this.activateHero(this.player2, data);
         } else {
             console.log('error : 2 players are already connected');
         }
     }
     
-    activateHero(hero) {
-        switch (hero) {
-            case 'fleur':
-                console.log('ajout de fleur');
-                break;
-
-            case 'coli':
-                console.log('ajout de coli');
-                break;
-        }
+    activateHero(player, data) {
+        console.log('ajout de ' + player.name);
+        player.data = data;
+        player.ready = true;
+        // Animation of the hero
     }
 
     createBackground() {
@@ -55,12 +54,22 @@ class GameMenu {
     }
 
     createCharacters() {
-        this.fleur = game.add.sprite(300, 200, 'fleur');
-        this.coli = game.add.sprite(800, 200, 'coli');
+        game.add.sprite(300, 200, 'fleur');
+        game.add.sprite(800, 200, 'coli');
     }
 
     createTitle() {
+        game.add.sprite(0, 0, 'title');
+    }
 
+    createTexts() {
+        this.waitingText = game.add.text(16, 16, 'Waiting for players...', { fontSize: '32px', fill: '#000'});
+        this.readyText = game.add.text(16, 16, 'Press ?? to start !', { fontSize: '32px', fill: '#000' });
+        this.readyText.alpha = 0;
+    }
+
+    initInputs() {
+        this.pad = game.input.gamepad.pad1;
     }
 
 }
