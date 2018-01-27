@@ -19,10 +19,13 @@ class GameMenu {
         this.createCharacters();
         this.createTexts();
         this.initInputs();
+
+        this.music = this.add.audio('menu_theme');
+        this.music.loop = true;
+        this.music.play();
         let that = this;
         game.socket.emit('newplayer');
         game.socket.on('selfplayer', function (data) {
-            console.log(data.self);
             that.setPlayer(that.self, data.self);
             if (that.self.id === 1) {
                 that.setPlayer(that.other, data.others[0]);
@@ -41,6 +44,7 @@ class GameMenu {
         game.socket.on('startgame', function () {
             game.camera.fade('#000000', 4000);
             game.camera.onFadeComplete.add(function () {
+                this.music.stop();
                 game.state.start('scene');
             }, this);
         });

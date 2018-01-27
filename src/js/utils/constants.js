@@ -24,3 +24,7 @@ const HEROHEIGHT = 64;
 const MENU_HEROS_POS_Y = 350;
 
 const SCENE_BACKGROUND = '#1d2b53';
+const UP = 'up';
+const DOWN = 'down';
+const LEFT = 'left';
+const RIGHT = 'right';
