@@ -132,6 +132,10 @@ class GameMenu {
 
         this.readyText = game.add.text(16, 16, 'Press ?? to start !', { fontSize: '32px', fill: '#000' });
         this.readyText.alpha = 0;
+
+        this.fleurText = game.add.text(0 + MENU_TEXT_FLEUR_WIDTH, game.world.centerY + MENU_TEXT_FLEUR_HEIGHT, MENU_TEXT_FLEUR, { font: MENU_TEXT_FLEUR_FONT, fill: MENU_TEXT_FLEUR_COLOR });
+        this.ColiText = game.add.text(game.world.centerX + MENU_TEXT_COLI_WIDTH, game.world.centerY + MENU_TEXT_COLI_HEIGHT, MENU_TEXT_COLI, { font: MENU_TEXT_COLI_FONT, fill: MENU_TEXT_COLI_COLOR });
+
     }
 
     initInputs() {
