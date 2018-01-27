@@ -47,7 +47,8 @@ class GameLoader {
     }
 
     loadAudio() {
-        //audio files
+        game.load.audio('sound_coli', 'assets/sound/phrase1.wav');
+        game.load.audio('sound_fleur', 'assets/sound/phrase11.wav');
     }
 
     create() {

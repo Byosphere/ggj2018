@@ -10,7 +10,9 @@ class GameMenu {
     }
 
     preload() {
-
+        this.music = this.add.audio('menu_theme');
+        this.soundColi = this.add.audio('sound_coli');
+        this.soundFleur = this.add.audio('sound_fleur');
     }
 
     create() {
@@ -66,18 +68,21 @@ class GameMenu {
         player.sprite = player.id === 0 ? this.player1Sprite : this.player2Sprite;
         player.ready = playerData.ready;
         if (player.ready) {
-            this.activateHero(player);
+            this.activateHero(player, true);
         }
     }
 
-    activateHero(player) {
-        console.log(player);
+    activateHero(player, skip) {
         player.ready = true;
         player.sprite.alpha = 1;
-        if (player.id === 0) {
-            game.add.tween(this.bulle1).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
-        } else {
-            game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
+        if(!skip) {
+            if (player.id === 0) {
+                this.soundColi.play();
+                game.add.tween(this.bulle1).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
+            } else {
+                this.soundFleur.play();
+                game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
+            }
         }
         // Animation of the hero
         player.sprite.animations.play('ready');
