@@ -26,13 +26,13 @@ io.on('connection', function (socket) {
             id: server.lastPlayerID++,
             ready: false
         };
-        socket.emit('allplayers', getAllPlayers());
-        socket.broadcast.emit('newplayer', socket.player);
-        console.log('New player connected !');       
+        socket.emit('selfplayer', socket.player.id);
+        socket.broadcast.emit('otherplayer', socket.player.id);
+        console.log('New player connected !');
     });
 
-    socket.on('playerready', function(id) {
-        socket.broadcast.emit('playerready', id);
+    socket.on('playerready', function() {
+        socket.broadcast.emit('playerready', socket.player.id);
     });
 
     socket.on('disconnect', function () {
