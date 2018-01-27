@@ -1,8 +1,8 @@
 class GameMenu {
 
     constructor() {
-        this.self = {id: null, name: null, ready:false, sprite: null};
-        this.other = {id: null, name: null, ready:false, sprite: null};
+        this.self = { id: null, name: null, ready: false, sprite: null };
+        this.other = { id: null, name: null, ready: false, sprite: null };
         this.pad = null;
         this.sentReadyInfo = false;
         this.player1Sprite = null;
@@ -59,7 +59,7 @@ class GameMenu {
             activateHero(player);
         }
     }
-    
+
     activateHero(player) {
         console.log(player);
         player.ready = true;
@@ -69,7 +69,7 @@ class GameMenu {
     }
 
     createBackground() {
-
+        game.stage.backgroundColor = MENU_BACKGROUND;
     }
 
     createCharacters() {
@@ -84,7 +84,8 @@ class GameMenu {
     }
 
     createTexts() {
-        this.waitingText = game.add.text(16, 16, 'Waiting for players...', { fontSize: '32px', fill: '#000'});
+        this.waitingText = game.add.text(game.world.centerX, game.world.centerY + MENU_TEXT_WAITING_HEIGHT, MENU_TEXT_WAITING, { font: MENU_TEXT_WAITING_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.waitingText.anchor.set(0.5);
         this.readyText = game.add.text(16, 16, 'Press ?? to start !', { fontSize: '32px', fill: '#000' });
         this.readyText.alpha = 0;
     }
