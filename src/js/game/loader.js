@@ -4,6 +4,8 @@ class GameLoader {
   
     preload() {
         game.stage.backgroundColor = BACKGROUND_COLOR;
+
+        game.add.sprite(0, 0, 'title');
     }
 
     create() {
