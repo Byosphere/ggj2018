@@ -10,11 +10,13 @@ class GameScene {
         this.noCollisionGroup = null;
         this.animatedDoors = [];
         this.exitActive = false;
+        this.enableControls = true;
     }
 
-    init(playerId) {
+    init(playerId, level) {
         this.playerId = playerId;
         this.characterName = null;
+        this.currentLevel = level || 'level1';
     }
 
     preload() {
@@ -26,7 +28,7 @@ class GameScene {
     create() {
         let that = this;
         this.characterName = this.playerId === 0 ? 'fleur' : 'coli';
-        this.map = game.add.tilemap('level1' + this.characterName);
+        this.map = game.add.tilemap(this.currentLevel + this.characterName);
 
         this.map.addTilesetImage('decor');
 
@@ -99,16 +101,17 @@ class GameScene {
             });
         });
 
-        game.socket.on('success', function() {
+        game.socket.on('success', function () {
             console.log('niveau terminé !');
+            that.endScene();
         });
     }
 
     update() {
         game.physics.arcade.collide(this.character, this.layer);
 
-        game.physics.arcade.collide(this.character, this.doorsGroup);
-        
+        //game.physics.arcade.collide(this.character, this.doorsGroup);
+
         let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.frame -= 1;
@@ -117,7 +120,7 @@ class GameScene {
         }
 
         let exit = game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
-        if(!exit && this.exitActive) {
+        if (!exit && this.exitActive) {
             game.socket.emit('outexit');
             this.exitActive = false;
         }
@@ -126,6 +129,17 @@ class GameScene {
         this.character.body.velocity.y = 0;
         this.character.body.angularVelocity = 0;
 
+        if(this.enableControls)
+            this.handleControls();
+    }
+
+    initAnimations() {
+        this.character.animations.add('walk_right', [13, 14, 15, 16], 12, false);
+        this.character.animations.add('walk_left', [36, 37, 38, 39], 12, false);
+        this.character.animations.add('walk_up', [32, 33, 34, 35], 12, false);
+    }
+
+    handleControls() {
         if (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
             this.character.body.velocity.x -= 200;
             this.character.animations.play('walk_left');
@@ -162,15 +176,9 @@ class GameScene {
         }
     }
 
-    initAnimations() {
-        this.character.animations.add('walk_right', [13, 14, 15, 16], 12, false);
-        this.character.animations.add('walk_left', [36, 37, 38, 39], 12, false);
-        this.character.animations.add('walk_up', [32, 33, 34, 35], 12, false);
-    }
-
     createObject(obj) {
         const type = obj.properties.Type;
-        switch(type) {
+        switch (type) {
             case 'character': this.createCharacter(obj.x, obj.y);
                 break;
             case 'button': this.createButton(obj);
@@ -203,6 +211,13 @@ class GameScene {
     createExit(exit) {
         let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
+        exitSprite.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 4, true);
+        exitSprite.animations.play('default');
+        if (this.playerId === 1) {
+            exitSprite.scale.setTo(-1, 1);
+            exitSprite.x -= exitSprite.width;
+        }
+
         game.physics.arcade.enable(exitSprite);
         this.exitGroup.add(exitSprite);
     }
@@ -217,9 +232,13 @@ class GameScene {
     }
 
     onExit(playerSprite, exitSprite) {
-        if(!this.exitActive) {
+        if (!this.exitActive) {
             game.socket.emit('inexit');
             this.exitActive = true;
         }
+    }
+
+    endScene() {
+        this.enableControls = false;
     }
 }

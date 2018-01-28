@@ -39,6 +39,8 @@ class GameLoader {
         game.load.spritesheet('door', 'assets/sprites/door.png', 64, 192);
         game.load.spritesheet('button', 'assets/sprites/button.png', 64, 64);
         game.load.spritesheet('exit', 'assets/sprites/exit.png', 192, 192);
+        game.load.spritesheet('victory', 'assets/sprites/vousavezgagne.png', 1200, 800);
+        game.load.spritesheet('exit_perso', 'assets/sprites/exit_perso.png', 192, 192);
     }
 
     loadTilemaps() {
