@@ -85,6 +85,12 @@ class GameMenu {
                 this.soundFleur.play();
                 game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
             }
+        } else {
+            if (player.id === 0) {
+                this.bulle1.alpha = 0;
+            } else {
+                this.bulle2.alpha = 0;
+            }
         }
         // Animation of the hero
         player.sprite.animations.play('ready');
