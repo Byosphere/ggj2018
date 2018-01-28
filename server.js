@@ -56,16 +56,17 @@ io.on('connection', function (socket) {
     });
 
     // player on exit spot
-    socket.on('inExit', function() {
+    socket.on('inexit', function() {
         server.exitCount++;
         if(server.exitCount === 2) {
             socket.emit('success');
             socket.broadcast.emit('success');
         }
+
     });
 
     // player out of exit spot
-    socket.on('outExit', function(){
+    socket.on('outexit', function(){
         server.exitCount--;
     });
 
