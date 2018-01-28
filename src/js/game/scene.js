@@ -15,9 +15,11 @@ class GameScene {
         this.exitPosX = 0;
         this.exitPosY = 0;
         this.end = false;
+        this.currentLevel = 0;
     }
 
     init(playerId, level) {
+        console.log('init : ' + level);
         this.playerId = playerId;
         this.characterName = null;
         this.currentLevel = level || 1;
@@ -25,7 +27,7 @@ class GameScene {
 
     preload() {
         game.stage.backgroundColor = SCENE_BACKGROUND;
-        this.music = this.add.audio('game');
+        this.music = game.add.audio('game');
         this.music.loop = true;
     }
 
@@ -110,6 +112,10 @@ class GameScene {
             console.log('niveau terminé !');
             that.endScene();
         });
+
+        setTimeout(function() {
+            that.endScene();
+        }, 1000);
     }
 
     update() {
@@ -140,7 +146,8 @@ class GameScene {
             this.handleControls();
 
         if (this.end && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
-            game.state.start('scene', true, false, this.playerId, this.level + 1);
+            this.clearWorld();
+            game.state.start('scene', true, false, this.playerId, this.currentLevel + 1);
         }
     }
 
@@ -276,5 +283,23 @@ class GameScene {
             this.end = true;
         }, 3000);
 
+    }
+
+    clearWorld() {
+        this.music.destroy();
+        this.map.destroy();
+        this.doorsGroup.destroy();
+        this.characterGroup.destroy();
+        this.rocksGroup.destroy();
+        this.buttonsGroup.destroy();
+        this.exitGroup.destroy();
+        this.noCollisionGroup.destroy();
+        this.overlapedButton = null;
+        this.exitActive = false;
+        this.enableControls = true;
+        this.exitPosX = 0;
+        this.exitPosY = 0;
+        this.animatedDoors = [];
+        this.end = false;
     }
 }

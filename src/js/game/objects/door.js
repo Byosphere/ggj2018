@@ -5,6 +5,11 @@ class Door {
         group.add(this.sprite);
         this.sprite.body.immovable = true;
         this.sprite.anchor.setTo(0, 1);
+        console.log(this.sprite);
+        if (obj.width > obj.height) {
+            this.sprite.angle += 90;
+            this.sprite.scale.setTo(-1, 1);
+        }
         this.sprite.colorParam = obj.properties.Color;
         this.setColor(this.sprite.colorParam);
     }
