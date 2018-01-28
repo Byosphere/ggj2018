@@ -72,6 +72,7 @@ class Loader extends Phaser.State {
         this.game.load.audio('sound_fleur', 'assets/sound/phrase11.wav');
         this.game.load.audio('main_menu', 'assets/sound/loader.wav');
         this.game.load.audio('game', 'assets/sound/niveau.wav');
+        this.game.load.audio('win', 'assets/sound/win.wav');
     }
 
     create() {

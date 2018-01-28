@@ -14,6 +14,7 @@ class Scene extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
         this.music = this.game.add.audio('game');
+        this.victoryMusic = this.game.add.audio('win');
         this.music.loop = true;
         this.buttonsGroup = null;
         this.doorsGroup = null;
@@ -338,7 +339,8 @@ class Scene extends Phaser.State {
         this.exitPerso.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 8, true);
         this.exitPerso.animations.play('default');
         setTimeout(() => {
-            this.music.stop();
+            this.music.fadeOut(1000);
+            this.victoryMusic.fadeIn(500);
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
@@ -355,7 +357,6 @@ class Scene extends Phaser.State {
             }
             this.end = true;
         }, 3000);
-
     }
 
     /**
@@ -363,6 +364,8 @@ class Scene extends Phaser.State {
      */
     shutdown() {
         this.music.destroy();
+        this.victoryMusic.stop();
+        this.victoryMusic.destroy();
         this.map.destroy();
         this.doorsGroup.destroy();
         this.characterGroup.destroy();

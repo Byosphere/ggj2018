@@ -29,7 +29,9 @@ class MainMenu extends Phaser.State {
         this.initInputs();
         this.connectServer();
 
-        this.music.play();
+        this.music.onDecoded.add(() => {
+            this.music.fadeIn(1000);
+        });
     }
 
     update() {
@@ -81,16 +83,21 @@ class MainMenu extends Phaser.State {
         });
 
         this.game.socket.on('startgame', () => {
-            this.game.camera.fade('#000000', 3000);
-            this.game.camera.onFadeComplete.add(() => {
-                this.music.stop();
-                this.game.state.start('scene', true, false, this.self.id);
-            }, this);
+            this.startGame();
         });
 
         this.game.socket.on('disconnect', () => {
             this.removePlayer();
         });
+    }
+
+
+    startGame() {
+        this.game.camera.fade('#000000', 3000);
+        this.music.fadeOut(3000);
+        this.game.camera.onFadeComplete.add(() => {
+            this.game.state.start('scene', true, false, this.self.id);
+        }, this);
     }
 
     /**
