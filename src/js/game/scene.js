@@ -6,6 +6,7 @@ class GameScene {
         this.doorsGroup = null;
         this.characterGroup = null;
         this.exitGroup = null;
+        this.rocksGroup = null;
         this.overlapedButton = null;
         this.noCollisionGroup = null;
         this.animatedDoors = [];
@@ -41,6 +42,8 @@ class GameScene {
         this.exitGroup = game.add.group();
         this.buttonsGroup = game.add.group();
         this.buttonsGroup.enableBody = true;
+        this.rocksGroup = game.add.group();
+        this.rocksGroup.enableBody = true;
         this.doorsGroup = game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = game.add.group();
@@ -110,7 +113,9 @@ class GameScene {
     update() {
         game.physics.arcade.collide(this.character, this.layer);
 
-        //game.physics.arcade.collide(this.character, this.doorsGroup);
+        game.physics.arcade.collide(this.character, this.doorsGroup);
+
+        game.physics.arcade.collide(this.character, this.rocksGroup);
 
         let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
@@ -185,6 +190,8 @@ class GameScene {
                 break;
             case 'door': this.createDoor(obj);
                 break;
+            case 'rock': this.createRock(obj);
+                break;
             case 'exit': this.createExit(obj);
                 break;
             default: break;
@@ -206,6 +213,10 @@ class GameScene {
 
     createDoor(door) {
         let doorSprite = new Door(door, this.doorsGroup);
+    }
+
+    createRock(rock) {
+        let rockSprite = new Rock(rock, this.rocksGroup);
     }
 
     createExit(exit) {

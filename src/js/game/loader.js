@@ -38,6 +38,7 @@ class GameLoader {
         game.load.spritesheet('anim_title', 'assets/sprites/titre_anim.png', 444, 276);
         game.load.spritesheet('door', 'assets/sprites/door.png', 64, 192);
         game.load.spritesheet('button', 'assets/sprites/button.png', 64, 64);
+        game.load.spritesheet('rock', 'assets/sprites/caillou.png', 64, 64);
         game.load.spritesheet('exit', 'assets/sprites/exit.png', 192, 192);
         game.load.spritesheet('victory', 'assets/sprites/vousavezgagne.png', 1200, 800);
         game.load.spritesheet('exit_perso', 'assets/sprites/exit_perso.png', 192, 192);
@@ -46,6 +47,18 @@ class GameLoader {
     loadTilemaps() {
         game.load.tilemap('level1fleur', 'assets/tilemaps/maps/level1_fleur.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('level1coli', 'assets/tilemaps/maps/level1_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level2fleur', 'assets/tilemaps/maps/level2_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level2coli', 'assets/tilemaps/maps/level2_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level3fleur', 'assets/tilemaps/maps/level3_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level3coli', 'assets/tilemaps/maps/level3_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level4fleur', 'assets/tilemaps/maps/level4_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level4coli', 'assets/tilemaps/maps/level4_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level5fleur', 'assets/tilemaps/maps/level5_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level5coli', 'assets/tilemaps/maps/level5_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level6fleur', 'assets/tilemaps/maps/level6_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level6coli', 'assets/tilemaps/maps/level6_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level7fleur', 'assets/tilemaps/maps/level7_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('level7coli', 'assets/tilemaps/maps/level7_coli.json', null, Phaser.Tilemap.TILED_JSON);
     }
 
     loadAudio() {
@@ -56,7 +69,7 @@ class GameLoader {
     }
 
     create() {
-        game.state.start('menu');
+        game.state.start('scene');
     }
 
 }
