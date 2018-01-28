@@ -112,10 +112,6 @@ class GameScene {
             console.log('niveau terminé !');
             that.endScene();
         });
-
-        setTimeout(function() {
-            that.endScene();
-        }, 1000);
     }
 
     update() {

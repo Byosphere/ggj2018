@@ -71,6 +71,6 @@ class GameLoader {
     }
 
     create() {
-        game.state.start('scene');
+        game.state.start('menu');
     }
 }
