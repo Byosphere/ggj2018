@@ -48,11 +48,13 @@ io.on('connection', function (socket) {
     // Interrupteur actif 
     socket.on('opendoor', function(color) {
         socket.broadcast.emit('opendoor', color);
+        socket.emit('opendoor', color);
     });
 
     // Interrupteur inactif 
     socket.on('closedoor', function(color) {
         socket.broadcast.emit('closedoor', color);
+        socket.emit('closedoor', color);
     });
 
     // player on exit spot
