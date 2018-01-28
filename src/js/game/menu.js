@@ -49,6 +49,10 @@ class GameMenu {
                 game.state.start('scene', true, false, that.self.id);
             }, this);
         });
+
+        game.socket.on('disconnect', function () {
+            that.removePlayer();
+        });
     }
 
     update() {
@@ -72,6 +76,14 @@ class GameMenu {
         if (player.ready) {
             this.activateHero(player, true);
         }
+    }
+    
+    removePlayer() {
+
+        if(this.other.ready) {
+            this.desactivateHero(this.other);
+        }
+        
     }
 
     activateHero(player, skip) {
@@ -98,6 +110,18 @@ class GameMenu {
             player.sprite.animations.play('walk');
         });
 
+    }
+
+    desactivateHero(player) {
+        player.sprite.alpha = 0.6;
+        this.other.ready = false;
+        if (player.id === 0) {
+            this.bulle1.alpha = 1;
+        } else {
+            this.bulle2.alpha = 1;
+        }
+        player.sprite.animations.stop();
+        player.sprite.frame = 8;
     }
 
     createBackground() {
