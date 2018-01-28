@@ -16,12 +16,11 @@ class GameBooter {
         // Loading the game title asset
         game.load.image('title', 'assets/title.png');
         // Loading the preload bar asset
-        game.load.image('preloadbar', 'assets/preloadbar.png');
+        game.load.spritesheet('preloadbar', 'assets/sprites/loader.png', 64, 64);
     }
 
     create() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.state.start('loader');
     }
-
 }

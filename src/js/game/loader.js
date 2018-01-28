@@ -6,12 +6,14 @@ class GameLoader {
         game.stage.backgroundColor = LOADER_BACKGROUND;
 
         // Displaying the title of the game
-        this.title = game.add.sprite(game.world.centerX, 20, 'title');
-        this.title.anchor.setTo(0.5, 0);
+        this.title = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+        this.title.anchor.setTo(0.5);
 
-        let preloadBar = game.add.sprite(game.world.centerX, game.world.centerY, 'preloadbar');
-        game.load.setPreloadSprite(preloadBar);
-        preloadBar.anchor.setTo(0.5, 0);
+        let preload = game.add.sprite(game.world.width - 100, game.world.height - 100, 'preloadbar');
+        //game.load.setPreloadSprite(preloadBar);
+        preload.anchor.setTo(0.5);
+        preload.animations.add('default', [0,1,2,3], 10, true);
+        preload.animations.play('default');
 
         // Loading the assets
         this.loadAssets();
@@ -71,5 +73,4 @@ class GameLoader {
     create() {
         game.state.start('scene');
     }
-
 }
