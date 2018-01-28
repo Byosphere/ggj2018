@@ -5,7 +5,7 @@ class Button {
         group.add(this.sprite);
         this.sprite.anchor.setTo(0, 1);
         this.sprite.body.setSize(32, 32, 0, 0);
-        const color = obj.properties.Color;
+        this.sprite.colorParam = obj.properties.Color;
         this.setColor(color);
     }
 
@@ -20,5 +20,9 @@ class Button {
             case WHITE: this.sprite.frame = 6;
                 break;
         }
+    }
+
+    getSprite() {
+        return this.sprite;
     }
 }

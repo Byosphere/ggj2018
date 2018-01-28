@@ -21,6 +21,7 @@ class GameScene {
     }
 
     create() {
+        let that = this;
         this.characterName = this.playerId === 0 ? 'fleur' : 'coli';
         this.map = game.add.tilemap('level1' + this.characterName);
 
@@ -49,6 +50,26 @@ class GameScene {
         game.input.gamepad.start();
         this.pad = game.input.gamepad.pad1;
         this.music.play();
+
+        game.socket.on('opendoor', function (color) {
+            console.log('open door : ' + color);
+            that.doorsGroup.forEach(function(door) {
+                if(door.paramColor == color) {
+                    //ouverture de la porte
+                    door.animations.play('open');
+                }
+            });
+        });
+
+        game.socket.on('closedoor', function (color) {
+            console.log('close door : ' + color);
+            that.doorsGroup.forEach(function(door) {
+                if(door.paramColor == color) {
+                    //fermeture de la porte
+                    door.animations.play('close');
+                }
+            });
+        });
     }
 
     update() {
@@ -59,6 +80,7 @@ class GameScene {
         let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.frame -= 1;
+            game.socket.emit('closedoor', this.overlapedButton.paramColor);
             this.overlapedButton = null;
         }
 
@@ -150,6 +172,7 @@ class GameScene {
         if (!this.overlapedButton) {
             buttonSprite.frame += 1;
             this.overlapedButton = buttonSprite;
+            game.socket.emit('opendoor', buttonSprite.paramColor);
         }
     }
 }

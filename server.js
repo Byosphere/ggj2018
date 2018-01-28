@@ -18,9 +18,11 @@ server.listen(process.env.PORT || 8081, function () {
 });
 
 server.lastPlayerID = 0;
+server.exitCount = 0;
 
 io.on('connection', function (socket) {
 
+    // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
         if (server.lastPlayerID > 1) return;
 
@@ -33,6 +35,7 @@ io.on('connection', function (socket) {
         console.log('New player connected !');       
     });
 
+    // action "ready" d'un player
     socket.on('playerready', function() {
         socket.player.ready = true;
         socket.broadcast.emit('playerready', socket.player);
@@ -42,6 +45,31 @@ io.on('connection', function (socket) {
         }
     });
 
+    // Interrupteur actif 
+    socket.on('opendoor', function(color) {
+        socket.broadcast.emit('opendoor', color);
+    });
+
+    // Interrupteur inactif 
+    socket.on('closedoor', function(color) {
+        socket.broadcast.emit('closedoor', color);
+    });
+
+    // player on exit spot
+    socket.on('inExit', function() {
+        server.exitCount++;
+        if(server.exitCount === 2) {
+            socket.emit('success');
+            socket.broadcast.emit('success');
+        }
+    });
+
+    // player out of exit spot
+    socket.on('outExit', function(){
+        server.exitCount--;
+    });
+
+    //disconnect
     socket.on('disconnect', function () {
         if(socket.player)
             io.emit('remove', socket.player.id);
