@@ -67,7 +67,7 @@ class GameScene {
 
         game.socket.on('opendoor', function (color) {
             console.log('open door : ' + color);
-            if(!this.openedDoorsColors.includes(color)) {
+            if(!that.openedDoorsColors.includes(color)) {
                 that.doorsGroup.forEach(function (door) {
                     if (door.colorParam == color) {
                         //ouverture de la porte
@@ -107,7 +107,6 @@ class GameScene {
                         door.animations.currentAnim.onComplete.add(function () {
                             // on stoppe la collision
                             that.doorsGroup.add(door);
-                            that.openedDoorsColors.
                             that.noCollisionGroup.remove(door);
                         });
                     }
