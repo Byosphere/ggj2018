@@ -44,7 +44,7 @@ class GameMenu {
         game.socket.on('startgame', function () {
             game.camera.fade('#000000', 4000);
             game.camera.onFadeComplete.add(function () {
-                this.music.stop();
+                // this.music.stop();
                 game.state.start('scene', true, false, that.self.id);
             }, this);
         });

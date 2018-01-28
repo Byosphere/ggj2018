@@ -24,6 +24,8 @@ class GameScene {
 
         this.map.setCollisionBetween(3, 4, true, 'Walls');
 
+        // 
+
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
@@ -68,7 +70,6 @@ class GameScene {
 
         } else if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_RIGHT)) {
             this.character.frame = 13;
-
         }
 
         if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_DOWN)) {
@@ -92,6 +93,10 @@ class GameScene {
                 break;
             case 'button': this.createButton(obj);
                 break;
+            case 'door': this.createDoor(obj);
+                break;
+            case 'exit': this.createExit(obj);
+                break;
             default: break;
         }
     }
@@ -105,8 +110,16 @@ class GameScene {
     }
 
     createButton(button) {
-        let buttonSprite = game.add.sprite(button.x, button.y, 'button');
-        buttonSprite.anchor.setTo(0, 1);
-        buttonSprite.frame = 0;
+        let buttonSprite = new Button(button);
+    }
+
+    createDoor(door) {
+        let doorSprite = new Door(door);
+    }
+
+    createExit(exit) {
+        console.log(exit);
+        let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
+        exitSprite.anchor.setTo(0, 1);
     }
 }

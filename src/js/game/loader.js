@@ -36,8 +36,9 @@ class GameLoader {
         game.load.spritesheet('background_title', 'assets/sprites/background_title.png', 1280, 896);
         game.load.spritesheet('bulle', 'assets/sprites/bulle.png', 64, 64);
         game.load.spritesheet('anim_title', 'assets/sprites/titre_anim.png', 444, 276);
-        game.load.spritesheet('door', 'assets/sprites/door.png', 320, 192);
+        game.load.spritesheet('door', 'assets/sprites/door.png', 64, 192);
         game.load.spritesheet('button', 'assets/sprites/button.png', 64, 64);
+        game.load.spritesheet('exit', 'assets/sprites/exit.png', 192, 192);
     }
 
     loadTilemaps() {
@@ -50,7 +51,7 @@ class GameLoader {
     }
 
     create() {
-        game.state.start('menu');
+        game.state.start('scene');
     }
 
 }
