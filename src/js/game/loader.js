@@ -39,11 +39,13 @@ class GameLoader {
         game.load.spritesheet('bulle', 'assets/sprites/bulle.png', 64, 64);
         game.load.spritesheet('anim_title', 'assets/sprites/titre_anim.png', 444, 276);
         game.load.spritesheet('door', 'assets/sprites/door.png', 64, 192);
+        game.load.spritesheet('door_horizontal', 'assets/sprites/door_horizontal.png', 192, 64);
         game.load.spritesheet('button', 'assets/sprites/button.png', 64, 64);
         game.load.spritesheet('rock', 'assets/sprites/caillou.png', 64, 64);
         game.load.spritesheet('exit', 'assets/sprites/exit.png', 192, 192);
         game.load.spritesheet('victory', 'assets/sprites/vousavezgagne.png', 1200, 800);
         game.load.spritesheet('exit_perso', 'assets/sprites/exit_perso.png', 192, 192);
+        game.load.spritesheet('felicitations', 'assets/sprites/felicitations.png', 1200, 800);
     }
 
     loadTilemaps() {

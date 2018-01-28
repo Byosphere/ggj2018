@@ -33,3 +33,5 @@ const WHITE = 'white';
 const GAME_TEXT_NEXT_LEVEL = 'Appuie sur B pour passer au niveau suivant';
 const GAME_TEXT_NEXT_LEVEL_FONT = 'normal 40px uni0553';
 const GAME_TEXT_NEXT_LEVEL_COLOR = '#FFF';
+
+const NB_LEVELS = 7;

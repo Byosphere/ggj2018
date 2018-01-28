@@ -67,6 +67,7 @@ class GameScene {
 
         game.socket.on('opendoor', function (color) {
             console.log('open door : ' + color);
+            console.log(that.openedDoorsColors);
             if(!that.openedDoorsColors.includes(color)) {
                 that.doorsGroup.forEach(function (door) {
                     if (door.colorParam == color) {
@@ -84,11 +85,13 @@ class GameScene {
                     }
                 });
             }
+            console.log(that.openedDoorsColors);
         });
 
         game.socket.on('closedoor', function (color) {
             console.log('close door : ' + color);
-            if(that.openedDoorsColors.includes(color)) {
+            if(that.openedDoorsColors.includes(color) 
+                && (!this.overlapedButton || (this.overlapedButton && this.overlapedButton.colorParam !== color))) {
                 that.animatedDoors.forEach(function (door) {
                     if (door.colorParam == color) {
                         console.log('Reverse door animation');
@@ -113,6 +116,7 @@ class GameScene {
                 });
                 const idx2 = that.openedDoorsColors.findIndex((x) => x === color);
                 that.openedDoorsColors.splice(idx2, idx2 + 1);
+                console.log(that.openedDoorsColors);
             }
         });
 
@@ -279,12 +283,19 @@ class GameScene {
         setTimeout(() => {
             this.music.stop();
             game.camera.flash();
-            this.endTitle = game.add.sprite(game.world.centerX, game.world.centerY, 'victory');
-            this.endTitle.anchor.setTo(0.5);
-            this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
-            this.endTitle.animations.play('default');
-            this.endText = game.add.text(game.world.centerX, game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL, { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-            this.endText.anchor.setTo(0.5);
+            if (this.currentLevel < NB_LEVELS) {
+                this.endTitle = game.add.sprite(game.world.centerX, game.world.centerY, 'victory');
+                this.endTitle.anchor.setTo(0.5);
+                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
+                this.endTitle.animations.play('default');
+                this.endText = game.add.text(game.world.centerX, game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL, { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+                this.endText.anchor.setTo(0.5);
+            } else {
+                this.endTitle = game.add.sprite(game.world.centerX, game.world.centerY, 'felicitations');
+                this.endTitle.anchor.setTo(0.5);
+                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, false);
+                this.endTitle.animations.play('default');
+            }
             this.end = true;
         }, 3000);
 
