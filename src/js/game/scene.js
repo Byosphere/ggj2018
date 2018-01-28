@@ -7,6 +7,7 @@ class GameScene {
         this.characterGroup = null;
         this.exitGroup = null;
         this.overlapedButton = null;
+        this.exitActive = false;
     }
 
     init(playerId) {
@@ -70,6 +71,10 @@ class GameScene {
                 }
             });
         });
+
+        game.socket.on('success', function() {
+            console.log('niveau terminé !');
+        });
     }
 
     update() {
@@ -82,6 +87,12 @@ class GameScene {
             this.overlapedButton.frame -= 1;
             game.socket.emit('closedoor', this.overlapedButton.paramColor);
             this.overlapedButton = null;
+        }
+
+        let exit = game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
+        if(!exit && this.exitActive) {
+            game.socket.emit('outexit');
+            this.exitActive = false;
         }
 
         this.character.body.velocity.x = 0;
@@ -165,6 +176,7 @@ class GameScene {
     createExit(exit) {
         let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
+        game.physics.arcade.enable(exitSprite);
         this.exitGroup.add(exitSprite);
     }
 
@@ -173,6 +185,13 @@ class GameScene {
             buttonSprite.frame += 1;
             this.overlapedButton = buttonSprite;
             game.socket.emit('opendoor', buttonSprite.paramColor);
+        }
+    }
+
+    onExit(playerSprite, exitSprite) {
+        if(!this.exitActive) {
+            game.socket.emit('inexit');
+            this.exitActive = true;
         }
     }
 }

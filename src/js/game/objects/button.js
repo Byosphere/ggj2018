@@ -6,7 +6,7 @@ class Button {
         this.sprite.anchor.setTo(0, 1);
         this.sprite.body.setSize(32, 32, 0, 0);
         this.sprite.colorParam = obj.properties.Color;
-        this.setColor(color);
+        this.setColor(this.sprite.colorParam);
     }
 
     setColor(color) {
