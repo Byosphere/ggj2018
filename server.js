@@ -72,6 +72,10 @@ io.on('connection', function (socket) {
         server.exitCount--;
     });
 
+    socket.on('resetexit', function() {
+        server.exitCount = 0;
+    });
+
     //disconnect
     socket.on('disconnect', function () {
         if(socket.player)

@@ -261,6 +261,7 @@ class GameScene {
     }
 
     endScene() {
+        game.socket.emit('resetexit');
         this.enableControls = false;
         this.character.alpha = 0;
         this.exitPerso = game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
