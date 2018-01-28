@@ -6,6 +6,7 @@ class GameScene {
         this.doorsGroup = null;
         this.characterGroup = null;
         this.exitGroup = null;
+        this.overlapedButton = null;
     }
 
     init(playerId) {
@@ -31,9 +32,11 @@ class GameScene {
         this.map.setCollisionBetween(3, 4, true, 'Walls');
 
         // Groups
-        this.buttonsGroup = game.add.group();
-        this.doorsGroup = game.add.group();
         this.exitGroup = game.add.group();
+        this.buttonsGroup = game.add.group();
+        this.buttonsGroup.enableBody = true;
+        this.doorsGroup = game.add.group();
+        this.doorsGroup.enableBody = true;
         this.characterGroup = game.add.group();
 
         // Adding map objects
@@ -50,6 +53,14 @@ class GameScene {
 
     update() {
         game.physics.arcade.collide(this.character, this.layer);
+
+        game.physics.arcade.collide(this.character, this.doorsGroup);
+        
+        let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
+        if (!overlap && this.overlapedButton) {
+            this.overlapedButton.frame -= 1;
+            this.overlapedButton = null;
+        }
 
         this.character.body.velocity.x = 0;
         this.character.body.velocity.y = 0;
@@ -130,9 +141,15 @@ class GameScene {
     }
 
     createExit(exit) {
-        console.log(exit);
         let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
         this.exitGroup.add(exitSprite);
+    }
+
+    pressButton(playerSprite, buttonSprite) {
+        if (!this.overlapedButton) {
+            buttonSprite.frame += 1;
+            this.overlapedButton = buttonSprite;
+        }
     }
 }

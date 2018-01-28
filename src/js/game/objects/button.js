@@ -4,6 +4,7 @@ class Button {
         this.sprite = game.add.sprite(obj.x, obj.y, 'button');
         group.add(this.sprite);
         this.sprite.anchor.setTo(0, 1);
+        this.sprite.body.setSize(32, 32, 0, 0);
         const color = obj.properties.Color;
         this.setColor(color);
     }
