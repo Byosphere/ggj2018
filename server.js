@@ -17,26 +17,33 @@ server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
 
-server.lastPlayerID = 0;
+server.playerCount = 0;
 server.exitCount = 0;
+server.playerList = [];
 
 io.on('connection', function (socket) {
 
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
-        if (server.lastPlayerID > 1) return;
-
+        if (server.playerCount == 2) return;
+        let id = 0;
+        if(server.playerList && server.playerList[0]) {
+            id = 1;
+        } else if(server.playerList && server.playerList[1]) {
+            id = 0;
+        }
         socket.player = {
-            id: server.lastPlayerID++,
+            id: id,
             ready: false
         };
-        socket.emit('selfplayer', {self: socket.player, others: getAllPlayers()});
-        socket.broadcast.emit('otherplayer',  socket.player);
-        console.log('New player connected !');       
+        server.playerList[id] = true;
+        socket.emit('selfplayer', { self: socket.player, others: getAllPlayers() });
+        socket.broadcast.emit('otherplayer', socket.player);
+        server.playerCount++;
     });
 
     // action "ready" d'un player
-    socket.on('playerready', function() {
+    socket.on('playerready', function () {
         socket.player.ready = true;
         socket.broadcast.emit('playerready', socket.player);
         if (getPlayersReady().length === 2) {
@@ -46,21 +53,21 @@ io.on('connection', function (socket) {
     });
 
     // Interrupteur actif 
-    socket.on('opendoor', function(color) {
+    socket.on('opendoor', function (color) {
         socket.broadcast.emit('opendoor', color);
         socket.emit('opendoor', color);
     });
 
     // Interrupteur inactif 
-    socket.on('closedoor', function(color) {
+    socket.on('closedoor', function (color) {
         socket.broadcast.emit('closedoor', color);
         socket.emit('closedoor', color);
     });
 
     // player on exit spot
-    socket.on('inexit', function() {
+    socket.on('inexit', function () {
         server.exitCount++;
-        if(server.exitCount === 2) {
+        if (server.exitCount === 2) {
             socket.emit('success');
             socket.broadcast.emit('success');
         }
@@ -68,18 +75,21 @@ io.on('connection', function (socket) {
     });
 
     // player out of exit spot
-    socket.on('outexit', function(){
+    socket.on('outexit', function () {
         server.exitCount--;
     });
 
-    socket.on('resetexit', function() {
+    socket.on('resetexit', function () {
         server.exitCount = 0;
     });
 
     //disconnect
     socket.on('disconnect', function () {
-        if(socket.player)
-            io.emit('remove', socket.player.id);
+        if (socket.player) {
+            io.emit('disconnect');
+            server.playerCount--;
+            server.playerList[socket.player.id] = false;
+        }
     });
 
 });
