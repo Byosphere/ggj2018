@@ -16,6 +16,7 @@ class GameScene {
         this.exitPosY = 0;
         this.end = false;
         this.currentLevel = 0;
+        this.openedDoorsColors = [];
     }
 
     init(playerId, level) {
@@ -66,46 +67,54 @@ class GameScene {
 
         game.socket.on('opendoor', function (color) {
             console.log('open door : ' + color);
-            that.doorsGroup.forEach(function (door) {
-                if (door.colorParam == color) {
-                    //ouverture de la porte
-                    door.animations.play('open');
-                    that.animatedDoors.push(door);
-                    door.animations.currentAnim.onComplete.add(function () {
-                        // on stoppe la collision
-                        that.noCollisionGroup.add(door);
-                        that.doorsGroup.remove(door);
-                        const idx = that.animatedDoors.findIndex((x) => x === door);
-                        that.animatedDoors.splice(idx, idx + 1);
-                    });
-                }
-            });
+            if(!this.openedDoorsColors.includes(color)) {
+                that.doorsGroup.forEach(function (door) {
+                    if (door.colorParam == color) {
+                        //ouverture de la porte
+                        that.openedDoorsColors.push(door.colorParam);
+                        door.animations.play('open');
+                        that.animatedDoors.push(door);
+                        door.animations.currentAnim.onComplete.add(function () {
+                            // on stoppe la collision
+                            that.noCollisionGroup.add(door);
+                            that.doorsGroup.remove(door);
+                            const idx = that.animatedDoors.findIndex((x) => x === door);
+                            that.animatedDoors.splice(idx, idx + 1);
+                        });
+                    }
+                });
+            }
         });
 
         game.socket.on('closedoor', function (color) {
             console.log('close door : ' + color);
-            that.animatedDoors.forEach(function (door) {
-                if (door.colorParam == color) {
-                    console.log('Reverse door animation');
-                    const anim = door.animations.currentAnim;
-                    const frame = anim.frame;
-                    anim.onComplete.removeAll();
-                    anim.reverseOnce();
-                    const idx = that.animatedDoors.findIndex((x) => x === door);
-                    that.animatedDoors.splice(idx, idx + 1);
-                }
-            });
-            that.noCollisionGroup.forEach(function (door) {
-                if (door.colorParam == color) {
-                    //fermeture de la porte
-                    door.animations.play('close');
-                    door.animations.currentAnim.onComplete.add(function () {
-                        // on stoppe la collision
-                        that.doorsGroup.add(door);
-                        that.noCollisionGroup.remove(door);
-                    });
-                }
-            });
+            if(that.openedDoorsColors.includes(color)) {
+                that.animatedDoors.forEach(function (door) {
+                    if (door.colorParam == color) {
+                        console.log('Reverse door animation');
+                        const anim = door.animations.currentAnim;
+                        const frame = anim.frame;
+                        anim.onComplete.removeAll();
+                        anim.reverseOnce();
+                        const idx = that.animatedDoors.findIndex((x) => x === door);
+                        that.animatedDoors.splice(idx, idx + 1);
+                    }
+                });
+                that.noCollisionGroup.forEach(function (door) {
+                    if (door.colorParam == color) {
+                        //fermeture de la porte
+                        door.animations.play('close');
+                        door.animations.currentAnim.onComplete.add(function () {
+                            // on stoppe la collision
+                            that.doorsGroup.add(door);
+                            that.openedDoorsColors.
+                            that.noCollisionGroup.remove(door);
+                        });
+                    }
+                });
+                const idx2 = that.openedDoorsColors.findIndex((x) => x === color);
+                that.openedDoorsColors.splice(idx2, idx2 + 1);
+            }
         });
 
         game.socket.on('success', function () {
@@ -297,6 +306,7 @@ class GameScene {
         this.exitPosX = 0;
         this.exitPosY = 0;
         this.animatedDoors = [];
+        this.openedDoorsColors = [];
         this.end = false;
     }
 }
