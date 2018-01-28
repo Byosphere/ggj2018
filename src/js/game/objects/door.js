@@ -1,7 +1,8 @@
 class Door {
 
-    constructor(obj) {
+    constructor(obj, group) {
         this.sprite = game.add.sprite(obj.x, obj.y, 'door');
+        group.add(this.sprite);
         this.sprite.anchor.setTo(0, 1);
         const color = obj.properties.Color;
         this.setColor(color);

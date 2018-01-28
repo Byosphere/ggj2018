@@ -2,6 +2,10 @@ class GameScene {
 
     constructor() {
         this.playerId = null;
+        this.buttonsGroup = null;
+        this.doorsGroup = null;
+        this.characterGroup = null;
+        this.exitGroup = null;
     }
 
     init(playerId) {
@@ -26,7 +30,11 @@ class GameScene {
 
         this.map.setCollisionBetween(3, 4, true, 'Walls');
 
-        // 
+        // Groups
+        this.buttonsGroup = game.add.group();
+        this.doorsGroup = game.add.group();
+        this.exitGroup = game.add.group();
+        this.characterGroup = game.add.group();
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
@@ -107,22 +115,24 @@ class GameScene {
     createCharacter(posX, posY) {
         // Creating the character and placing it on the map
         this.character = game.add.sprite(posX, posY, this.characterName);
+        this.characterGroup.add(this.character);
         this.character.anchor.setTo(0, 1);
         game.physics.arcade.enable(this.character);
         this.character.body.setSize(64, 64, 0, 0);
     }
 
     createButton(button) {
-        let buttonSprite = new Button(button);
+        let buttonSprite = new Button(button, this.buttonsGroup);
     }
 
     createDoor(door) {
-        let doorSprite = new Door(door);
+        let doorSprite = new Door(door, this.doorsGroup);
     }
 
     createExit(exit) {
         console.log(exit);
         let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
+        this.exitGroup.add(exitSprite);
     }
 }
