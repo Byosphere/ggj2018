@@ -43,7 +43,7 @@ class GameMenu {
             }
         });
         game.socket.on('startgame', function () {
-            game.camera.fade('#000000', 4000);
+            game.camera.fade('#000000', 3000);
             game.camera.onFadeComplete.add(function () {
                 that.music.stop();
                 game.state.start('scene', true, false, that.self.id);

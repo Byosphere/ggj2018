@@ -11,12 +11,15 @@ class GameScene {
         this.animatedDoors = [];
         this.exitActive = false;
         this.enableControls = true;
+        this.exitPosX = 0;
+        this.exitPosY = 0;
+        this.end = false;
     }
 
     init(playerId, level) {
         this.playerId = playerId;
         this.characterName = null;
-        this.currentLevel = level || 'level1';
+        this.currentLevel = level || 1;
     }
 
     preload() {
@@ -28,8 +31,7 @@ class GameScene {
     create() {
         let that = this;
         this.characterName = this.playerId === 0 ? 'fleur' : 'coli';
-        this.map = game.add.tilemap(this.currentLevel + this.characterName);
-
+        this.map = game.add.tilemap('level' + this.currentLevel + this.characterName);
         this.map.addTilesetImage('decor');
 
         this.layer = this.map.createLayer('Walls');
@@ -59,17 +61,17 @@ class GameScene {
 
         game.socket.on('opendoor', function (color) {
             console.log('open door : ' + color);
-            that.doorsGroup.forEach(function(door) {
-                if(door.colorParam == color) {
+            that.doorsGroup.forEach(function (door) {
+                if (door.colorParam == color) {
                     //ouverture de la porte
                     door.animations.play('open');
                     that.animatedDoors.push(door);
-                    door.animations.currentAnim.onComplete.add(function() {
+                    door.animations.currentAnim.onComplete.add(function () {
                         // on stoppe la collision
                         that.noCollisionGroup.add(door);
                         that.doorsGroup.remove(door);
                         const idx = that.animatedDoors.findIndex((x) => x === door);
-                        that.animatedDoors.splice(idx, idx+1);
+                        that.animatedDoors.splice(idx, idx + 1);
                     });
                 }
             });
@@ -77,7 +79,7 @@ class GameScene {
 
         game.socket.on('closedoor', function (color) {
             console.log('close door : ' + color);
-            that.animatedDoors.forEach(function(door) {
+            that.animatedDoors.forEach(function (door) {
                 if (door.colorParam == color) {
                     console.log('Reverse door animation');
                     const anim = door.animations.currentAnim;
@@ -85,14 +87,14 @@ class GameScene {
                     anim.onComplete.removeAll();
                     anim.reverseOnce();
                     const idx = that.animatedDoors.findIndex((x) => x === door);
-                    that.animatedDoors.splice(idx, idx+1);
+                    that.animatedDoors.splice(idx, idx + 1);
                 }
             });
-            that.noCollisionGroup.forEach(function(door) {
-                if(door.colorParam == color) {
+            that.noCollisionGroup.forEach(function (door) {
+                if (door.colorParam == color) {
                     //fermeture de la porte
                     door.animations.play('close');
-                    door.animations.currentAnim.onComplete.add(function() {
+                    door.animations.currentAnim.onComplete.add(function () {
                         // on stoppe la collision
                         that.doorsGroup.add(door);
                         that.noCollisionGroup.remove(door);
@@ -110,7 +112,7 @@ class GameScene {
     update() {
         game.physics.arcade.collide(this.character, this.layer);
 
-        //game.physics.arcade.collide(this.character, this.doorsGroup);
+        game.physics.arcade.collide(this.character, this.doorsGroup);
 
         let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
@@ -129,8 +131,12 @@ class GameScene {
         this.character.body.velocity.y = 0;
         this.character.body.angularVelocity = 0;
 
-        if(this.enableControls)
+        if (this.enableControls)
             this.handleControls();
+
+        if (this.end && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
+            game.state.start('scene', true, false, this.playerId, this.level + 1);
+        }
     }
 
     initAnimations() {
@@ -209,6 +215,8 @@ class GameScene {
     }
 
     createExit(exit) {
+        this.exitPosX = exit.x;
+        this.exitPosY = exit.y;
         let exitSprite = game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
         exitSprite.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 4, true);
@@ -240,5 +248,22 @@ class GameScene {
 
     endScene() {
         this.enableControls = false;
+        this.character.alpha = 0;
+        this.exitPerso = game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
+        this.exitPerso.anchor.setTo(0, 1);
+        this.exitPerso.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 8, true);
+        this.exitPerso.animations.play('default');
+        setTimeout(() => {
+            this.music.stop();
+            game.camera.flash();
+            this.endTitle = game.add.sprite(game.world.centerX, game.world.centerY, 'victory');
+            this.endTitle.anchor.setTo(0.5);
+            this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
+            this.endTitle.animations.play('default');
+            this.endText = game.add.text(game.world.centerX, game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL, { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+            this.endText.anchor.setTo(0.5);
+            this.end = true;
+        }, 3000);
+
     }
 }
