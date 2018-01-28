@@ -1,6 +1,6 @@
 class Door {
 
-    constructor(obj, group) {
+    constructor(obj, group, game) {
         if (obj.properties.Orientation === 'vertical') {
             this.sprite = game.add.sprite(obj.x, obj.y, 'door');
         } else {

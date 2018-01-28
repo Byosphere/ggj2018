@@ -1,6 +1,6 @@
 class Button {
 
-    constructor(obj, group) {
+    constructor(obj, group, game) {
         this.sprite = game.add.sprite(obj.x, obj.y, 'button');
         group.add(this.sprite);
         this.sprite.anchor.setTo(0, 1);

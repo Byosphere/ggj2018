@@ -1,11 +1,11 @@
 module.exports = function(grunt) {
 
     var jsSources = ['src/js/utils/constants.js', 
-                     'src/js/game/builder.js',
-                     'src/js/game/booter.js', 
-                     'src/js/game/loader.js',
-                     'src/js/game/scene.js',
-                     'src/js/game/menu.js',
+                     'src/js/game/Game.js',
+                     'src/js/game/states/Booter.js', 
+                     'src/js/game/states/Loader.js',
+                     'src/js/game/states/MainMenu.js',
+                     'src/js/game/states/Scene.js',
                      'src/js/game/objects/button.js',
                      'src/js/game/objects/door.js',
                      'src/js/game/objects/exit.js'];
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             ]
           },
           assets: {
-            files: [{expand: true, src: ['assets/**'], dest: 'public/'}, {expand: true, src: ['fonts/**'], dest: 'public/'}, {expand: true, src: ['sound/**'], dest: 'public/assets/'}]
+            files: [{expand: true, src: ['assets/**'], dest: 'public/'}, {expand: true, src: ['fonts/**'], dest: 'public/'}]
           }
         },
         concat: {
