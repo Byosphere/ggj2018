@@ -5,8 +5,8 @@ class Door {
         group.add(this.sprite);
         this.sprite.body.immovable = true;
         this.sprite.anchor.setTo(0, 1);
-        this.sprite.paramColor = obj.properties.Color;
-        this.setColor(this.sprite.paramColor);
+        this.sprite.colorParam = obj.properties.Color;
+        this.setColor(this.sprite.colorParam);
     }
 
     setColor(color) {

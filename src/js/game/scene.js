@@ -7,6 +7,8 @@ class GameScene {
         this.characterGroup = null;
         this.exitGroup = null;
         this.overlapedButton = null;
+        this.noCollisionGroup = null;
+        this.animatedDoors = [];
     }
 
     init(playerId) {
@@ -39,6 +41,7 @@ class GameScene {
         this.doorsGroup = game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = game.add.group();
+        this.noCollisionGroup = game.add.group();
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
@@ -54,19 +57,43 @@ class GameScene {
         game.socket.on('opendoor', function (color) {
             console.log('open door : ' + color);
             that.doorsGroup.forEach(function(door) {
-                if(door.paramColor == color) {
+                if(door.colorParam == color) {
                     //ouverture de la porte
                     door.animations.play('open');
+                    that.animatedDoors.push(door);
+                    door.animations.currentAnim.onComplete.add(function() {
+                        // on stoppe la collision
+                        that.noCollisionGroup.add(door);
+                        that.doorsGroup.remove(door);
+                        const idx = that.animatedDoors.findIndex((x) => x === door);
+                        that.animatedDoors.splice(idx, idx+1);
+                    });
                 }
             });
         });
 
         game.socket.on('closedoor', function (color) {
             console.log('close door : ' + color);
-            that.doorsGroup.forEach(function(door) {
-                if(door.paramColor == color) {
+            that.animatedDoors.forEach(function(door) {
+                if (door.colorParam == color) {
+                    console.log('Reverse door animation');
+                    const anim = door.animations.currentAnim;
+                    const frame = anim.frame;
+                    anim.onComplete.removeAll();
+                    anim.reverseOnce();
+                    const idx = that.animatedDoors.findIndex((x) => x === door);
+                    that.animatedDoors.splice(idx, idx+1);
+                }
+            });
+            that.noCollisionGroup.forEach(function(door) {
+                if(door.colorParam == color) {
                     //fermeture de la porte
                     door.animations.play('close');
+                    door.animations.currentAnim.onComplete.add(function() {
+                        // on stoppe la collision
+                        that.doorsGroup.add(door);
+                        that.noCollisionGroup.remove(door);
+                    });
                 }
             });
         });
@@ -80,7 +107,7 @@ class GameScene {
         let overlap = game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.frame -= 1;
-            game.socket.emit('closedoor', this.overlapedButton.paramColor);
+            game.socket.emit('closedoor', this.overlapedButton.colorParam);
             this.overlapedButton = null;
         }
 
@@ -172,7 +199,8 @@ class GameScene {
         if (!this.overlapedButton) {
             buttonSprite.frame += 1;
             this.overlapedButton = buttonSprite;
-            game.socket.emit('opendoor', buttonSprite.paramColor);
+            console.log(buttonSprite);
+            game.socket.emit('opendoor', buttonSprite.colorParam);
         }
     }
 }
