@@ -10,7 +10,8 @@ class GameMenu {
     }
 
     preload() {
-        this.music = this.add.audio('menu_theme');
+        this.music = this.add.audio('main_menu');
+        this.music.loop = true;
         this.soundColi = this.add.audio('sound_coli');
         this.soundFleur = this.add.audio('sound_fleur');
     }
@@ -22,8 +23,6 @@ class GameMenu {
         this.createTexts();
         this.initInputs();
 
-        this.music = this.add.audio('menu_theme');
-        this.music.loop = true;
         this.music.play();
         let that = this;
         game.socket.emit('newplayer');
@@ -46,18 +45,21 @@ class GameMenu {
         game.socket.on('startgame', function () {
             game.camera.fade('#000000', 4000);
             game.camera.onFadeComplete.add(function () {
-                // this.music.stop();
+                that.music.stop();
                 game.state.start('scene', true, false, that.self.id);
             }, this);
         });
     }
 
     update() {
-        if (!this.sentReadyInfo && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
-            console.log('sent ready info !')
-            this.sentReadyInfo = true;
-            this.activateHero(this.self);
-            game.socket.emit('playerready');
+        if (this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
+            if(!this.sentReadyInfo) {
+                this.sentReadyInfo = true;
+                this.activateHero(this.self);
+                game.socket.emit('playerready');
+            } else {             
+                //spam sound
+            }
         }
     }
 

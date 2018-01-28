@@ -11,6 +11,8 @@ class GameScene {
 
     preload() {
         game.stage.backgroundColor = SCENE_BACKGROUND;
+        this.music = this.add.audio('game');
+        this.music.loop = true;
     }
 
     create() {
@@ -35,6 +37,7 @@ class GameScene {
         this.initAnimations();
         game.input.gamepad.start();
         this.pad = game.input.gamepad.pad1;
+        this.music.play();
     }
 
     update() {
