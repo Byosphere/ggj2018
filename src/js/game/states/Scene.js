@@ -35,7 +35,6 @@ class Scene extends Phaser.State {
     create() {
         this.generateLevel(this.currentLevel);
         this.initAnimations();
-        this.initInputs();
         this.connectServer();
         this.music.play();
     }
@@ -170,7 +169,7 @@ class Scene extends Phaser.State {
         if (this.enableControls)
             this.handleControls();
 
-        if (this.end && this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
+        if (this.end && this.game.controlsManager.actionButtonReleased()) {
             this.game.state.start('scene', true, false, this.playerId, this.currentLevel + 1);
         }
     }
@@ -188,38 +187,38 @@ class Scene extends Phaser.State {
      * Gère les inputs du joueur
      */
     handleControls() {
-        if (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
+        if (this.game.controlsManager.leftButtonDown()) {
             this.character.body.velocity.x -= 200;
             this.character.animations.play('walk_left');
         }
-        else if (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+        else if (this.game.controlsManager.rightButtonDown()) {
             this.character.body.velocity.x += 200;
             this.character.animations.play('walk_right');
             this.character.scale.setTo(1, 1);
         }
 
-        if (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+        if (this.game.controlsManager.upButtonDown()) {
             this.character.body.velocity.y -= 200;
             this.character.animations.play('walk_up');
             this.character.scale.setTo(1, 1);
         }
-        else if (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+        else if (this.game.controlsManager.downButtonDown()) {
             this.character.body.velocity.y += 200;
             this.character.animations.play('walk_right');
             this.character.scale.setTo(1, 1);
         }
 
-        if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_LEFT)) {
+        if (this.game.controlsManager.leftButtonReleased()) {
             this.character.frame = 36;
 
-        } else if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_RIGHT)) {
+        } else if (this.game.controlsManager.rightButtonReleased()) {
             this.character.frame = 13;
         }
 
-        if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_DOWN)) {
+        if (this.game.controlsManager.downButtonReleased()) {
             this.character.frame = 13;
 
-        } else if (this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_UP)) {
+        } else if (this.game.controlsManager.upButtonReleased()) {
             this.character.frame = 32;
         }
     }
@@ -340,14 +339,14 @@ class Scene extends Phaser.State {
         this.exitPerso.animations.play('default');
         setTimeout(() => {
             this.music.fadeOut(1000);
-            this.victoryMusic.fadeIn(500);
+            this.victoryMusic.fadeIn(500, true);
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
                 this.endTitle.anchor.setTo(0.5);
                 this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
                 this.endTitle.animations.play('default');
-                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL, { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
                 this.endText.anchor.setTo(0.5);
             } else {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');

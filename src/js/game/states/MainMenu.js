@@ -3,12 +3,10 @@ class MainMenu extends Phaser.State {
     preload() {
         this.self = { id: null, name: null, ready: false, sprite: null };
         this.other = { id: null, name: null, ready: false, sprite: null };
-        this.pad = null;
         this.sentReadyInfo = false;
         this.player1Sprite = null;
         this.player2Sprite = null;
-        this.soundPlaying = false;
-
+        
         //musique
         this.music = this.add.audio('main_menu');
         this.music.loop = true;
@@ -18,6 +16,7 @@ class MainMenu extends Phaser.State {
         this.soundColi.onStop.add(() => this.soundPlaying = false, this);
         this.soundFleur = this.add.audio('sound_fleur');
         this.soundFleur.onStop.add(() => this.soundPlaying = false, this);
+        this.soundPlaying = false;
 
     }
 
@@ -26,16 +25,18 @@ class MainMenu extends Phaser.State {
         this.createTitle();
         this.createCharacters();
         this.createTexts();
-        this.initInputs();
         this.connectServer();
 
+        //initialise les manettes
+        
+
         this.music.onDecoded.add(() => {
-            this.music.fadeIn(1000);
+            this.music.fadeIn(1000, true);
         });
     }
 
     update() {
-        if (this.pad.justReleased(Phaser.Gamepad.XBOX360_A)) {
+        if (this.game.controlsManager.actionButtonReleased()) {
             if (!this.sentReadyInfo) {
                 this.sentReadyInfo = true;
                 this.activateHero(this.self);
@@ -51,10 +52,6 @@ class MainMenu extends Phaser.State {
                 }
             }
         }
-    }
-
-    shutdown() {
-
     }
 
     /**
@@ -246,11 +243,7 @@ class MainMenu extends Phaser.State {
         this.ColiText.anchor.set(0.5);
     }
 
-    /**
-     * initialise les manettes
-     */
-    initInputs() {
-        this.game.input.gamepad.start();
-        this.pad = this.game.input.gamepad.pad1;
+    shutdown() {
+
     }
 }

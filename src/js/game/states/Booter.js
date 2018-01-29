@@ -7,6 +7,9 @@ class Booter extends Phaser.State {
         // Scaling options
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+        //init controllers
+        this.game.controlsManager.init();
+        
         // Centering game
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;

@@ -11,6 +11,9 @@ class Game extends Phaser.Game {
 
         //add socket IO to the game
         this.socket = io.connect();
+        //add the controlsMananger to the game
+        this.controlsManager = new ControlsManager(this);
+        
         this.state.start('boot');
     }
 }
