@@ -4,11 +4,19 @@ This is the repository for our video-game developed durring the 2018 edition of 
 
 ### How to install
 
-**TODO**
+- Télécharger/cloner les sources dans un dossier sur son ordinateur.
+- Se placer dans le répertoire racine du jeu puis lancer 'npm install' (installer nodejs si nécessaire)
+- lancer la commande 'npm run publish' 
+
+- Ouvrir un navigateur (localhost:8081 par défaut) 
 
 ### How to play
 
-**TODO**
+Gestion des manettes :
+A/B : action principale
+haut, bas, gauche, droite : déplacer le personnage.
+
+Il suffit de se placer sur un interrupteur pour l'activer.
 
 ### How to contribute
 
