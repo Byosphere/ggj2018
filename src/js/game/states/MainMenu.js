@@ -48,20 +48,16 @@ class MainMenu extends Phaser.State {
         if (this.game.controlsManager.actionButtonReleased()) {
             if (!this.heros[this.self.position].selected) {
                 this.game.socket.emit('selecthero', this.heros[this.self.position].name);
-            } else if (this.self.id === this.heros[this.self.position].selected) {
+            } else if (this.self.selectedHero === this.self.position) {
                 if (!this.soundPlaying) {
                     this.soundPlaying = true;
-                    if (this.self.id) {
-                        this.soundFleur.play();
-                    } else {
-                        this.soundColi.play();
-                    }
+                    this.heros[this.self.selectedHero].sound.play();
                 }
             }
         }
 
         if (this.game.controlsManager.cancelButtonReleased()) {
-            if (this.heros[this.self.position].selected && this.self.id === this.heros[this.self.position].selected) {
+            if (this.self.selectedHero === this.self.position) {
                 this.game.socket.emit('selecthero', null);
             }
         }
@@ -133,7 +129,7 @@ class MainMenu extends Phaser.State {
                 this.other = player;
                 this.checkHeroActivation(player, false);
             }
-            if(!player.selectedHero)
+            if (!player.selectedHero)
                 this.changePosition(player, player.position);
         });
     }
@@ -205,7 +201,8 @@ class MainMenu extends Phaser.State {
         player.position = position;
 
         let pSprite = player.id === 0 ? this.p1 : this.p2;
-        pSprite.alpha = 1;
+        this.self.id === player.id ? pSprite.alpha = 1 : pSprite.alpha = 0.5;
+
         if (position === COLI_HEROS) {
             pSprite.x = this.displayPlayerColiX;
         } else {
@@ -218,8 +215,12 @@ class MainMenu extends Phaser.State {
      * @param {Object} player : joueur qui se desactive
      */
     desactivateHero(player) {
-        if (!player.selectedHero) return;
-        let selectedHero = this.heros[player.selectedHero];
+        let selectedHero;
+        if (!player.selectedHero) {
+            selectedHero = this.heros[player.position];
+        } else {
+            selectedHero = this.heros[player.selectedHero];
+        }
         selectedHero.alpha = 0.6;
         selectedHero.bulle.alpha = 1;
         selectedHero.sprite.animations.stop();
@@ -294,12 +295,11 @@ class MainMenu extends Phaser.State {
         this.ColiText = this.game.add.text(this.heros[COLI_HEROS].sprite.x + (this.heros[COLI_HEROS].sprite.width / 2), this.heros[COLI_HEROS].sprite.y + this.heros[COLI_HEROS].sprite.height + 20, MENU_TEXT_COLI, { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
         this.ColiText.anchor.set(0.5);
 
-        this.displayPlayerFleurX = this.heros[FLEUR_HEROS].bulle.x - this.heros[FLEUR_HEROS].bulle.width / 2 + 10;
+        this.displayPlayerFleurX = this.heros[FLEUR_HEROS].sprite.x + this.heros[FLEUR_HEROS].sprite.width + 10;
+        this.displayPlayerColiX = this.heros[COLI_HEROS].sprite.x + this.heros[COLI_HEROS].sprite.width + 10;
 
-        this.displayPlayerColiX = this.heros[COLI_HEROS].bulle.x + this.heros[COLI_HEROS].bulle.width / 2 - 10;
-
-        this.p1 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].bulle.y, P1, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
-        this.p2 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].bulle.y + 30, P2, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.p1 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y, P1, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.p2 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y + 30, P2, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         this.p1.alpha = 0;
         this.p2.alpha = 0;
     }
