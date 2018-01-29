@@ -2,12 +2,12 @@ class Scene extends Phaser.State {
 
     /**
      * Initialisation de la scene avec l'id du player et le niveau dans lequel il va jouer
-     * @param {int} playerId 
+     * @param {int} player
      * @param {int} level 
      */
-    init(playerId, level) {
-        this.playerId = playerId;
-        this.characterName = this.playerId === 0 ? 'fleur' : 'coli';
+    init(player, level) {
+        this.player = player;
+        this.characterName = this.player.selectedHero;
         this.currentLevel = level || 1;
     }
 
@@ -170,7 +170,7 @@ class Scene extends Phaser.State {
             this.handleControls();
 
         if (this.end && this.game.controlsManager.actionButtonReleased()) {
-            this.game.state.start('scene', true, false, this.playerId, this.currentLevel + 1);
+            this.game.state.start('scene', true, false, this.player, this.currentLevel + 1);
         }
     }
 
@@ -292,7 +292,7 @@ class Scene extends Phaser.State {
         exitSprite.anchor.setTo(0, 1);
         exitSprite.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 4, true);
         exitSprite.animations.play('default');
-        if (this.playerId === 1) {
+        if (this.player.id === 1) {
             exitSprite.scale.setTo(-1, 1);
             exitSprite.x -= exitSprite.width;
         }

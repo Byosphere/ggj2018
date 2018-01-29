@@ -16,38 +16,49 @@ server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
 
-server.playerCount = 0;
 server.exitCount = 0;
-server.playerList = [];
+server.players = [null, null];
 
 io.on('connection', function (socket) {
 
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
-        if (server.playerCount == 2) return;
-        let id = 0;
-        if(server.playerList && server.playerList[0]) {
-            id = 1;
-        } else if(server.playerList && server.playerList[1]) {
-            id = 0;
-        }
+        if (server.players[0] && server.players[1]) return;
+        let id = server.players[0] ? 1 : 0;
+
         socket.player = {
             id: id,
-            ready: false
+            selectedHero: false,
+            position: 'fleur'
         };
-        server.playerList[id] = true;
-        socket.emit('selfplayer', { self: socket.player, others: getAllPlayers() });
-        socket.broadcast.emit('otherplayer', socket.player);
-        server.playerCount++;
+        server.players[id] = socket.player;
+        socket.emit('newplayer', socket.player, server.players);
+        socket.broadcast.emit('newplayer', null, server.players);
     });
 
     // action "ready" d'un player
-    socket.on('playerready', function () {
-        socket.player.ready = true;
-        socket.broadcast.emit('playerready', socket.player);
-        if (getPlayersReady().length === 2) {
+    socket.on('selecthero', function (selectedHero) {
+        server.players[socket.player.id].selectedHero = selectedHero;
+        socket.emit('updateplayers', server.players);
+        socket.broadcast.emit('updateplayers', server.players);
+        if (server.players[0] && server.players[0].selectedHero && server.players[1] && server.players[1].selectedHero) {
             socket.emit('startgame');
             socket.broadcast.emit('startgame');
+        }
+    });
+
+    socket.on('updateposition', function (position) {
+        server.players[socket.player.id].position = position;
+        socket.broadcast.emit('updateplayers', server.players);
+        console.log(server.players);
+    });
+
+    //disconnect
+    socket.on('disconnect', function () {
+        if (socket.player) {
+            io.emit('disconnect');
+            server.playerCount--;
+            server.players[socket.player.id] = null;
         }
     });
 
@@ -70,7 +81,6 @@ io.on('connection', function (socket) {
             socket.emit('success');
             socket.broadcast.emit('success');
         }
-
     });
 
     // player out of exit spot
@@ -82,33 +92,4 @@ io.on('connection', function (socket) {
         server.exitCount = 0;
     });
 
-    //disconnect
-    socket.on('disconnect', function () {
-        if (socket.player) {
-            io.emit('disconnect');
-            server.playerCount--;
-            server.playerList[socket.player.id] = false;
-        }
-    });
-
 });
-
-function getAllPlayers() {
-    var players = [];
-    Object.keys(io.sockets.connected).forEach(function (socketID) {
-        var player = io.sockets.connected[socketID].player;
-        if (player) players.push(player);
-    });
-    return players;
-}
-
-function getPlayersReady() {
-    var playersReady = [];
-    for (const socketID of Object.keys(io.sockets.connected)) {
-        var player = io.sockets.connected[socketID].player;
-        if (player && player.ready) {
-            playersReady.push(player);
-        }
-    }
-    return playersReady;
-}

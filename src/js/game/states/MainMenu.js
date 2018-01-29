@@ -1,25 +1,33 @@
 class MainMenu extends Phaser.State {
 
+    /**
+     * preload fonction du phaser state
+     */
     preload() {
-        this.self = { id: null, name: null, ready: false, sprite: null };
-        this.other = { id: null, name: null, ready: false, sprite: null };
-        this.sentReadyInfo = false;
-        this.player1Sprite = null;
-        this.player2Sprite = null;
-        
+        this.heros = [];
+        this.heros[FLEUR_HEROS] = { sprite: null, bulle: null, selected: false, sound: null, name: FLEUR_HEROS };
+        this.heros[COLI_HEROS] = { sprite: null, bulle: null, selected: false, sound: null, name: COLI_HEROS };
+
+        this.self = { id: null, selectedHero: null, position: FLEUR_HEROS };
+        this.other = { id: null, selectedHero: null, position: FLEUR_HEROS };
+
         //musique
         this.music = this.add.audio('main_menu');
         this.music.loop = true;
 
         //sons
-        this.soundColi = this.add.audio('sound_coli');
-        this.soundColi.onStop.add(() => this.soundPlaying = false, this);
-        this.soundFleur = this.add.audio('sound_fleur');
-        this.soundFleur.onStop.add(() => this.soundPlaying = false, this);
-        this.soundPlaying = false;
+        this.heros[COLI_HEROS].sound = this.add.audio('sound_coli');
+        this.heros[COLI_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
 
+        this.heros[FLEUR_HEROS].sound = this.add.audio('sound_fleur');
+        this.heros[FLEUR_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
+
+        this.soundPlaying = false;
     }
 
+    /**
+     * create fonction du phaser state
+     */
     create() {
         this.createBackground();
         this.createTitle();
@@ -27,21 +35,20 @@ class MainMenu extends Phaser.State {
         this.createTexts();
         this.connectServer();
 
-        //initialise les manettes
-        
-
         this.music.onDecoded.add(() => {
             this.music.fadeIn(1000, true);
         });
     }
 
+    /**
+     * update fonction du phaser state
+     */
     update() {
+
         if (this.game.controlsManager.actionButtonReleased()) {
-            if (!this.sentReadyInfo) {
-                this.sentReadyInfo = true;
-                this.activateHero(this.self);
-                this.game.socket.emit('playerready');
-            } else {
+            if (!this.heros[this.self.position].selected) {
+                this.game.socket.emit('selecthero', this.heros[this.self.position].name);
+            } else if (this.self.id === this.heros[this.self.position].selected) {
                 if (!this.soundPlaying) {
                     this.soundPlaying = true;
                     if (this.self.id) {
@@ -52,31 +59,40 @@ class MainMenu extends Phaser.State {
                 }
             }
         }
+
+        if (this.game.controlsManager.cancelButtonReleased()) {
+            if (this.heros[this.self.position].selected && this.self.id === this.heros[this.self.position].selected) {
+                this.game.socket.emit('selecthero', null);
+            }
+        }
+
+        if (this.game.controlsManager.leftButtonReleased() && (this.self.position == COLI_HEROS) && !this.self.selectedHero) {
+            this.changePosition(this.self, FLEUR_HEROS);
+            this.game.socket.emit('updateposition', FLEUR_HEROS);
+
+        } else if (this.game.controlsManager.rightButtonReleased() && (this.self.position == FLEUR_HEROS) && !this.self.selectedHero) {
+            this.changePosition(this.self, COLI_HEROS);
+            this.game.socket.emit('updateposition', COLI_HEROS);
+        }
     }
 
     /**
      * Fonction rassemblant tous les écouteurs de socket IO
      */
     connectServer() {
+        // connexion au jeu
         this.game.socket.emit('newplayer');
 
-        this.game.socket.on('selfplayer', (data) => {
-            this.setPlayer(this.self, data.self);
-            if (this.self.id === 1) {
-                this.setPlayer(this.other, data.others[0]);
+        this.game.socket.on('newplayer', (self, playerList) => {
+            if (self) {
+                this.self = self;
             }
+            this.updatePlayers(playerList);
+
         });
 
-        this.game.socket.on('otherplayer', (player) => {
-            this.setPlayer(this.other, player);
-        });
-
-        this.game.socket.on('playerready', (player) => {
-            if (this.self.id === player.id) {
-                this.activateHero(this.self);
-            } else {
-                this.activateHero(this.other);
-            }
+        this.game.socket.on('updateplayers', (playerList) => {
+            this.updatePlayers(playerList);
         });
 
         this.game.socket.on('startgame', () => {
@@ -89,26 +105,49 @@ class MainMenu extends Phaser.State {
     }
 
 
+    /**
+     * fonction lançant la partie (scene)
+     */
     startGame() {
         this.game.camera.fade('#000000', 3000);
         this.music.fadeOut(3000);
         this.game.camera.onFadeComplete.add(() => {
-            this.game.state.start('scene', true, false, this.self.id);
+            this.game.state.start('scene', true, false, this.self);
         }, this);
     }
 
     /**
-     * Fonction permettant de définir un joueur
+     * Fonction permettant de mettre à jour un joueur
      * @param {Object} player : joueur à définir
      * @param {Object} playerData : données à utiliser
      */
-    setPlayer(player, playerData) {
-        player.id = playerData.id;
-        player.name = player.id === 0 ? 'Fleur' : 'Coli';
-        player.sprite = player.id === 0 ? this.player1Sprite : this.player2Sprite;
-        player.ready = playerData.ready;
-        if (player.ready) {
-            this.activateHero(player, true);
+    updatePlayers(playerList) {
+
+        playerList.forEach(player => {
+            if (player === null) return;
+
+            if (this.self.id == player.id) {
+                this.self = player;
+                this.checkHeroActivation(player, true);
+            } else {
+                this.other = player;
+                this.checkHeroActivation(player, false);
+            }
+            if(!player.selectedHero)
+                this.changePosition(player, player.position);
+        });
+    }
+
+    /**
+     * Fonction qui gère l'activation de la séléction d'un personnage sur l'écran titre
+     * @param {Object} player 
+     * @param {Object} self 
+     */
+    checkHeroActivation(player, self) {
+        if (player.selectedHero) {
+            this.activateHero(player, !self);
+        } else {
+            this.desactivateHero(player)
         }
     }
 
@@ -117,8 +156,13 @@ class MainMenu extends Phaser.State {
      */
     removePlayer() {
 
-        if (this.other.ready) {
+        if (this.other.selectedHero) {
             this.desactivateHero(this.other);
+        }
+        if (this.other.id === 0) {
+            this.p1.alpha = 0;
+        } else {
+            this.p2.alpha = 0;
         }
 
     }
@@ -129,41 +173,44 @@ class MainMenu extends Phaser.State {
      * @param {boolean} skip : sauter les animations/sons
      */
     activateHero(player, skip) {
-        player.ready = true;
-        player.sprite.alpha = 1;
 
-        switch (player.id) {
-
-            case 0:
-                if (skip) {
-                    this.bulle1.alpha = 0;
-                } else {
-                    this.soundPlaying = true;
-                    this.soundColi.play();
-                    this.game.add.tween(this.bulle1).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
-                }
-                break;
-
-            case 1:
-                if (skip) {
-                    this.bulle2.alpha = 0;
-                } else {
-                    this.soundPlaying = true;
-                    this.soundFleur.play();
-                    this.game.add.tween(this.bulle2).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
-                }
-                break;
-
-            default:
-                console.error('Player\'s ID is incorrect !');
+        let selectedHero = this.heros[player.selectedHero];
+        selectedHero.selected = true;
+        selectedHero.sprite.alpha = 1;
+        let text = player.id === 0 ? this.p1 : this.p2;
+        if (skip) {
+            selectedHero.bulle.alpha = 0;
+            text.alpha = 0;
+        } else {
+            this.soundPlaying = true;
+            selectedHero.sound.play();
+            this.game.add.tween(selectedHero.bulle).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
+            this.game.add.tween(text).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         }
 
         // Animation of the hero
-        player.sprite.animations.play('ready');
-        player.sprite.animations.currentAnim.onComplete.add(function () {
-            player.sprite.animations.play('walk');
+        selectedHero.sprite.animations.play('ready');
+        selectedHero.sprite.animations.currentAnim.onComplete.add(function () {
+            selectedHero.sprite.animations.play('walk');
         });
 
+    }
+
+    /**
+     * Fonction qui gère le changement de position du curseur sur l'écran titre
+     * @param {Object} player 
+     * @param {string} position 
+     */
+    changePosition(player, position) {
+        player.position = position;
+
+        let pSprite = player.id === 0 ? this.p1 : this.p2;
+        pSprite.alpha = 1;
+        if (position === COLI_HEROS) {
+            pSprite.x = this.displayPlayerColiX;
+        } else {
+            pSprite.x = this.displayPlayerFleurX;
+        }
     }
 
     /**
@@ -171,15 +218,14 @@ class MainMenu extends Phaser.State {
      * @param {Object} player : joueur qui se desactive
      */
     desactivateHero(player) {
-        player.sprite.alpha = 0.6;
-        this.other.ready = false;
-        if (player.id === 0) {
-            this.bulle1.alpha = 1;
-        } else {
-            this.bulle2.alpha = 1;
-        }
-        player.sprite.animations.stop();
-        player.sprite.frame = 8;
+        if (!player.selectedHero) return;
+        let selectedHero = this.heros[player.selectedHero];
+        selectedHero.alpha = 0.6;
+        selectedHero.bulle.alpha = 1;
+        selectedHero.sprite.animations.stop();
+        selectedHero.sprite.frame = 8;
+        selectedHero.selected = false;
+        player.id === 0 ? this.p1.alpha = 1 : this.p2.alpha = 1;
     }
 
     /**
@@ -195,27 +241,33 @@ class MainMenu extends Phaser.State {
      * Créé les personnages Fleur et Coli + bulles
      */
     createCharacters() {
-        this.player2Sprite = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - (HEROS_WIDTH / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
-        this.player1Sprite = this.game.add.sprite((this.game.world.centerX / 2) - (HEROS_WIDTH / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
-        this.player1Sprite.alpha = 0.6;
-        this.player2Sprite.alpha = 0.6;
-        this.player1Sprite.frame = HEROS_SITTING_FRAME;
-        this.player2Sprite.frame = HEROS_SITTING_FRAME;
-        this.player1Sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
-        this.player2Sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
-        this.player1Sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
-        this.player2Sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
 
-        this.bulle1 = this.game.add.sprite(this.player1Sprite.x + (this.player1Sprite.width / 2) - BULLE_SKEW, 0, 'bulle');
-        this.bulle1.y = this.player1Sprite.y - this.bulle1.height;
-        this.bulle1.anchor.set(0.5, 0);
-        this.bulle1.scale.setTo(-1, 1);
-        this.bulle1.animations.add('default', [0, 1], 4, true).play();
+        let coli = this.heros[COLI_HEROS];
+        let fleur = this.heros[FLEUR_HEROS];
 
-        this.bulle2 = this.game.add.sprite(this.player2Sprite.x + (this.player1Sprite.width / 2) + BULLE_SKEW, 0, 'bulle');
-        this.bulle2.y = this.player2Sprite.y - this.bulle2.height;
-        this.bulle2.anchor.set(0.5, 0);
-        this.bulle2.animations.add('default', [0, 1], 4, true).play();
+
+        coli.sprite = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
+        coli.sprite.alpha = 0.6;
+        coli.sprite.frame = HEROS_SITTING_FRAME;
+        coli.sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
+        coli.sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
+
+        coli.bulle = this.game.add.sprite(coli.sprite.x + (coli.sprite.width / 2) + BULLE_SKEW, 0, 'bulle');
+        coli.bulle.y = coli.sprite.y - coli.bulle.height;
+        coli.bulle.anchor.set(0.5, 0);
+        coli.bulle.animations.add('default', [0, 1], 4, true).play();
+
+        fleur.sprite = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
+        fleur.sprite.alpha = 0.6;
+        fleur.sprite.frame = HEROS_SITTING_FRAME;
+        fleur.sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
+        fleur.sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
+
+        fleur.bulle = this.game.add.sprite(fleur.sprite.x + (fleur.sprite.width / 2) - BULLE_SKEW, 0, 'bulle');
+        fleur.bulle.y = fleur.sprite.y - fleur.bulle.height;
+        fleur.bulle.anchor.set(0.5, 0);
+        fleur.bulle.scale.setTo(-1, 1);
+        fleur.bulle.animations.add('default', [0, 1], 4, true).play();
 
     }
 
@@ -237,12 +289,24 @@ class MainMenu extends Phaser.State {
         this.waitingText.anchor.set(0.5);
         this.game.add.tween(this.waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
 
-        this.fleurText = this.game.add.text(this.player1Sprite.x + (this.player1Sprite.width / 2), this.player1Sprite.y + this.player1Sprite.height + 20, MENU_TEXT_FLEUR, { font: DEFAULT_FONT, fill: MENU_TEXT_FLEUR_COLOR });
+        this.fleurText = this.game.add.text(this.heros[FLEUR_HEROS].sprite.x + (this.heros[FLEUR_HEROS].sprite.width / 2), this.heros[FLEUR_HEROS].sprite.y + this.heros[FLEUR_HEROS].sprite.height + 20, MENU_TEXT_FLEUR, { font: DEFAULT_FONT, fill: MENU_TEXT_FLEUR_COLOR });
         this.fleurText.anchor.set(0.5);
-        this.ColiText = this.game.add.text(this.player2Sprite.x + (this.player2Sprite.width / 2), this.player2Sprite.y + this.player2Sprite.height + 20, MENU_TEXT_COLI, { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
+        this.ColiText = this.game.add.text(this.heros[COLI_HEROS].sprite.x + (this.heros[COLI_HEROS].sprite.width / 2), this.heros[COLI_HEROS].sprite.y + this.heros[COLI_HEROS].sprite.height + 20, MENU_TEXT_COLI, { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
         this.ColiText.anchor.set(0.5);
+
+        this.displayPlayerFleurX = this.heros[FLEUR_HEROS].bulle.x - this.heros[FLEUR_HEROS].bulle.width / 2 + 10;
+
+        this.displayPlayerColiX = this.heros[COLI_HEROS].bulle.x + this.heros[COLI_HEROS].bulle.width / 2 - 10;
+
+        this.p1 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].bulle.y, P1, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.p2 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].bulle.y + 30, P2, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.p1.alpha = 0;
+        this.p2.alpha = 0;
     }
 
+    /**
+     * fonction de shutdown de phaser.state
+     */
     shutdown() {
 
     }

@@ -5,6 +5,7 @@ const GREEN = 'green';
 const RED = 'red';
 const WHITE = 'white';
 const CONTROLLER = true;
+const DEFAULT_CURSOR_POSITION = 'fleur';
 
 /* TEXTES & COLORS */
 const LOADER_BACKGROUND = '#000';
@@ -37,6 +38,8 @@ const KEY_LEFT_BUTTON = 'la touche Q';
 const KEY_RIGHT_BUTTON = 'la touche D';
 const KEY_RESET_BUTTON = 'la touche R';
 const KEY_CANCEL_BUTTON = 'la touche RETOUR';
+const P1 = '<- J1';
+const P2 = '<- J2';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;
