@@ -23,6 +23,7 @@ class MainMenu extends Phaser.State {
         this.heros[FLEUR_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
 
         this.soundPlaying = false;
+        this.game.controlsManager.setCallbackContext(this);
     }
 
     /**
@@ -40,33 +41,33 @@ class MainMenu extends Phaser.State {
         });
     }
 
-    /**
-     * update fonction du phaser state
-     */
-    update() {
 
-        if (this.game.controlsManager.actionButtonReleased()) {
-            if (!this.heros[this.self.position].selected) {
-                this.game.socket.emit('selecthero', this.heros[this.self.position].name);
-            } else if (this.self.selectedHero === this.self.position) {
-                if (!this.soundPlaying) {
-                    this.soundPlaying = true;
-                    this.heros[this.self.selectedHero].sound.play();
-                }
+    actionButtonReleased() {
+        if (!this.heros[this.self.position].selected) {
+            this.game.socket.emit('selecthero', this.heros[this.self.position].name);
+        } else if (this.self.selectedHero === this.self.position) {
+            if (!this.soundPlaying) {
+                this.soundPlaying = true;
+                this.heros[this.self.selectedHero].sound.play();
             }
         }
+    }
 
-        if (this.game.controlsManager.cancelButtonReleased()) {
-            if (this.self.selectedHero === this.self.position) {
-                this.game.socket.emit('selecthero', null);
-            }
+    cancelButtonReleased() {
+        if (this.self.selectedHero === this.self.position) {
+            this.game.socket.emit('selecthero', null);
         }
+    }
 
-        if (this.game.controlsManager.leftButtonReleased() && (this.self.position == COLI_HEROS) && !this.self.selectedHero) {
+    leftButtonReleased() {
+        if (this.self.position == COLI_HEROS && !this.self.selectedHero) {
             this.changePosition(this.self, FLEUR_HEROS);
             this.game.socket.emit('updateposition', FLEUR_HEROS);
+        }
+    }
 
-        } else if (this.game.controlsManager.rightButtonReleased() && (this.self.position == FLEUR_HEROS) && !this.self.selectedHero) {
+    rightButtonReleased() {
+        if (this.self.position == FLEUR_HEROS && !this.self.selectedHero) {
             this.changePosition(this.self, COLI_HEROS);
             this.game.socket.emit('updateposition', COLI_HEROS);
         }
@@ -100,7 +101,6 @@ class MainMenu extends Phaser.State {
         });
     }
 
-
     /**
      * fonction lançant la partie (scene)
      */
@@ -122,7 +122,7 @@ class MainMenu extends Phaser.State {
         playerList.forEach(player => {
             if (player === null) return;
 
-            if (this.self.id == player.id) {
+            if (this.self.id === player.id) {
                 this.self = player;
                 this.checkHeroActivation(player, true);
             } else {
@@ -143,7 +143,7 @@ class MainMenu extends Phaser.State {
         if (player.selectedHero) {
             this.activateHero(player, !self);
         } else {
-            this.desactivateHero(player)
+            this.desactivateHero(player);
         }
     }
 
@@ -215,12 +215,15 @@ class MainMenu extends Phaser.State {
      * @param {Object} player : joueur qui se desactive
      */
     desactivateHero(player) {
+
         let selectedHero;
         if (!player.selectedHero) {
             selectedHero = this.heros[player.position];
         } else {
             selectedHero = this.heros[player.selectedHero];
         }
+
+        if (selectedHero.name === this.self.selectedHero || selectedHero.name === this.other.selectedHero) return;
         selectedHero.alpha = 0.6;
         selectedHero.bulle.alpha = 1;
         selectedHero.sprite.animations.stop();
