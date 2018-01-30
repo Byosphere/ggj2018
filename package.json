@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "build": "grunt",
-    "publish": "node node_modules/grunt/bin/grunt && node server.js"
+    "postinstall": "grunt",
+    "publish": "grunt && node server.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,11 @@
   },
   "homepage": "https://github.com/campignon/ggj2018#readme",
   "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -34,11 +40,6 @@
     "grunt-contrib-cssmin": "^2.2.1",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
-    "http-server": "^0.11.1",
     "phaser-ce": "^2.10.0"
-  },
-  "dependencies": {
-    "express": "^4.16.2",
-    "socket.io": "^2.0.4"
   }
 }
