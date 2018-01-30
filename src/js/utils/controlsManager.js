@@ -1,3 +1,19 @@
+/**
+ * actionButtonReleased$
+ * upButtonReleased
+ * downButtonReleased
+ * leftButtonReleased
+ * rightButtonReleased
+ * cancelButtonReleased
+ * startButtonReleased
+ * actionButtonDown
+ * upButtonDown
+ * donwButtonDown
+ * leftButtonDown
+ * rightButtonDown
+ * cancelButtonDown
+ * startButtonDown
+ */
 class ControlsManager {
 
     constructor(game) {
@@ -9,10 +25,12 @@ class ControlsManager {
         this.leftButtonName = '';
         this.rightButtonName = '';
         this.resetButtonName = '';
+        this.callbackContext = this;
+        this.controlsEnabled = true;
     }
 
     init() {
-        if (CONTROLLER) {
+        if (this.game.parameters.controller) {
             this.initController();
         } else {
             this.initKeyboard();
@@ -21,7 +39,13 @@ class ControlsManager {
 
     initController() {
         this.game.input.gamepad.start();
-        this.pad = this.game.input.gamepad.pad1;
+        let pad = this.game.input.gamepad.pad1;
+        pad.callbackContext = this;
+        pad.onUpCallback = this.onControllerButtonReleased;
+        pad.onDownCallback = this.onControllerButtonDown;
+        pad.onAxisCallback = this.onControllerAxisChanged;
+
+        //button names
         this.actionButtonName = PAD_ACTION_BUTTON;
         this.cancelButtonName = PAD_CANCEL_BUTTON;
         this.upButtonName = PAD_UP_BUTTON;
@@ -32,12 +56,9 @@ class ControlsManager {
     }
 
     initKeyboard() {
-        let keyZ = this.game.input.keyboard.addKey(Phaser.KeyCode.Z);
-        let keyS = this.game.input.keyboard.addKey(Phaser.KeyCode.S);
-        let keyQ = this.game.input.keyboard.addKey(Phaser.KeyCode.Q);
-        let keyD = this.game.input.keyboard.addKey(Phaser.KeyCode.D);
-        let keySPACE = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACE);
-        let keyR = this.game.input.keyboard.addKey(Phaser.KeyCode.R);
+        let keyboard = this.game.input.keyboard.addCallbacks(this, this.onKeyboardButtonDown, this.onKeyboardButtonReleased, this.onKeyboardButtonPressed);
+
+        //button names
         this.actionButtonName = KEY_ACTION_BUTTON;
         this.cancelButtonName = KEY_CANCEL_BUTTON;
         this.upButtonName = KEY_UP_BUTTON;
@@ -47,53 +68,195 @@ class ControlsManager {
         this.resetButtonName = KEY_RESET_BUTTON;
     }
 
+    setCallbackContext(context) {
+        this.callbackContext = context;
+    }
+
     /* ------------------ BUTTONS ON RELEASE ------------------------------ */
-    actionButtonReleased() {
-        return (this.pad.justReleased(Phaser.Gamepad.XBOX360_A));
-            
+
+
+    onControllerButtonReleased(button) {
+        if (!this.controlsEnabled) return;
+
+        switch (button) {
+            case Phaser.Gamepad.XBOX360_A:
+                if (this.callbackContext.actionButtonReleased)
+                    this.callbackContext.actionButtonReleased();
+                break;
+
+            case Phaser.Gamepad.XBOX360_DPAD_UP:
+                if (this.callbackContext.upButtonReleased)
+                    this.callbackContext.upButtonReleased();
+                break;
+
+            case Phaser.Gamepad.XBOX360_DPAD_DOWN:
+                if (this.callbackContext.downButtonReleased)
+                    this.callbackContext.downButtonReleased();
+                break;
+
+            case Phaser.Gamepad.XBOX360_DPAD_LEFT:
+                if (this.callbackContext.leftButtonReleased)
+                    this.callbackContext.leftButtonReleased();
+                break;
+            case Phaser.Gamepad.XBOX360_DPAD_RIGHT:
+                if (this.callbackContext.rightButtonReleased)
+                    this.callbackContext.rightButtonReleased();
+                break;
+            case Phaser.Gamepad.XBOX360_B:
+                if (this.callbackContext.cancelButtonReleased)
+                    this.callbackContext.cancelButtonReleased();
+                break;
+            case Phaser.Gamepad.XBOX360_START:
+                if (this.callbackContext.startButtonReleased)
+                    this.callbackContext.startButtonReleased();
+                break;
+            default:
+                console.log('Button pressed unknown : ' + button);
+        }
     }
 
-    upButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_UP);
+    onKeyboardButtonReleased(keyboardEvent) {
+        if (!this.controlsEnabled) return;
+        let button = keyboardEvent.keyCode;
+
+        switch (button) {
+            case Phaser.KeyCode.ENTER:
+                if (this.callbackContext.actionButtonReleased)
+                    this.callbackContext.actionButtonReleased();
+                break;
+
+            case Phaser.KeyCode.UP:
+            case Phaser.KeyCode.Z:
+                if (this.callbackContext.upButtonReleased)
+                    this.callbackContext.upButtonReleased();
+                break;
+
+            case Phaser.KeyCode.DOWN:
+            case Phaser.KeyCode.S:
+                if (this.callbackContext.downButtonReleased)
+                    this.callbackContext.downButtonReleased();
+                break;
+
+            case Phaser.KeyCode.LEFT:
+            case Phaser.KeyCode.Q:
+                if (this.callbackContext.leftButtonReleased)
+                    this.callbackContext.leftButtonReleased();
+                break;
+            case Phaser.KeyCode.RIGHT:
+            case Phaser.KeyCode.D:
+                if (this.callbackContext.rightButtonReleased)
+                    this.callbackContext.rightButtonReleased();
+                break;
+            case Phaser.KeyCode.BACKSPACE:
+            case Phaser.KeyCode.ESC:
+                if (this.callbackContext.cancelButtonReleased)
+                    this.callbackContext.cancelButtonReleased();
+                break;
+            case Phaser.KeyCode.SPACEBAR:
+                if (this.callbackContext.startButtonReleased)
+                    this.callbackContext.startButtonReleased();
+                break;
+            default:
+                console.log('Button pressed unknown : ' + button);
+        }
     }
 
-    downButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_DOWN);
+    onControllerButtonDown(button) {
+        if (!this.controlsEnabled) return;
+
+        switch (button) {
+            case Phaser.Gamepad.XBOX360_A:
+                if (this.callbackContext.actionButtonDown)
+                    this.callbackContext.actionButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_DPAD_UP:
+                if (this.callbackContext.upButtonDown)
+                    this.callbackContext.upButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_DPAD_DOWN:
+                if (this.callbackContext.downButtonDown)
+                    this.callbackContext.downButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_DPAD_LEFT:
+                if (this.callbackContext.leftButtonDown)
+                    this.callbackContext.leftButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_DPAD_RIGHT:
+                if (this.callbackContext.rightButtonDown)
+                    this.callbackContext.rightButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_B:
+                if (this.callbackContext.cancelButtonDown)
+                    this.callbackContext.cancelButtonDown();
+                break;
+            case Phaser.Gamepad.XBOX360_START:
+                if (this.callbackContext.startButtonDown)
+                    this.callbackContext.startButtonDown();
+                break;
+            default:
+                console.log('Button pressed unknown : ' + button);
+
+        }
     }
 
-    leftButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_LEFT);
+
+    onKeyboardButtonDown(keyboardEvent) {
+        if (!this.controlsEnabled) return;
+        let button = keyboardEvent.keyCode;
+
+        switch (button) {
+            case Phaser.KeyCode.ENTER:
+                if (this.callbackContext.actionButtonDown)
+                    this.callbackContext.actionButtonDown();
+                break;
+
+            case Phaser.KeyCode.UP:
+            case Phaser.KeyCode.Z:
+                if (this.callbackContext.upButtonDown)
+                    this.callbackContext.upButtonDown();
+                break;
+
+            case Phaser.KeyCode.DOWN:
+            case Phaser.KeyCode.S:
+                if (this.callbackContext.downButtonDown)
+                    this.callbackContext.downButtonDown();
+                break;
+
+            case Phaser.KeyCode.LEFT:
+            case Phaser.KeyCode.Q:
+                if (this.callbackContext.leftButtonDown)
+                    this.callbackContext.leftButtonDown();
+                break;
+            case Phaser.KeyCode.RIGHT:
+            case Phaser.KeyCode.D:
+                if (this.callbackContext.rightButtonDown)
+                    this.callbackContext.rightButtonDown();
+                break;
+            case Phaser.KeyCode.BACKSPACE:
+            case Phaser.KeyCode.ESC:
+                if (this.callbackContext.cancelButtonDown)
+                    this.callbackContext.cancelButtonDown();
+                break;
+            case Phaser.KeyCode.SPACEBAR:
+                if (this.callbackContext.startButtonDown)
+                    this.callbackContext.startButtonDown();
+                break;
+            default:
+                console.log('Button pressed unknown : ' + button);
+        }
     }
 
-    rightButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_DPAD_RIGHT);
+    onKeyboardButtonPressed(button) {
+        
     }
 
-    cancelButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_B);
+    disableControls() {
+        this.controlsEnabled = false;
     }
 
-    resetButtonReleased() {
-        return this.pad.justReleased(Phaser.Gamepad.XBOX360_START);
+    enableControls() {
+        this.controlsEnabled = true;
     }
-
-    /* ------------------ BUTTONS ON DOWN ------------------------------ */
-    upButtonDown() {
-        return (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1)
-    }
-
-    downButtonDown() {
-        return (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1);
-    }
-
-    leftButtonDown() {
-        return (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1);
-    }
-
-    rightButtonDown() {
-        return (this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1);
-    }
-
 
     /* ----- GETTERS ----- */
     getActionButtonName() {

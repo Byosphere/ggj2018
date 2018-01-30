@@ -6,13 +6,18 @@ class Scene extends Phaser.State {
      * @param {int} level 
      */
     init(player, level) {
-        this.player = player;
+        if (DEBUG) {
+            this.player = { id: 0, selectedHero: FLEUR_HEROS, position: FLEUR_HEROS };
+        } else {
+            this.player = player;
+        }
         this.characterName = this.player.selectedHero;
         this.currentLevel = level || 1;
     }
 
     preload() {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
+        this.game.controlsManager.setCallbackContext(this);
         this.music = this.game.add.audio('game');
         this.victoryMusic = this.game.add.audio('win');
         this.music.loop = true;
@@ -25,11 +30,26 @@ class Scene extends Phaser.State {
         this.noCollisionGroup = null;
         this.animatedDoors = [];
         this.exitActive = false;
-        this.enableControls = true;
         this.exitPosX = 0;
         this.exitPosY = 0;
         this.end = false;
         this.openedDoorsColors = [];
+        this.onPause = false;
+    }
+
+    /**
+     * preload the graphical elements for the pause menu (externaliser dans une classe peut etre)
+     */
+    preloadPauseScreen() {
+        let darkBack = this.game.add.graphics(0, 0);
+        this.pauseGroup.add(darkBack);
+        darkBack.beginFill(0x00000, 0.7);
+        darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        darkBack.endFill();
+        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.pauseGroup.add(pauseText);
+        pauseText.anchor.setTo(0.5);
+        this.pauseGroup.alpha = 0;
     }
 
     create() {
@@ -62,7 +82,6 @@ class Scene extends Phaser.State {
             });
         }
     }
-
 
     /**
      * Fonction pour animer les portes à fermer
@@ -142,6 +161,9 @@ class Scene extends Phaser.State {
         for (let i = 0; i < mapObjects.length; i++) {
             this.createObject(mapObjects[i]);
         }
+
+        this.pauseGroup = this.game.add.group();
+        this.preloadPauseScreen();
     }
 
     update() {
@@ -162,65 +184,75 @@ class Scene extends Phaser.State {
             this.exitActive = false;
         }
 
-        this.character.body.velocity.x = 0;
-        this.character.body.velocity.y = 0;
-        this.character.body.angularVelocity = 0;
+    }
 
-        if (this.enableControls)
-            this.handleControls();
-
-        if (this.end && this.game.controlsManager.actionButtonReleased()) {
+    actionButtonReleased() {
+        if (this.end)
             this.game.state.start('scene', true, false, this.player, this.currentLevel + 1);
+    }
+
+    startButtonReleased() {
+        if (this.onPause) {
+            this.resumeLevel();
+        } else {
+            this.pauseLevel();
         }
+    }
+
+    leftButtonDown() {
+        this.character.body.velocity.x = -200;
+        this.character.animations.play('walk_left', true);
+    }
+
+    rightButtonDown() {
+        this.character.body.velocity.x = 200;
+        this.character.animations.play('walk_right', true);
+        this.character.scale.setTo(1, 1);
+    }
+
+    upButtonDown() {
+        this.character.body.velocity.y = -200;
+        this.character.animations.play('walk_up', true);
+        this.character.scale.setTo(1, 1);
+    }
+
+    downButtonDown() {
+        this.character.body.velocity.y = 200;
+        this.character.animations.play('walk_right', true);
+        this.character.scale.setTo(1, 1);
+    }
+
+    leftButtonReleased() {
+        this.character.body.velocity.x = 0;
+        this.character.animations.stop();
+        this.character.frame = 36;
+    }
+
+    rightButtonReleased() {
+        this.character.body.velocity.x = 0;
+        this.character.animations.stop();
+        this.character.frame = 0;
+    }
+
+    downButtonReleased() {
+        this.character.body.velocity.y = 0;
+        this.character.animations.stop();
+        this.character.frame = 13;
+    }
+
+    upButtonReleased() {
+        this.character.body.velocity.y = 0;
+        this.character.animations.stop();
+        this.character.frame = 32;
     }
 
     /**
      * initialise character animations
      */
     initAnimations() {
-        this.character.animations.add('walk_right', [13, 14, 15, 16], 12, false);
-        this.character.animations.add('walk_left', [36, 37, 38, 39], 12, false);
-        this.character.animations.add('walk_up', [32, 33, 34, 35], 12, false);
-    }
-
-    /**
-     * Gère les inputs du joueur
-     */
-    handleControls() {
-        if (this.game.controlsManager.leftButtonDown()) {
-            this.character.body.velocity.x -= 200;
-            this.character.animations.play('walk_left');
-        }
-        else if (this.game.controlsManager.rightButtonDown()) {
-            this.character.body.velocity.x += 200;
-            this.character.animations.play('walk_right');
-            this.character.scale.setTo(1, 1);
-        }
-
-        if (this.game.controlsManager.upButtonDown()) {
-            this.character.body.velocity.y -= 200;
-            this.character.animations.play('walk_up');
-            this.character.scale.setTo(1, 1);
-        }
-        else if (this.game.controlsManager.downButtonDown()) {
-            this.character.body.velocity.y += 200;
-            this.character.animations.play('walk_right');
-            this.character.scale.setTo(1, 1);
-        }
-
-        if (this.game.controlsManager.leftButtonReleased()) {
-            this.character.frame = 36;
-
-        } else if (this.game.controlsManager.rightButtonReleased()) {
-            this.character.frame = 13;
-        }
-
-        if (this.game.controlsManager.downButtonReleased()) {
-            this.character.frame = 13;
-
-        } else if (this.game.controlsManager.upButtonReleased()) {
-            this.character.frame = 32;
-        }
+        this.character.animations.add('walk_right', [13, 14, 15, 16], 12, true);
+        this.character.animations.add('walk_left', [36, 37, 38, 39], 12, true);
+        this.character.animations.add('walk_up', [32, 33, 34, 35], 12, true);
     }
 
     /**
@@ -331,7 +363,7 @@ class Scene extends Phaser.State {
      */
     endScene() {
         this.game.socket.emit('resetexit');
-        this.enableControls = false;
+        this.game.controlsManager.disableControls();
         this.character.alpha = 0;
         this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
         this.exitPerso.anchor.setTo(0, 1);
@@ -358,6 +390,22 @@ class Scene extends Phaser.State {
         }, 3000);
     }
 
+
+    /**
+     * relance le niveau
+     * @param {number} level 
+     */
+    pauseLevel(level) {
+        this.onPause = true;
+        this.music.pause();
+        this.pauseGroup.alpha = 1;
+    }
+
+    resumeLevel() {
+        this.onPause = false;
+        this.music.play();
+        this.pauseGroup.alpha = 0;
+    }
     /**
      * Fonction appelée au moment du changement de scene
      */
@@ -374,19 +422,12 @@ class Scene extends Phaser.State {
         this.noCollisionGroup.destroy();
         this.overlapedButton = null;
         this.exitActive = false;
-        this.enableControls = true;
+        this.game.controlsManager.enableControls();
         this.exitPosX = 0;
         this.exitPosY = 0;
         this.animatedDoors = [];
         this.openedDoorsColors = [];
         this.end = false;
-    }
-
-    /**
-     * Init de la manette
-     */
-    initInputs() {
-        this.game.input.gamepad.start();
-        this.pad = this.game.input.gamepad.pad1;
+        this.onPause = false;
     }
 }

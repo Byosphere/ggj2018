@@ -1,10 +1,13 @@
 /* GENERAL */
+const DEBUG = false;
+const GAME_WIDTH = 1280;
+const GAME_HEIGHT = 896;
 const CELL_SIZE = 64;
 const ORANGE = 'orange';
 const GREEN = 'green';
 const RED = 'red';
 const WHITE = 'white';
-const CONTROLLER = true;
+const CONTROLLER = false;
 const DEFAULT_CURSOR_POSITION = 'fleur';
 
 /* TEXTES & COLORS */
@@ -40,6 +43,7 @@ const KEY_RESET_BUTTON = 'la touche R';
 const KEY_CANCEL_BUTTON = 'la touche RETOUR';
 const P1 = '<- J1';
 const P2 = '<- J2';
+const MENU_TEXT_PAUSE = 'PAUSE';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;
