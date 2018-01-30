@@ -4,9 +4,8 @@
   "description": "Our video-game for the 2018 edition of the global game jam",
   "main": "server.js",
   "scripts": {
-    "start": "node node_modules/http-server/bin/http-server",
+    "start": "node server.js",
     "build": "node node_modules/grunt/bin/grunt",
-    "serve": "node server.js",
     "publish": "node node_modules/grunt/bin/grunt && node server.js"
   },
   "repository": {
