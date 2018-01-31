@@ -42,6 +42,7 @@ module.exports = function (grunt) {
             prod: {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/js/phaser.min.js' },
+                    { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.min.js', dest: 'public/js/phaser-input.min.js' },
                     { src: 'src/index-prod.html', dest: 'public/index.html' }
                 ]
             },
