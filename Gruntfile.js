@@ -2,7 +2,7 @@ module.exports = function (grunt) {
 
     var jsSources = [
         'src/js/utils/constants.js',
-        'src/js/utils/ControlsManager.js',
+        'src/js/utils/controlsManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
