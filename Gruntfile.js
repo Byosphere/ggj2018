@@ -1,6 +1,6 @@
 module.exports = function (grunt) {
 
-    var jsSources = [
+    var jsSourcesCommon = [
         'src/js/utils/constants.js',
         'src/js/utils/controlsManager.js',
         'src/js/game/Game.js',
@@ -13,6 +13,10 @@ module.exports = function (grunt) {
         'src/js/game/objects/exit.js'
     ];
 
+    var jsSourcesDev = ['src/js/utils/storage-dev.js'];
+
+    var jsSourcesProd = ['src/js/utils/storage-prod.js'];
+
     // Load modules
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -20,6 +24,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-babel');
 
     // Grunt configuration
     grunt.initConfig({
@@ -44,13 +49,26 @@ module.exports = function (grunt) {
         },
         concat: {
             src: {
-                src: jsSources,
+                src: jsSourcesCommon.concat(jsSourcesDev),
                 dest: 'public/js/bundle.js'
+            }
+        },
+        babel: {
+            options: {
+                sourceMap: true
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    src: jsSourcesCommon.concat(jsSourcesProd),
+                    dest: "src/js-compiled/",
+                    ext: "-compiled.js"
+                }]
             }
         },
         uglify: {
             compile: {
-                src: jsSources,
+                src: "src/js-compiled/**/*-compiled.js",
                 dest: 'public/js/bundle.min.js'
             }
         },
@@ -79,6 +97,6 @@ module.exports = function (grunt) {
     grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
 
     grunt.registerTask('scripts:dev', ['concat:src']);
-    grunt.registerTask('scripts:prod', ['uglify:compile']);
+    grunt.registerTask('scripts:prod', ['babel', 'uglify:compile']);
 
 };
