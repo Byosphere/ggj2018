@@ -104,15 +104,26 @@ io.on('connection', function (socket) {
     });
 
     // Interrupteur actif 
-    socket.on('opendoor', function (color) {
+    socket.on('pressbutton', function (color) {
+        if(server.lobbies[socket.code].buttonsState[color]) {
+            server.lobbies[socket.code].buttonsState[color]++;
+        } else {
+            server.lobbies[socket.code].buttonsState[color] = 1;
+        }
         socket.broadcast.to(socket.code).emit('opendoor', color);
         socket.emit('opendoor', color);
+        console.log(server.lobbies[socket.code]);
     });
 
     // Interrupteur inactif 
-    socket.on('closedoor', function (color) {
-        socket.broadcast.to(socket.code).emit('closedoor', color);
-        socket.emit('closedoor', color);
+    socket.on('releasebutton', function (color) {
+        if(server.lobbies[socket.code].buttonsState[color]) {
+            server.lobbies[socket.code].buttonsState[color]--;
+        }
+        if(!server.lobbies[socket.code].buttonsState[color]) {
+            socket.broadcast.to(socket.code).emit('closedoor', color);
+            socket.emit('closedoor', color);
+        }
     });
 
     // player on exit spot
