@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "grunt",
+    "build": "grunt prod",
     "postinstall": "grunt",
     "publish": "grunt && node server.js"
   },
