@@ -12,7 +12,7 @@ class Booter extends Phaser.State {
 
         //init controllers
         this.game.controlsManager.init();
-        
+
         // Centering game
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
@@ -21,6 +21,8 @@ class Booter extends Phaser.State {
         this.game.load.image('title', BASE_URL + 'title.png');
         // Loading the preload bar asset
         this.game.load.spritesheet('preloadbar', BASE_URL + 'sprites/loader.png', 64, 64);
+
+        this.game.add.plugin(PhaserInput.Plugin);
     }
 
     create() {

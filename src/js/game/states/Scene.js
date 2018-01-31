@@ -46,9 +46,12 @@ class Scene extends Phaser.State {
         darkBack.beginFill(0x00000, 0.7);
         darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         darkBack.endFill();
-        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, this.game.translate.MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.pauseGroup.add(pauseText);
         pauseText.anchor.setTo(0.5);
+        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + this.game.translate.MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        resetText.anchor.setTo(0.5);
+        this.pauseGroup.add(resetText);
         this.pauseGroup.alpha = 0;
     }
 
@@ -127,6 +130,10 @@ class Scene extends Phaser.State {
             this.closeDoor(color);
         });
 
+        this.game.socket.on('reset', () => {
+            this.resetLevel();
+        });
+
         this.game.socket.on('success', () => {
             this.endScene();
         });
@@ -186,6 +193,13 @@ class Scene extends Phaser.State {
 
     }
 
+    resetLevel() {
+        this.game.camera.fade('#000000', 200);
+        this.game.camera.onFadeComplete.add(() => {
+            this.game.state.start('scene', true, false, this.player, this.currentLevel);
+        }, this);
+    }
+
     actionButtonReleased() {
         if (this.end)
             this.game.state.start('scene', true, false, this.player, this.currentLevel + 1);
@@ -196,6 +210,13 @@ class Scene extends Phaser.State {
             this.resumeLevel();
         } else {
             this.pauseLevel();
+        }
+    }
+
+    cancelButtonReleased() {
+        if (this.onPause) {
+            this.game.socket.emit('reset');
+            this.resetLevel();
         }
     }
 
@@ -363,7 +384,7 @@ class Scene extends Phaser.State {
      */
     endScene() {
         this.game.socket.emit('resetexit');
-        this.game.controlsManager.disableControls();
+        this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
         this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
         this.exitPerso.anchor.setTo(0, 1);
@@ -371,14 +392,14 @@ class Scene extends Phaser.State {
         this.exitPerso.animations.play('default');
         setTimeout(() => {
             this.music.fadeOut(1000);
-            this.victoryMusic.fadeIn(500, true);
+            this.victoryMusic.fadeIn(500, false);
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
                 this.endTitle.anchor.setTo(0.5);
                 this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
                 this.endTitle.animations.play('default');
-                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate.GENERIC_PRESS_BUTTON + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
                 this.endText.anchor.setTo(0.5);
             } else {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');
@@ -397,12 +418,14 @@ class Scene extends Phaser.State {
      */
     pauseLevel(level) {
         this.onPause = true;
+        this.game.controlsManager.disableControls([START, CANCEL]);
         this.music.pause();
         this.pauseGroup.alpha = 1;
     }
 
     resumeLevel() {
         this.onPause = false;
+        this.game.controlsManager.enableControls();
         this.music.play();
         this.pauseGroup.alpha = 0;
     }

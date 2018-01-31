@@ -10,12 +10,12 @@ class Loader extends Phaser.State {
 
         let preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
         preload.anchor.setTo(0.5);
-        preload.animations.add('default', [0,1,2,3], 10, true);
+        preload.animations.add('default', [0, 1, 2, 3], 10, true);
         preload.animations.play('default');
 
-        let loadingText = this.game.add.text(0, 0, LOADING_TEXT, {font: DEFAULT_FONT, fill: LOADER_COLOR});
-        loadingText.x = preload.x - loadingText.width - (preload.width/2) - 10;
-        loadingText.y = preload.y - loadingText.height/2;
+        let loadingText = this.game.add.text(0, 0, this.game.translate.LOADING_TEXT, { font: DEFAULT_FONT, fill: LOADER_COLOR });
+        loadingText.x = preload.x - loadingText.width - (preload.width / 2) - 10;
+        loadingText.y = preload.y - loadingText.height / 2;
 
         // Loading the assets
         this.loadAssets();
@@ -76,6 +76,6 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        this.game.state.start('menu');
+        this.game.state.start('lobby');
     }
 }

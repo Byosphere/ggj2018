@@ -6,6 +6,7 @@ module.exports = function (grunt) {
         'src/js/game/Game.js',
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
+        'src/js/game/states/Lobby.js',
         'src/js/game/states/MainMenu.js',
         'src/js/game/states/Scene.js',
         'src/js/game/objects/button.js',
@@ -33,6 +34,7 @@ module.exports = function (grunt) {
             dev: {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/js/phaser.js' },
+                    { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.js', dest: 'public/js/phaser-input.js' },
                     { src: 'src/index-dev.html', dest: 'public/index.html' },
                     { src: 'src/css/style.css', dest: 'public/css/style.css' }
                 ]
