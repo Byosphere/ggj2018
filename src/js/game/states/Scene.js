@@ -363,7 +363,7 @@ class Scene extends Phaser.State {
      */
     endScene() {
         this.game.socket.emit('resetexit');
-        this.game.controlsManager.disableControls();
+        this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
         this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
         this.exitPerso.anchor.setTo(0, 1);
@@ -371,7 +371,7 @@ class Scene extends Phaser.State {
         this.exitPerso.animations.play('default');
         setTimeout(() => {
             this.music.fadeOut(1000);
-            this.victoryMusic.fadeIn(500, true);
+            this.victoryMusic.fadeIn(500, false);
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');

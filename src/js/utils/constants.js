@@ -34,7 +34,7 @@ const PAD_LEFT_BUTTON = 'le bouton gauche';
 const PAD_RIGHT_BUTTON = 'le bouton droite';
 const PAD_RESET_BUTTON = 'le bouton start';
 const PAD_CANCEL_BUTTON = 'le bouton B';
-const KEY_ACTION_BUTTON = 'la touche ESPACE';
+const KEY_ACTION_BUTTON = 'la touche ENTREE';
 const KEY_UP_BUTTON = 'la touche Z';
 const KEY_DOWN_BUTTON = 'la touche S';
 const KEY_LEFT_BUTTON = 'la touche Q';
@@ -78,3 +78,11 @@ const ROCK_HEIGHT = 1;
 const EXIT_WIDTH = 3;
 const EXIT_HEIGHT = 3;
 
+/* BUTTONS */
+const ACTION = 'action';
+const UP = 'up';
+const DOWN = 'down';
+const LEFT = 'left';
+const RIGHT = 'right';
+const CANCEL = 'cancel';
+const START = 'start';

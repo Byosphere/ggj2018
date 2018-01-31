@@ -6,9 +6,9 @@ This is the repository for our video-game developed durring the 2018 edition of 
 
 - Télécharger/cloner les sources dans un dossier sur son ordinateur.
 - Se placer dans le répertoire racine du jeu puis lancer 'npm install' (installer nodejs si nécessaire)
+- Télécharger les assets du drive et les mettre dans le dossier racine (au même niveau que src)
 - lancer la commande 'npm run publish' 
-
-- Ouvrir un navigateur (localhost:8081 par défaut) 
+- Ouvrir un navigateur (localhost:8081 par défaut)
 
 ### How to play
 
