@@ -31,6 +31,10 @@ server.players = [null, null];
 
 io.on('connection', function (socket) {
 
+    socket.on('init', function(){
+        socket.emit('init');
+    }) ;
+ 
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
         if (server.players[0] && server.players[1]) return;

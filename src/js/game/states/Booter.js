@@ -18,6 +18,8 @@ class Booter extends Phaser.State {
         this.game.load.image('title', 'assets/title.png');
         // Loading the preload bar asset
         this.game.load.spritesheet('preloadbar', 'assets/sprites/loader.png', 64, 64);
+        
+        this.game.add.plugin(PhaserInput.Plugin);
     }
 
     create() {
