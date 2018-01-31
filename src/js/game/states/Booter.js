@@ -1,6 +1,9 @@
 class Booter extends Phaser.State {
 
     preload() {
+        // CROSS Origin
+        this.game.load.crossOrigin = 'anonymous';
+
         // No antialiasing
         Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
