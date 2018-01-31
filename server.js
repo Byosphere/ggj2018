@@ -8,13 +8,6 @@ app.use('/js', express.static(__dirname + '/public/js'));
 app.use('/assets', express.static(__dirname + '/public/assets'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    next();
-});
-
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
