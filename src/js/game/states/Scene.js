@@ -46,10 +46,10 @@ class Scene extends Phaser.State {
         darkBack.beginFill(0x00000, 0.7);
         darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         darkBack.endFill();
-        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, this.game.translate.MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.pauseGroup.add(pauseText);
         pauseText.anchor.setTo(0.5);
-        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + this.game.translate.MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         resetText.anchor.setTo(0.5);
         this.pauseGroup.add(resetText);
         this.pauseGroup.alpha = 0;
@@ -399,7 +399,7 @@ class Scene extends Phaser.State {
                 this.endTitle.anchor.setTo(0.5);
                 this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
                 this.endTitle.animations.play('default');
-                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, GAME_TEXT_NEXT_LEVEL + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate.GENERIC_PRESS_BUTTON + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
                 this.endText.anchor.setTo(0.5);
             } else {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');

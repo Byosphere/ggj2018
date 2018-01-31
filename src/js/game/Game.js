@@ -12,7 +12,11 @@ class Game extends Phaser.Game {
 
         //add socket IO to the game
         this.socket = io.connect();
+
+        //set some parameters
         this.parameters = { controller: CONTROLLER };
+        this.translate = TEXT_FR;
+
         //add the controlsMananger to the game
         this.controlsManager = new ControlsManager(this);
 

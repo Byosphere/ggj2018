@@ -16,7 +16,7 @@ server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
 
-server.lobby = {};
+server.lobbies = [];
 /*
 idées pour la gestion des lobby
 {
@@ -26,90 +26,110 @@ idées pour la gestion des lobby
     ...
 }
 */
-server.exitCount = 0;
-server.players = [null, null];
 
 io.on('connection', function (socket) {
 
-    socket.on('init', function(){
+    socket.on('init', function () {
         socket.emit('init');
-    }) ;
- 
+    });
+
+    socket.on('newlobby', function () {
+        let code = '';
+        do {
+            code = Math.floor((Math.random() * 900000) + 100000);
+
+        } while (server.lobbies['L_' + code]);
+
+        socket.emit('newlobby', code);
+        code = 'L_' + code;
+        server.lobbies[code] = { players: [null, null], buttonsState: [], exitCount: 0, playerCount: 1 };
+        socket.join(code);
+        socket.code = code;
+    });
+
+    socket.on('joinlobby', function (code) {
+
+        code = 'L_' + code;
+        if (!code || !server.lobbies[code] || server.lobbies[code].playerCount === 2) return;
+        server.lobbies[code].playerCount++;
+        socket.join(code);
+        socket.code = code;
+        socket.emit('joinlobby', true);
+    });
+
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
-        if (server.players[0] && server.players[1]) return;
-        let id = server.players[0] ? 1 : 0;
+        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) return;
+        let id = server.lobbies[socket.code].players[0] ? 1 : 0;
 
         socket.player = {
             id: id,
             selectedHero: false,
             position: 'fleur'
         };
-        server.players[id] = socket.player;
-        socket.emit('newplayer', socket.player, server.players);
-        socket.broadcast.emit('newplayer', null, server.players);
+        server.lobbies[socket.code].players[id] = socket.player;
+        socket.emit('newplayer', socket.player, server.lobbies[socket.code].players);
+        socket.broadcast.to(socket.code).emit('newplayer', null, server.lobbies[socket.code].players);
     });
 
     // selection d'un personnage par un joueur sur l'écran titre
     socket.on('selecthero', function (selectedHero) {
-        server.players[socket.player.id].selectedHero = selectedHero;
-        socket.emit('updateplayers', server.players);
-        socket.broadcast.emit('updateplayers', server.players);
-        if (server.players[0] && server.players[0].selectedHero && server.players[1] && server.players[1].selectedHero) {
+        server.lobbies[socket.code].players[socket.player.id].selectedHero = selectedHero;
+        socket.emit('updateplayers', server.lobbies[socket.code].players);
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[0].selectedHero && server.lobbies[socket.code].players[1] && server.lobbies[socket.code].players[1].selectedHero) {
             socket.emit('startgame');
-            socket.broadcast.emit('startgame');
+            socket.broadcast.to(socket.code).emit('startgame');
         }
     });
 
     // mets à jour la position du curseur d'un joueur sur l'écran titre
     socket.on('updateposition', function (position) {
-        server.players[socket.player.id].position = position;
-        socket.broadcast.emit('updateplayers', server.players);
-        console.log(server.players);
+        server.lobbies[socket.code].players[socket.player.id].position = position;
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
     });
 
     // reset le niveau en cours
-    socket.on('reset', function() {
-        socket.broadcast.emit('reset');
+    socket.on('reset', function () {
+        socket.broadcast.to(socket.code).emit('reset');
     });
 
     //disconnect
     socket.on('disconnect', function () {
         if (socket.player) {
             io.emit('disconnect');
-            server.playerCount--;
-            server.players[socket.player.id] = null;
+            server.lobbies[socket.code].playerCount--;
+            server.lobbies[socket.code].players[socket.player.id] = null;
         }
     });
 
     // Interrupteur actif 
     socket.on('opendoor', function (color) {
-        socket.broadcast.emit('opendoor', color);
+        socket.broadcast.to(socket.code).emit('opendoor', color);
         socket.emit('opendoor', color);
     });
 
     // Interrupteur inactif 
     socket.on('closedoor', function (color) {
-        socket.broadcast.emit('closedoor', color);
+        socket.broadcast.to(socket.code).emit('closedoor', color);
         socket.emit('closedoor', color);
     });
 
     // player on exit spot
     socket.on('inexit', function () {
-        server.exitCount++;
-        if (server.exitCount === 2) {
+        server.lobbies[socket.code].exitCount++;
+        if (server.lobbies[socket.code].exitCount === 2) {
             socket.emit('success');
-            socket.broadcast.emit('success');
+            socket.broadcast.to(socket.code).emit('success');
         }
     });
 
     // player out of exit spot
     socket.on('outexit', function () {
-        server.exitCount--;
+        server.lobbies[socket.code].exitCount--;
     });
 
     socket.on('resetexit', function () {
-        server.exitCount = 0;
+        server.lobbies[socket.code].exitCount = 0;
     });
-
 });
