@@ -4,6 +4,7 @@ class Lobby extends Phaser.State {
 		this.connected = false;
 		this.connexionText = this.game.add.text(20, 20, '- Tentative de connexion...' , { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
 		this.choice = 0;
+		this.input = null;
 		this.game.controlsManager.setCallbackContext(this);
 	}
 
@@ -18,6 +19,14 @@ class Lobby extends Phaser.State {
 			this.connected = true;
 			this.startChoice();
 		});
+
+		this.game.on('newlobby', (code) => {
+			// TODO
+		});
+
+		this.game.on('joinlobby', (success) => {
+			//TODO
+		});
 	}
 
 	startChoice() {
@@ -31,10 +40,21 @@ class Lobby extends Phaser.State {
 
 	actionButtonReleased() {
 		if(!this.connected) return;
-		if(this.choice === 0) {
-
-		} else if(this.choice === 1) {
-
+		if(this.input === null) {
+			if(this.choice === 0) {
+				this.game.socket.emit('newlobby');
+			} else if(this.choice === 1) {
+				this.input = this.game.add.inputField(this.game.world.centerX - 110, this.game.world.centerY + 80, {
+					font: '44px uni0553',
+					width: 220,
+					height: 60,
+					padding: 4,
+					placeHolder: 'Code'
+				});
+				this.input.startFocus();
+			}
+		} else {
+			this.game.socket.emit('joinlobby', this.input.text.text);
 		}
 	}
 
@@ -56,9 +76,5 @@ class Lobby extends Phaser.State {
 			this.createLobby.alpha = 0.4;
 			this.createLobby.text = 'Créer un salon';
 		}
-	}
-
-	shutdown() {
-
 	}
 }
