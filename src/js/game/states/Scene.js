@@ -49,6 +49,9 @@ class Scene extends Phaser.State {
         let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         this.pauseGroup.add(pauseText);
         pauseText.anchor.setTo(0.5);
+        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        resetText.anchor.setTo(0.5);
+        this.pauseGroup.add(resetText);
         this.pauseGroup.alpha = 0;
     }
 
@@ -127,6 +130,10 @@ class Scene extends Phaser.State {
             this.closeDoor(color);
         });
 
+        this.game.socket.on('reset', () => {
+            this.resetLevel();
+        });
+
         this.game.socket.on('success', () => {
             this.endScene();
         });
@@ -186,6 +193,13 @@ class Scene extends Phaser.State {
 
     }
 
+    resetLevel() {
+        this.game.camera.fade('#000000', 200);
+        this.game.camera.onFadeComplete.add(() => {
+            this.game.state.start('scene', true, false, this.player, this.currentLevel);
+        }, this);
+    }
+
     actionButtonReleased() {
         if (this.end)
             this.game.state.start('scene', true, false, this.player, this.currentLevel + 1);
@@ -196,6 +210,13 @@ class Scene extends Phaser.State {
             this.resumeLevel();
         } else {
             this.pauseLevel();
+        }
+    }
+
+    cancelButtonReleased() {
+        if (this.onPause) {
+            this.game.socket.emit('reset');
+            this.resetLevel();
         }
     }
 
@@ -397,12 +418,14 @@ class Scene extends Phaser.State {
      */
     pauseLevel(level) {
         this.onPause = true;
+        this.game.controlsManager.disableControls([START, CANCEL]);
         this.music.pause();
         this.pauseGroup.alpha = 1;
     }
 
     resumeLevel() {
         this.onPause = false;
+        this.game.controlsManager.enableControls();
         this.music.play();
         this.pauseGroup.alpha = 0;
     }

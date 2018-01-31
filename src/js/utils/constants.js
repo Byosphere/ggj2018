@@ -32,18 +32,19 @@ const PAD_UP_BUTTON = 'le bouton haut';
 const PAD_DOWN_BUTTON = 'le bouton bas';
 const PAD_LEFT_BUTTON = 'le bouton gauche';
 const PAD_RIGHT_BUTTON = 'le bouton droite';
-const PAD_RESET_BUTTON = 'le bouton start';
+const PAD_START_BUTTON = 'le bouton start';
 const PAD_CANCEL_BUTTON = 'le bouton B';
 const KEY_ACTION_BUTTON = 'la touche ENTREE';
 const KEY_UP_BUTTON = 'la touche Z';
 const KEY_DOWN_BUTTON = 'la touche S';
 const KEY_LEFT_BUTTON = 'la touche Q';
 const KEY_RIGHT_BUTTON = 'la touche D';
-const KEY_RESET_BUTTON = 'la touche R';
-const KEY_CANCEL_BUTTON = 'la touche RETOUR';
+const KEY_START_BUTTON = 'la barre espace';
+const KEY_CANCEL_BUTTON = 'la touche ESC';
 const P1 = '<- J1';
 const P2 = '<- J2';
 const MENU_TEXT_PAUSE = 'PAUSE';
+const MENU_TEXT_RESET = 'réinitialise le niveau';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;

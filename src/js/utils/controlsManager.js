@@ -60,7 +60,7 @@ class ControlsManager {
         this.downButtonName = PAD_DOWN_BUTTON;
         this.leftButtonName = PAD_LEFT_BUTTON;
         this.rightButtonName = PAD_RIGHT_BUTTON;
-        this.resetButtonName = PAD_RESET_BUTTON;
+        this.startButtonName = PAD_START_BUTTON;
     }
 
     initKeyboard() {
@@ -73,7 +73,7 @@ class ControlsManager {
         this.downButtonName = KEY_DOWN_BUTTON;
         this.leftButtonName = KEY_LEFT_BUTTON;
         this.rightButtonName = KEY_RIGHT_BUTTON;
-        this.resetButtonName = KEY_RESET_BUTTON;
+        this.startButtonName = KEY_START_BUTTON;
     }
 
     setCallbackContext(context) {
@@ -310,7 +310,11 @@ class ControlsManager {
         return this.rightButtonName;
     }
 
-    getResetButtonName() {
-        return this.resetButtonName;
+    getCancelButtonName() {
+        return this.cancelButtonName;
+    }
+
+    getStartButtonName() {
+        return this.startButtonName;
     }
 }

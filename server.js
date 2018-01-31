@@ -16,6 +16,16 @@ server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
 
+server.lobby = {};
+/*
+idées pour la gestion des lobby
+{
+    '012546' : {players: [null, null], buttonsState: ['red' : true, 'orange' : false], exitCount: 0 },
+    '649822' : {},
+    '586136' : {}
+    ...
+}
+*/
 server.exitCount = 0;
 server.players = [null, null];
 
@@ -36,7 +46,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('newplayer', null, server.players);
     });
 
-    // action "ready" d'un player
+    // selection d'un personnage par un joueur sur l'écran titre
     socket.on('selecthero', function (selectedHero) {
         server.players[socket.player.id].selectedHero = selectedHero;
         socket.emit('updateplayers', server.players);
@@ -47,10 +57,16 @@ io.on('connection', function (socket) {
         }
     });
 
+    // mets à jour la position du curseur d'un joueur sur l'écran titre
     socket.on('updateposition', function (position) {
         server.players[socket.player.id].position = position;
         socket.broadcast.emit('updateplayers', server.players);
         console.log(server.players);
+    });
+
+    // reset le niveau en cours
+    socket.on('reset', function() {
+        socket.broadcast.emit('reset');
     });
 
     //disconnect
