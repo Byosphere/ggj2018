@@ -14,11 +14,14 @@ class Game extends Phaser.Game {
         this.socket = io.connect();
 
         //set some parameters
-        this.parameters = { controller: CONTROLLER };
+        this.controller = CONTROLLER;
         this.translate = TEXT_FR;
 
         //add the controlsMananger to the game
         this.controlsManager = new ControlsManager(this);
+
+        //audiomanager
+        this.audioManager = new AudioManager(this);
 
         this.state.start('boot');
     }

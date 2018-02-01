@@ -18,9 +18,7 @@ class Scene extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
         this.game.controlsManager.setCallbackContext(this);
-        this.music = this.game.add.audio('game');
         this.victoryMusic = this.game.add.audio('win');
-        this.music.loop = true;
         this.buttonsGroup = null;
         this.doorsGroup = null;
         this.characterGroup = null;
@@ -59,7 +57,7 @@ class Scene extends Phaser.State {
         this.generateLevel(this.currentLevel);
         this.initAnimations();
         this.connectServer();
-        this.music.play();
+        this.game.audioManager.playMusic('game');
     }
 
     /**
@@ -393,7 +391,7 @@ class Scene extends Phaser.State {
         this.exitPerso.anchor.setTo(0, 1);
         this.exitPerso.animations.add(EXIT_HEROS.DANCE.NAME, EXIT_HEROS.DANCE.FRAMES, 8, true).play();
         setTimeout(() => {
-            this.music.fadeOut(1000);
+            this.game.audioManager.stopCurrentMusic();
             this.victoryMusic.fadeIn(500, false);
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
@@ -419,21 +417,20 @@ class Scene extends Phaser.State {
     pauseLevel(level) {
         this.onPause = true;
         this.game.controlsManager.disableControls([START, CANCEL]);
-        this.music.pause();
+        this.audioManager.getCurrentMusic().pause();
         this.pauseGroup.alpha = 1;
     }
 
     resumeLevel() {
         this.onPause = false;
         this.game.controlsManager.enableControls();
-        this.music.play();
+        this.audioManager.getCurrentMusic().resume();
         this.pauseGroup.alpha = 0;
     }
     /**
      * Fonction appelée au moment du changement de scene
      */
     shutdown() {
-        this.music.destroy();
         this.victoryMusic.stop();
         this.victoryMusic.destroy();
         this.map.destroy();

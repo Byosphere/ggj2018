@@ -38,7 +38,7 @@ class ControlsManager {
     }
 
     init() {
-        if (this.game.parameters.controller) {
+        if (this.game.controller) {
             this.initController();
         } else {
             this.initKeyboard();

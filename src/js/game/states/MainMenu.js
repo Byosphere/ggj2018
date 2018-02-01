@@ -18,10 +18,6 @@ class MainMenu extends Phaser.State {
         this.self = { id: null, selectedHero: null, position: FLEUR_HEROS };
         this.other = { id: null, selectedHero: null, position: FLEUR_HEROS };
 
-        //musique
-        this.music = this.add.audio('main_menu');
-        this.music.loop = true;
-
         //sons
         this.heros[COLI_HEROS].sound = this.add.audio('sound_coli');
         this.heros[COLI_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
@@ -42,10 +38,7 @@ class MainMenu extends Phaser.State {
         this.createCharacters();
         this.createTexts();
         this.connectServer();
-
-        this.music.onDecoded.add(() => {
-            this.music.fadeIn(1000, true);
-        });
+        this.game.audioManager.playMusic('main_menu');
     }
 
 
@@ -113,7 +106,7 @@ class MainMenu extends Phaser.State {
      */
     startGame() {
         this.game.camera.fade('#000000', 3000);
-        this.music.fadeOut(3000);
+        this.game.audioManager.stopCurrentMusic(3000);
         this.game.camera.onFadeComplete.add(() => {
             this.game.state.start('scene', true, false, this.self);
         }, this);
@@ -317,6 +310,6 @@ class MainMenu extends Phaser.State {
      * fonction de shutdown de phaser.state
      */
     shutdown() {
-        this.music.stop();
+        
     }
 }

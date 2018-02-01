@@ -98,7 +98,12 @@ class Lobby extends Phaser.State {
 		this.joinLobby.destroy();
 		this.createLobby.destroy();
 		this.connexionText.destroy();
-		this.codeMessage.destroy();
+		if (this.codeMessage)
+			this.codeMessage.destroy();
+
+		if (this.codeMessage2)
+			this.codeMessage2.destroy();
+
 		this.choice = 0;
 		this.input = null;
 		this.code = null;
