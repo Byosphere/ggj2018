@@ -97,9 +97,10 @@ io.on('connection', function (socket) {
     //disconnect
     socket.on('disconnect', function () {
         if (socket.player) {
-            io.emit('disconnect');
+            io.to(socket.code).emit('disconnect');
             server.lobbies[socket.code].playerCount--;
             server.lobbies[socket.code].players[socket.player.id] = null;
+            socket.leave(socket.code);
         }
     });
 
@@ -112,7 +113,6 @@ io.on('connection', function (socket) {
         }
         socket.broadcast.to(socket.code).emit('opendoor', color);
         socket.emit('opendoor', color);
-        console.log(server.lobbies[socket.code]);
     });
 
     // Interrupteur inactif 
