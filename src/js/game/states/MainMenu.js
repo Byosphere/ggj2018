@@ -235,7 +235,7 @@ class MainMenu extends Phaser.State {
         selectedHero.alpha = 0.6;
         selectedHero.bulle.alpha = 1;
         selectedHero.sprite.animations.stop();
-        selectedHero.sprite.frame = 8;
+        selectedHero.sprite.frame = HEROS_ANIMATIONS.SIT.FRAMES;
         selectedHero.selected = false;
         player.id === 0 ? this.p1.alpha = 1 : this.p2.alpha = 1;
     }
@@ -246,7 +246,7 @@ class MainMenu extends Phaser.State {
     createBackground() {
         this.game.stage.backgroundColor = MENU_BACKGROUND_COLOR;
         this.background = this.game.add.sprite(0, 0, 'background_title');
-        this.background.animations.add('default', [0, 1], 1, true).play();
+        this.background.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
     }
 
     /**
@@ -267,7 +267,7 @@ class MainMenu extends Phaser.State {
         coli.bulle = this.game.add.sprite(coli.sprite.x + (coli.sprite.width / 2) + BULLE_SKEW, 0, 'bulle');
         coli.bulle.y = coli.sprite.y - coli.bulle.height;
         coli.bulle.anchor.set(0.5, 0);
-        coli.bulle.animations.add('default', [0, 1], 4, true).play();
+        coli.bulle.animations.add(BULLE_ANIMATIONS.PUSH_BUTTON.NAME, BULLE_ANIMATIONS.PUSH_BUTTON.FRAMES, 4, true).play();
 
         fleur.sprite = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
         fleur.sprite.alpha = 0.6;
@@ -279,8 +279,7 @@ class MainMenu extends Phaser.State {
         fleur.bulle.y = fleur.sprite.y - fleur.bulle.height;
         fleur.bulle.anchor.set(0.5, 0);
         fleur.bulle.scale.setTo(-1, 1);
-        fleur.bulle.animations.add('default', [0, 1], 4, true).play();
-
+        fleur.bulle.animations.add(BULLE_ANIMATIONS.PUSH_BUTTON.NAME, BULLE_ANIMATIONS.PUSH_BUTTON.FRAMES, 4, true).play();
     }
 
     /**
@@ -289,7 +288,7 @@ class MainMenu extends Phaser.State {
     createTitle() {
         this.title = this.game.add.sprite(this.game.world.centerX, MENU_TITLE_HEIGHT, 'anim_title');
         this.title.anchor.set(0.5, 0);
-        this.title.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 4, false).play();
+        this.title.animations.add(TITLE_ANIMATIONS.DEFAULT.NAME, TITLE_ANIMATIONS.DEFAULT.FRAMES, 4, false).play();
     }
 
     /**

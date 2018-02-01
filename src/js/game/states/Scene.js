@@ -72,7 +72,7 @@ class Scene extends Phaser.State {
                 if (door.colorParam == color) {
                     //ouverture de la porte
                     this.openedDoorsColors.push(door.colorParam);
-                    door.animations.play('open');
+                    door.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
                     this.animatedDoors.push(door);
                     door.animations.currentAnim.onComplete.add(() => {
                         // on stoppe la collision
@@ -105,7 +105,7 @@ class Scene extends Phaser.State {
             this.noCollisionGroup.forEach((door) => {
                 if (door.colorParam == color) {
                     //fermeture de la porte
-                    door.animations.play('close');
+                    door.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
                     door.animations.currentAnim.onComplete.add(() => {
                         // on stoppe la collision
                         this.doorsGroup.add(door);
@@ -347,8 +347,7 @@ class Scene extends Phaser.State {
         this.exitPosY = exit.y;
         let exitSprite = this.game.add.sprite(exit.x, exit.y, 'exit');
         exitSprite.anchor.setTo(0, 1);
-        exitSprite.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 4, true);
-        exitSprite.animations.play('default');
+        exitSprite.animations.add(EXIT_ANIMATIONS.EXIT_ACTIVE.NAME, EXIT_ANIMATIONS.EXIT_ACTIVE.FRAMES, 4, true).play();
         if (this.player.id === 1) {
             exitSprite.scale.setTo(-1, 1);
             exitSprite.x -= exitSprite.width;
@@ -392,8 +391,7 @@ class Scene extends Phaser.State {
         this.character.alpha = 0;
         this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
         this.exitPerso.anchor.setTo(0, 1);
-        this.exitPerso.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 8, true);
-        this.exitPerso.animations.play('default');
+        this.exitPerso.animations.add(EXIT_HEROS.DANCE.NAME, EXIT_HEROS.DANCE.FRAMES, 8, true).play();
         setTimeout(() => {
             this.music.fadeOut(1000);
             this.victoryMusic.fadeIn(500, false);
@@ -401,15 +399,13 @@ class Scene extends Phaser.State {
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
                 this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 10, false);
-                this.endTitle.animations.play('default');
+                this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
                 this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate.GENERIC_PRESS_BUTTON + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
                 this.endText.anchor.setTo(0.5);
             } else {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');
                 this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, false);
-                this.endTitle.animations.play('default');
+                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, false).play();
             }
             this.end = true;
         }, 3000);
