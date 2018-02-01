@@ -1,5 +1,5 @@
 const TEXT_FR = {
-    GENERIC_PRESS_BUTTON: 'Appuie sur ',
+    GENERIC_PRESS_BUTTON: 'Appuie sur',
     GENERIC_TO_START: 'pour commencer',
     LOADING_TEXT: 'Chargement...',
     LOBBY_TEXT_CONNECTING: 'Tentative de connexion...',
@@ -14,6 +14,8 @@ const TEXT_FR = {
     MENU_TEXT_COLI: 'L\'est son bro, Coli.',
     MENU_TEXT_PAUSE: 'PAUSE',
     MENU_TEXT_RESET: 'réinitialise le niveau',
+    MENU_TEXT_ERROR: 'Erreur de connexion entre les joueurs',
+    MENU_TEXT_BACKMENU: 'pour retourner au menu principal',
     P1: '<- J1',
     P2: '<- J2',
     PAD_ACTION_BUTTON: 'le bouton A',

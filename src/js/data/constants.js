@@ -10,6 +10,7 @@ const NB_LEVELS = 7;
 /* COLORS & FONTS */
 const LOADER_BACKGROUND = '#000';
 const MENU_BACKGROUND_COLOR = '#1d2b53';
+const LOBBY_BACKGROUND = '#000';
 const DEFAULT_FONT = 'normal 32px uni0553';
 const DEFAULT_COLOR = '#FFF';
 const LOADER_COLOR = '#FFF';

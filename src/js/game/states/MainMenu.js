@@ -7,7 +7,6 @@ class MainMenu extends Phaser.State {
             this.codeMessage.alpha = 0.7;
         }
     }
-
     /**
      * preload fonction du phaser state
      */
@@ -318,6 +317,6 @@ class MainMenu extends Phaser.State {
      * fonction de shutdown de phaser.state
      */
     shutdown() {
-
+        this.music.stop();
     }
 }

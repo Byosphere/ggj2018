@@ -1,6 +1,7 @@
 class Lobby extends Phaser.State {
 
 	preload() {
+		this.game.stage.backgroundColor = LOBBY_BACKGROUND;
 		this.connected = false;
 		this.connexionText = this.game.add.text(20, 20, '- ' + this.game.translate.LOBBY_TEXT_CONNECTING + ' -', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 		this.choice = 0;
@@ -23,8 +24,8 @@ class Lobby extends Phaser.State {
 
 		this.game.socket.on('newlobby', (code) => {
 			this.code = code;
-			this.joinLobby.alpha = 0;
-			this.createLobby.alpha = 0;
+			this.joinLobby.destroy();
+			this.createLobby.destroy();
 			this.displayCode = this.game.add.text(this.game.world.centerX, this.game.world.centerY, code, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 			this.displayCode.anchor.setTo(0.5);
 			this.codeMessage = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 80, this.game.translate.LOBBY_TEXT_CODE_INSTRUCTIONS, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
@@ -90,5 +91,16 @@ class Lobby extends Phaser.State {
 			this.createLobby.alpha = 0.4;
 			this.createLobby.text = this.game.translate.LOBBY_TEXT_CREATE;
 		}
+	}
+
+	shutdown() {
+		this.connected = false;
+		this.joinLobby.destroy();
+		this.createLobby.destroy();
+		this.connexionText.destroy();
+		this.codeMessage.destroy();
+		this.choice = 0;
+		this.input = null;
+		this.code = null;
 	}
 }
