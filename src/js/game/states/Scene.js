@@ -137,6 +137,10 @@ class Scene extends Phaser.State {
         this.game.socket.on('success', () => {
             this.endScene();
         });
+
+        this.game.socket.on('disconnect', () => {
+            console.log('player disconnected');
+        });
     }
 
     /**
@@ -222,58 +226,58 @@ class Scene extends Phaser.State {
 
     leftButtonDown() {
         this.character.body.velocity.x = -200;
-        this.character.animations.play('walk_left', true);
+        this.character.animations.play(HEROS_ANIMATIONS.WALK_LEFT.NAME, true);
     }
 
     rightButtonDown() {
         this.character.body.velocity.x = 200;
-        this.character.animations.play('walk_right', true);
+        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
         this.character.scale.setTo(1, 1);
     }
 
     upButtonDown() {
         this.character.body.velocity.y = -200;
-        this.character.animations.play('walk_up', true);
+        this.character.animations.play(HEROS_ANIMATIONS.WALK_UP.NAME, true);
         this.character.scale.setTo(1, 1);
     }
 
     downButtonDown() {
         this.character.body.velocity.y = 200;
-        this.character.animations.play('walk_right', true);
+        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
         this.character.scale.setTo(1, 1);
     }
 
     leftButtonReleased() {
         this.character.body.velocity.x = 0;
         this.character.animations.stop();
-        this.character.frame = 36;
+        this.character.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
     }
 
     rightButtonReleased() {
         this.character.body.velocity.x = 0;
         this.character.animations.stop();
-        this.character.frame = 0;
+        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
     }
 
     downButtonReleased() {
         this.character.body.velocity.y = 0;
         this.character.animations.stop();
-        this.character.frame = 13;
+        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
     }
 
     upButtonReleased() {
         this.character.body.velocity.y = 0;
         this.character.animations.stop();
-        this.character.frame = 32;
+        this.character.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
     }
 
     /**
      * initialise character animations
      */
     initAnimations() {
-        this.character.animations.add('walk_right', [13, 14, 15, 16], 12, true);
-        this.character.animations.add('walk_left', [36, 37, 38, 39], 12, true);
-        this.character.animations.add('walk_up', [32, 33, 34, 35], 12, true);
+        this.character.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
+        this.character.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
+        this.character.animations.add(HEROS_ANIMATIONS.WALK_UP.NAME, HEROS_ANIMATIONS.WALK_UP.FRAMES, 12, true);
     }
 
     /**

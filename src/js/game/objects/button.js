@@ -10,14 +10,14 @@ class Button {
     }
 
     setColor(color) {
-        switch(color) {
-            case ORANGE: this.sprite.frame = 2;
+        switch (color) {
+            case ORANGE: this.sprite.frame = BUTTON_ANIMATIONS.ORANGE_BUTTON.FRAMES;
                 break;
-            case GREEN: this.sprite.frame = 4;
+            case GREEN: this.sprite.frame = BUTTON_ANIMATIONS.GREEN_BUTTON.FRAMES;
                 break;
-            case RED: this.sprite.frame = 0;
+            case RED: this.sprite.frame = BUTTON_ANIMATIONS.RED_BUTTON.FRAMES;
                 break;
-            case WHITE: this.sprite.frame = 6;
+            case WHITE: this.sprite.frame = BUTTON_ANIMATIONS.WHITE_BUTTON.FRAMES;
                 break;
         }
     }

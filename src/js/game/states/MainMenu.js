@@ -193,9 +193,9 @@ class MainMenu extends Phaser.State {
         }
 
         // Animation of the hero
-        selectedHero.sprite.animations.play('ready');
+        selectedHero.sprite.animations.play(HEROS_ANIMATIONS.JUMP.NAME);
         selectedHero.sprite.animations.currentAnim.onComplete.add(function () {
-            selectedHero.sprite.animations.play('walk');
+            selectedHero.sprite.animations.play(HEROS_ANIMATIONS.HIGHLIGHT.NAME);
         });
 
     }
@@ -261,8 +261,8 @@ class MainMenu extends Phaser.State {
         coli.sprite = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
         coli.sprite.alpha = 0.6;
         coli.sprite.frame = HEROS_SITTING_FRAME;
-        coli.sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
-        coli.sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
+        coli.sprite.animations.add(HEROS_ANIMATIONS.JUMP.NAME, HEROS_ANIMATIONS.JUMP.FRAMES, 10, false);
+        coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true);
 
         coli.bulle = this.game.add.sprite(coli.sprite.x + (coli.sprite.width / 2) + BULLE_SKEW, 0, 'bulle');
         coli.bulle.y = coli.sprite.y - coli.bulle.height;
@@ -272,8 +272,8 @@ class MainMenu extends Phaser.State {
         fleur.sprite = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
         fleur.sprite.alpha = 0.6;
         fleur.sprite.frame = HEROS_SITTING_FRAME;
-        fleur.sprite.animations.add('ready', [2, 3, 4, 5, 6, 7], 10, false);
-        fleur.sprite.animations.add('walk', [13, 14, 15, 16], 10, true);
+        fleur.sprite.animations.add(HEROS_ANIMATIONS.JUMP.NAME, HEROS_ANIMATIONS.JUMP.FRAMES, 10, false);
+        fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true);
 
         fleur.bulle = this.game.add.sprite(fleur.sprite.x + (fleur.sprite.width / 2) - BULLE_SKEW, 0, 'bulle');
         fleur.bulle.y = fleur.sprite.y - fleur.bulle.height;

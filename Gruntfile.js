@@ -1,7 +1,9 @@
 module.exports = function (grunt) {
 
     var jsSourcesCommon = [
-        'src/js/utils/constants.js',
+        'src/js/data/constants.js',
+        'src/js/data/translate-fr.js',
+        'src/js/data/animations.js',
         'src/js/utils/controlsManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Booter.js',
