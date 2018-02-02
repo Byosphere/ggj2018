@@ -93,15 +93,21 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: 'src/js/*.js',
-                tasks: ['scripts:dev']
+                files: ['src/**'],
+                tasks: ['scripts:dev'],
+                options: {
+                    livereload: {
+                        host: 'localhost',
+                        port: 35729,
+                    }
+                }
             }
         }
     });
 
     // Tasks definition
     grunt.registerTask('default', ['dev']);
-    grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets']);
+    grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets', 'watch:scripts']);
     grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
 
     grunt.registerTask('scripts:dev', ['concat:src']);
