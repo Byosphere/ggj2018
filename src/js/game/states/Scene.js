@@ -32,25 +32,6 @@ class Scene extends Phaser.State {
         this.exitPosY = 0;
         this.end = false;
         this.openedDoorsColors = [];
-        this.onPause = false;
-    }
-
-    /**
-     * preload the graphical elements for the pause menu (externaliser dans une classe peut etre)
-     */
-    preloadPauseScreen() {
-        let darkBack = this.game.add.graphics(0, 0);
-        this.pauseGroup.add(darkBack);
-        darkBack.beginFill(0x00000, 0.7);
-        darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        darkBack.endFill();
-        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, this.game.translate.MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-        this.pauseGroup.add(pauseText);
-        pauseText.anchor.setTo(0.5);
-        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + this.game.translate.MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-        resetText.anchor.setTo(0.5);
-        this.pauseGroup.add(resetText);
-        this.pauseGroup.alpha = 0;
     }
 
     create() {
@@ -170,8 +151,34 @@ class Scene extends Phaser.State {
             this.createObject(mapObjects[i]);
         }
 
-        this.pauseGroup = this.game.add.group();
-        this.preloadPauseScreen();
+        this.pauseScreen = new PauseScreen(this.game);
+    }
+
+    /**
+     * Factory pour les différents objets possibles à instancier pour la scene
+     * @param {Object} obj : objet à instancier
+     */
+    createObject(obj) {
+        const type = obj.properties.Type;
+        switch (type) {
+            case 'character':
+                this.character = new Character(this.game, obj, this.characterName);
+                this.characterGroup.add(this.character);
+                break;
+            case 'button':
+                this.buttonsGroup.add(new Button(this.game, obj));
+                break;
+            case 'door':
+                this.doorsGroup.add(new Door(this.game, obj));
+                break;
+            case 'rock':
+                this.rocksGroup.add(new Rock(this.game, obj));
+                break;
+            case 'exit':
+                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
+                break;
+            default: break;
+        }
     }
 
     update() {
@@ -181,8 +188,7 @@ class Scene extends Phaser.State {
 
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
-            this.overlapedButton.frame -= 1;
-            this.game.socket.emit('releasebutton', this.overlapedButton.colorParam);
+            this.overlapedButton.toggleOff();
             this.overlapedButton = null;
         }
 
@@ -207,15 +213,15 @@ class Scene extends Phaser.State {
     }
 
     startButtonReleased() {
-        if (this.onPause) {
-            this.resumeLevel();
+        if (this.pauseScreen.isOnPause()) {
+            this.pauseScreen.hide();
         } else {
-            this.pauseLevel();
+            this.pauseScreen.display();
         }
     }
 
     cancelButtonReleased() {
-        if (this.onPause) {
+        if (this.pauseScreen.isOnPause()) {
             this.game.socket.emit('reset');
             this.resetLevel();
         }
@@ -254,42 +260,14 @@ class Scene extends Phaser.State {
     }
 
     /**
-     * Factory pour les différents objets possibles à instancier pour la scene
-     * @param {Object} obj : objet à instancier
-     */
-    createObject(obj) {
-        const type = obj.properties.Type;
-        switch (type) {
-            case 'character':
-                this.character = new Character(this.game, obj, this.characterName);
-                this.characterGroup.add(this.character);
-                break;
-            case 'button':
-                this.buttonsGroup.add(new Button(this.game, obj));
-                break;
-            case 'door':
-                this.doorsGroup.add(new Door(this.game, obj));
-                break;
-            case 'rock':
-                this.rocksGroup.add(new Rock(this.game, obj));
-                break;
-            case 'exit':
-                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
-                break;
-            default: break;
-        }
-    }
-
-    /**
      * Action lorsqu'un bouton est pressé
      * @param {Phaser.Sprite} playerSprite 
      * @param {Phaser.Sprite} buttonSprite 
      */
     pressButton(playerSprite, buttonSprite) {
         if (!this.overlapedButton) {
-            buttonSprite.frame += 1;
+            buttonSprite.toggleOn();
             this.overlapedButton = buttonSprite;
-            this.game.socket.emit('pressbutton', buttonSprite.colorParam);
         }
     }
 
@@ -332,24 +310,6 @@ class Scene extends Phaser.State {
         }, 3000);
     }
 
-
-    /**
-     * relance le niveau
-     * @param {number} level 
-     */
-    pauseLevel(level) {
-        this.onPause = true;
-        this.game.controlsManager.disableControls([START, CANCEL]);
-        this.audioManager.getCurrentMusic().pause();
-        this.pauseGroup.alpha = 1;
-    }
-
-    resumeLevel() {
-        this.onPause = false;
-        this.game.controlsManager.enableControls();
-        this.audioManager.getCurrentMusic().resume();
-        this.pauseGroup.alpha = 0;
-    }
     /**
      * Fonction appelée au moment du changement de scene
      */
@@ -371,6 +331,5 @@ class Scene extends Phaser.State {
         this.animatedDoors = [];
         this.openedDoorsColors = [];
         this.end = false;
-        this.onPause = false;
     }
 }
