@@ -1,28 +1,26 @@
-class Button {
+class Button extends Phaser.Sprite {
 
-    constructor(obj, group, game) {
-        this.sprite = game.add.sprite(obj.x, obj.y, 'button');
-        group.add(this.sprite);
-        this.sprite.anchor.setTo(0, 1);
-        this.sprite.body.setSize(32, 32, 0, 0);
-        this.sprite.colorParam = obj.properties.Color;
-        this.setColor(this.sprite.colorParam);
+    constructor(game, data) {
+        super(game, data.x, data.y, 'button', 0);
+        this.game = game;
+        this.colorParam = data.properties.Color;
+        this.anchor.setTo(0, 1);
+        this.setColor(this.colorParam);
+        this.game.physics.arcade.enable(this);
+        this.body.setSize(32, 32, 0, 0);
+        this.activated = false;
     }
 
     setColor(color) {
         switch (color) {
-            case ORANGE: this.sprite.frame = BUTTON_ANIMATIONS.ORANGE_BUTTON.FRAMES;
+            case ORANGE: this.frame = BUTTON_ANIMATIONS.ORANGE_BUTTON.FRAMES;
                 break;
-            case GREEN: this.sprite.frame = BUTTON_ANIMATIONS.GREEN_BUTTON.FRAMES;
+            case GREEN: this.frame = BUTTON_ANIMATIONS.GREEN_BUTTON.FRAMES;
                 break;
-            case RED: this.sprite.frame = BUTTON_ANIMATIONS.RED_BUTTON.FRAMES;
+            case RED: this.frame = BUTTON_ANIMATIONS.RED_BUTTON.FRAMES;
                 break;
-            case WHITE: this.sprite.frame = BUTTON_ANIMATIONS.WHITE_BUTTON.FRAMES;
+            case WHITE: this.frame = BUTTON_ANIMATIONS.WHITE_BUTTON.FRAMES;
                 break;
         }
-    }
-
-    getSprite() {
-        return this.sprite;
     }
 }

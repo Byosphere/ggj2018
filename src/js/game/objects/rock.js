@@ -1,9 +1,8 @@
-class Rock {
+class Rock extends Phaser.Sprite {
 
-    constructor(obj, group, game) {
-        this.sprite = game.add.sprite(obj.x, obj.y, 'rock');
-        group.add(this.sprite);
-        this.sprite.anchor.setTo(0, 1);
+    constructor(game, data) {
+        super(game, data.x, data.y, 'rock', 0);
+        this.anchor.setTo(0, 1);
     }
 
 }

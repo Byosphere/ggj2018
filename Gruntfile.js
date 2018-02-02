@@ -12,9 +12,11 @@ module.exports = function (grunt) {
         'src/js/game/states/Lobby.js',
         'src/js/game/states/MainMenu.js',
         'src/js/game/states/Scene.js',
-        'src/js/game/objects/button.js',
-        'src/js/game/objects/door.js',
-        'src/js/game/objects/exit.js'
+        'src/js/game/objects/Button.js',
+        'src/js/game/objects/Door.js',
+        'src/js/game/objects/Exit.js',
+        'src/js/game/objects/Rock.js',
+        'src/js/game/objects/Character.js'
     ];
 
     var jsSourcesDev = ['src/js/utils/storage-dev.js'];

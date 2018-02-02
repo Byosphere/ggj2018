@@ -55,7 +55,6 @@ class Scene extends Phaser.State {
 
     create() {
         this.generateLevel(this.currentLevel);
-        this.initAnimations();
         this.connectServer();
         this.game.audioManager.playMusic('game');
     }
@@ -223,59 +222,35 @@ class Scene extends Phaser.State {
     }
 
     leftButtonDown() {
-        this.character.body.velocity.x = -200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_LEFT.NAME, true);
+        this.character.moveLeft();
     }
 
     rightButtonDown() {
-        this.character.body.velocity.x = 200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveRight();
     }
 
     upButtonDown() {
-        this.character.body.velocity.y = -200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_UP.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveUp();
     }
 
     downButtonDown() {
-        this.character.body.velocity.y = 200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveDown();
     }
 
     leftButtonReleased() {
-        this.character.body.velocity.x = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
+        this.character.stopLeft();
     }
 
     rightButtonReleased() {
-        this.character.body.velocity.x = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
+        this.character.stopRight();
     }
 
     downButtonReleased() {
-        this.character.body.velocity.y = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
+        this.character.stopDown();
     }
 
     upButtonReleased() {
-        this.character.body.velocity.y = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
-    }
-
-    /**
-     * initialise character animations
-     */
-    initAnimations() {
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_UP.NAME, HEROS_ANIMATIONS.WALK_UP.FRAMES, 12, true);
+        this.character.stopUp();
     }
 
     /**
@@ -285,74 +260,24 @@ class Scene extends Phaser.State {
     createObject(obj) {
         const type = obj.properties.Type;
         switch (type) {
-            case 'character': this.createCharacter(obj.x, obj.y);
+            case 'character':
+                this.character = new Character(this.game, obj, this.characterName);
+                this.characterGroup.add(this.character);
                 break;
-            case 'button': this.createButton(obj);
+            case 'button':
+                this.buttonsGroup.add(new Button(this.game, obj));
                 break;
-            case 'door': this.createDoor(obj);
+            case 'door':
+                this.doorsGroup.add(new Door(this.game, obj));
                 break;
-            case 'rock': this.createRock(obj);
+            case 'rock':
+                this.rocksGroup.add(new Rock(this.game, obj));
                 break;
-            case 'exit': this.createExit(obj);
+            case 'exit':
+                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
                 break;
             default: break;
         }
-    }
-
-    /**
-     * Créé le personnage et le place sur la scene
-     * @param {int} posX : position en X
-     * @param {int} posY : position en Y
-     */
-    createCharacter(posX, posY) {
-        this.character = this.game.add.sprite(posX, posY, this.characterName);
-        this.characterGroup.add(this.character);
-        this.character.anchor.setTo(0, 1);
-        this.game.physics.arcade.enable(this.character);
-        this.character.body.setSize(64, 64, 0, 0);
-    }
-
-    /**
-     * Créé un bouton
-     * @param {Object} button 
-     */
-    createButton(button) {
-        let buttonSprite = new Button(button, this.buttonsGroup, this.game);
-    }
-
-    /**
-     * Créé une porte
-     * @param {*Object} door 
-     */
-    createDoor(door) {
-        let doorSprite = new Door(door, this.doorsGroup, this.game);
-    }
-
-    /**
-     * Créé un rocher
-     * @param {*Object} rock 
-     */
-    createRock(rock) {
-        let rockSprite = new Rock(rock, this.rocksGroup, this.game);
-    }
-
-    /**
-     * Créé la zone d'objectif
-     * @param {*Object} exit 
-     */
-    createExit(exit) {
-        this.exitPosX = exit.x;
-        this.exitPosY = exit.y;
-        let exitSprite = this.game.add.sprite(exit.x, exit.y, 'exit');
-        exitSprite.anchor.setTo(0, 1);
-        exitSprite.animations.add(EXIT_ANIMATIONS.EXIT_ACTIVE.NAME, EXIT_ANIMATIONS.EXIT_ACTIVE.FRAMES, 4, true).play();
-        if (this.player.id === 1) {
-            exitSprite.scale.setTo(-1, 1);
-            exitSprite.x -= exitSprite.width;
-        }
-
-        this.game.physics.arcade.enable(exitSprite);
-        this.exitGroup.add(exitSprite);
     }
 
     /**
@@ -387,9 +312,7 @@ class Scene extends Phaser.State {
         this.game.socket.emit('resetexit');
         this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
-        this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
-        this.exitPerso.anchor.setTo(0, 1);
-        this.exitPerso.animations.add(EXIT_HEROS.DANCE.NAME, EXIT_HEROS.DANCE.FRAMES, 8, true).play();
+        this.exitGroup.children[0].animateSuccess();
         setTimeout(() => {
             this.game.audioManager.stopCurrentMusic();
             this.victoryMusic.fadeIn(500, false);
