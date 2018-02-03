@@ -270,7 +270,6 @@ class ControlsManager {
                 this.controlsEnabled[button] = true;
             });
         }
-        console.log(this.controlsEnabled);
     }
 
     /**

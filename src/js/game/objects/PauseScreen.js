@@ -19,18 +19,18 @@ class PauseScreen {
         let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + this.game.translate.MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         resetText.anchor.setTo(0.5);
         this.pauseGroup.add(resetText);
-        this.pauseGroup.alpha = 0;
+        this.pauseGroup.visible = false;
     }
 
     display() {
-        this.pauseGroup.alpha = 1;
+        this.pauseGroup.visible = true;
         this.game.controlsManager.disableControls([START, CANCEL]);
         this.game.audioManager.getCurrentMusic().pause();
         this.onPause = true;
     }
 
     hide() {
-        this.pauseGroup.alpha = 0;
+        this.pauseGroup.visible = false;
         this.game.controlsManager.enableControls();
         this.game.audioManager.getCurrentMusic().resume();
         this.onPause = false;

@@ -12,6 +12,33 @@ class Door extends Phaser.Sprite {
         this.anchor.setTo(0, 1);
         this.colorParam = data.properties.Color;
         this.setColor(this.colorParam);
+        this.isAnimating = false;
+    }
+
+    openDoor() {
+        if(this.body.enable) {
+            this.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
+            this.isAnimating = true;
+            this.animations.currentAnim.onComplete.add(() => {
+                this.body.enable = false;
+                this.isAnimating = false;
+            });
+        } else if (this.isAnimating) {
+            this.animations.currentAnim.reverse();
+            this.animations.currentAnim.onComplete.add(() => {
+                this.body.enable = false;
+                this.isAnimating = false;
+            });
+        }
+    }
+
+    closeDoor() {
+        this.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
+        this.isAnimating = true;
+        this.animations.currentAnim.onComplete.add(() => {
+            this.body.enable = true;
+            this.isAnimating = false;
+        });
     }
 
     setColor(color) {

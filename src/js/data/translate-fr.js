@@ -32,4 +32,9 @@ const TEXT_FR = {
     KEY_RIGHT_BUTTON: 'la touche D',
     KEY_START_BUTTON: 'la barre espace',
     KEY_CANCEL_BUTTON: 'la touche ESC',
+    ELAPSED_TIME: 'Temps écoulé : ',
+    LEVEL_NAMES: [
+        'Loin du légume, loin du coeur',
+        'Un bouton vaut mieux que deux, tu l\'auras',
+    ]
 }

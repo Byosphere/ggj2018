@@ -6,6 +6,7 @@ module.exports = function (grunt) {
         'src/js/data/animations.js',
         'src/js/utils/controlsManager.js',
         'src/js/utils/AudioManager.js',
+        'src/js/utils/ServerManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
@@ -17,7 +18,8 @@ module.exports = function (grunt) {
         'src/js/game/objects/Exit.js',
         'src/js/game/objects/Rock.js',
         'src/js/game/objects/Character.js',
-        'src/js/game/objects/PauseScreen.js'
+        'src/js/game/objects/PauseScreen.js',
+        'src/js/game/objects/Timer.js'
     ];
 
     var jsSourcesDev = ['src/js/utils/storage-dev.js'];

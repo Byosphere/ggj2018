@@ -28,7 +28,7 @@ class Button extends Phaser.Sprite {
         if (!this.activated) {
             this.frame++;
             this.activated = true;
-            this.game.socket.emit('pressbutton', this.colorParam);
+            this.game.serverManager.getSocket().emit('pressbutton', this.colorParam);
         }
     }
 
@@ -36,7 +36,7 @@ class Button extends Phaser.Sprite {
         if (this.activated) {
             this.frame--;
             this.activated = false;
-            this.game.socket.emit('releasebutton', this.colorParam);
+            this.game.serverManager.getSocket().emit('releasebutton', this.colorParam);
         }
     }
 

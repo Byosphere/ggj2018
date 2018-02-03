@@ -18,6 +18,7 @@ class Scene extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
         this.game.controlsManager.setCallbackContext(this);
+        this.game.serverManager.setCallbackContext(this);
         this.victoryMusic = this.game.add.audio('win');
         this.buttonsGroup = null;
         this.doorsGroup = null;
@@ -25,107 +26,72 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.overlapedButton = null;
-        this.noCollisionGroup = null;
         this.animatedDoors = [];
         this.exitActive = false;
         this.exitPosX = 0;
         this.exitPosY = 0;
         this.end = false;
         this.openedDoorsColors = [];
+        this.timer = new Timer(this.game);
     }
 
+    /**
+     * Initialise le niveau
+     */
     create() {
+        this.game.controlsManager.disableControls();
         this.generateLevel(this.currentLevel);
-        this.connectServer();
-        this.game.audioManager.playMusic('game');
+    }
+
+    /**
+     * Lance le niveau
+     */
+    onStartLevel() {
+        this.loadGroup.destroy();
+        this.timer.start(this.currentLevel, () => {
+            this.game.controlsManager.enableControls();
+            this.game.audioManager.playMusic('game');
+        });
     }
 
     /**
      * Fonction pour animer les portes à ouvrir
      * @param {String} color : Couleur des portes à ouvrir
      */
-    openDoor(color) {
-        if (!this.openedDoorsColors.includes(color)) {
-            this.doorsGroup.forEach((door) => {
-                if (door.colorParam == color) {
-                    //ouverture de la porte
-                    this.openedDoorsColors.push(door.colorParam);
-                    door.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
-                    this.animatedDoors.push(door);
-                    door.animations.currentAnim.onComplete.add(() => {
-                        // on stoppe la collision
-                        this.noCollisionGroup.add(door);
-                        this.doorsGroup.remove(door);
-                        const idx = this.animatedDoors.findIndex((x) => x === door);
-                        this.animatedDoors.splice(idx, idx + 1);
-                    });
-                }
-            });
-        }
+    onOpenDoor(color) {
+        this.doorsGroup.forEach(door => {
+            if(door.colorParam == color)
+                door.openDoor();
+        });
     }
 
     /**
      * Fonction pour animer les portes à fermer
      * @param {String} color : Couleur des portes à ouvrir
      */
-    closeDoor(color) {
-        if (this.openedDoorsColors.includes(color) && (!this.overlapedButton || (this.overlapedButton && this.overlapedButton.colorParam !== color))) {
-            this.animatedDoors.forEach((door) => {
-                if (door.colorParam == color) {
-                    const anim = door.animations.currentAnim;
-                    const frame = anim.frame;
-                    anim.onComplete.removeAll();
-                    anim.reverseOnce();
-                    const idx = this.animatedDoors.findIndex((x) => x === door);
-                    this.animatedDoors.splice(idx, idx + 1);
-                }
-            });
-            this.noCollisionGroup.forEach((door) => {
-                if (door.colorParam == color) {
-                    //fermeture de la porte
-                    door.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
-                    door.animations.currentAnim.onComplete.add(() => {
-                        // on stoppe la collision
-                        this.doorsGroup.add(door);
-                        this.noCollisionGroup.remove(door);
-                    });
-                }
-            });
-            const idx2 = this.openedDoorsColors.findIndex((x) => x === color);
-            this.openedDoorsColors.splice(idx2, idx2 + 1);
-        }
-    }
-
-    /**
-     * Fonction rassemblant tous les écouteurs de socket IO
-     */
-    connectServer() {
-        this.game.socket.on('opendoor', (color) => {
-            this.openDoor(color);
-        });
-
-        this.game.socket.on('closedoor', (color) => {
-            this.closeDoor(color);
-        });
-
-        this.game.socket.on('reset', () => {
-            this.resetLevel();
-        });
-
-        this.game.socket.on('success', () => {
-            this.endScene();
-        });
-
-        this.game.socket.on('disconnect', () => {
-            console.log('player disconnected');
+    onCloseDoor(color) {
+        this.doorsGroup.forEach(door => {
+            if(door.colorParam == color)
+                door.closeDoor();
         });
     }
 
     /**
      * Génère l'environnement du niveau passé en paramètre
      * @param {*int} level : niveau à générer
+     * @param {function} callback : fonction appelée une fois le niveau généré
      */
-    generateLevel(level) {
+    generateLevel(level, callback) {
+
+        let loadBack = this.game.add.graphics(0, 0);
+        loadBack.beginFill(0x00000, 1);
+        loadBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        loadBack.endFill();
+        let preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
+        preload.anchor.setTo(0.5);
+        preload.animations.add('default', [0, 1, 2, 3], 10, true);
+        preload.animations.play('default');
+
         this.map = this.game.add.tilemap('level' + level + this.characterName);
         this.map.addTilesetImage('decor');
 
@@ -143,7 +109,9 @@ class Scene extends Phaser.State {
         this.doorsGroup = this.game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = this.game.add.group();
-        this.noCollisionGroup = this.game.add.group();
+        this.loadGroup = this.game.add.group();
+        this.loadGroup.add(loadBack);
+        this.loadGroup.add(preload);
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
@@ -152,6 +120,7 @@ class Scene extends Phaser.State {
         }
 
         this.pauseScreen = new PauseScreen(this.game);
+        this.game.serverManager.getSocket().emit('levelready', DEBUG);
     }
 
     /**
@@ -194,13 +163,13 @@ class Scene extends Phaser.State {
 
         let exit = this.game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
         if (!exit && this.exitActive) {
-            this.game.socket.emit('outexit');
+            this.game.serverManager.getSocket().emit('outexit');
             this.exitActive = false;
         }
 
     }
 
-    resetLevel() {
+    onResetLevel() {
         this.game.camera.fade('#000000', 200);
         this.game.camera.onFadeComplete.add(() => {
             this.game.state.start('scene', true, false, this.player, this.currentLevel);
@@ -222,8 +191,8 @@ class Scene extends Phaser.State {
 
     cancelButtonReleased() {
         if (this.pauseScreen.isOnPause()) {
-            this.game.socket.emit('reset');
-            this.resetLevel();
+            this.game.serverManager.getSocket().emit('reset');
+            this.onResetLevel();
         }
     }
 
@@ -278,7 +247,7 @@ class Scene extends Phaser.State {
      */
     onExit(playerSprite, exitSprite) {
         if (!this.exitActive) {
-            this.game.socket.emit('inexit');
+            this.game.serverManager.getSocket().emit('inexit');
             this.exitActive = true;
         }
     }
@@ -286,8 +255,8 @@ class Scene extends Phaser.State {
     /**
      * Action lorsque le niveau est terminé
      */
-    endScene() {
-        this.game.socket.emit('resetexit');
+    onLevelCompleted() {
+        this.game.serverManager.getSocket().emit('finishlevel');
         this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
         this.exitGroup.children[0].animateSuccess();
@@ -322,14 +291,13 @@ class Scene extends Phaser.State {
         this.rocksGroup.destroy();
         this.buttonsGroup.destroy();
         this.exitGroup.destroy();
-        this.noCollisionGroup.destroy();
         this.overlapedButton = null;
         this.exitActive = false;
         this.game.controlsManager.enableControls();
         this.exitPosX = 0;
         this.exitPosY = 0;
-        this.animatedDoors = [];
-        this.openedDoorsColors = [];
         this.end = false;
+        this.timer.resetTime();
+        this.timer = null;
     }
 }

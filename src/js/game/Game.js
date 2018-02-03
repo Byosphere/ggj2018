@@ -10,9 +10,6 @@ class Game extends Phaser.Game {
         this.state.add('menu', MainMenu);
         this.state.add('scene', Scene);
 
-        //add socket IO to the game
-        this.socket = io.connect();
-
         //set some parameters
         this.controller = CONTROLLER;
         this.translate = TEXT_FR;
@@ -22,6 +19,9 @@ class Game extends Phaser.Game {
 
         //audiomanager
         this.audioManager = new AudioManager(this);
+
+        //server socket io
+        this.serverManager = new ServerManager(this);
 
         this.state.start('boot');
     }

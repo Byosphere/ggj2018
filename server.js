@@ -15,8 +15,9 @@ app.get('/', function (req, res) {
 server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
-
+server.debugLobby = 'L_DEBUG';
 server.lobbies = [];
+server.lobbies[server.debugLobby] = { players: [{id: 0, selectedHero: 'fleur', position: 'fleur'}, null], buttonsState: [], exitCount: 0, playerCount: 1, levelReady: 1 }
 /*
 idées pour la gestion des lobby
 {
@@ -42,7 +43,7 @@ io.on('connection', function (socket) {
 
         socket.emit('newlobby', code);
         code = 'L_' + code;
-        server.lobbies[code] = { players: [null, null], buttonsState: [], exitCount: 0, playerCount: 1 };
+        server.lobbies[code] = { players: [null, null], buttonsState: [], exitCount: 0, playerCount: 1, levelReady: 0 };
         socket.join(code);
         socket.code = code;
     });
@@ -94,6 +95,20 @@ io.on('connection', function (socket) {
         socket.broadcast.to(socket.code).emit('reset');
     });
 
+    socket.on('levelready', (debug) => {
+        if (debug) {
+            socket.code = server.debugLobby;
+            socket.emit('startlevel');
+        } else {
+            server.lobbies[socket.code].levelReady++;
+            if (server.lobbies[socket.code].levelReady === 2) {
+                socket.broadcast.to(socket.code).emit('startlevel');
+                socket.emit('startlevel');
+            }
+            console.log(server.lobbies[socket.code]);
+        }
+    });
+
     //disconnect
     socket.on('disconnect', function () {
         if (socket.player) {
@@ -106,7 +121,7 @@ io.on('connection', function (socket) {
 
     // Interrupteur actif 
     socket.on('pressbutton', function (color) {
-        if(server.lobbies[socket.code].buttonsState[color]) {
+        if (server.lobbies[socket.code].buttonsState[color]) {
             server.lobbies[socket.code].buttonsState[color]++;
         } else {
             server.lobbies[socket.code].buttonsState[color] = 1;
@@ -117,10 +132,10 @@ io.on('connection', function (socket) {
 
     // Interrupteur inactif 
     socket.on('releasebutton', function (color) {
-        if(server.lobbies[socket.code].buttonsState[color]) {
+        if (server.lobbies[socket.code].buttonsState[color]) {
             server.lobbies[socket.code].buttonsState[color]--;
         }
-        if(!server.lobbies[socket.code].buttonsState[color]) {
+        if (!server.lobbies[socket.code].buttonsState[color]) {
             socket.broadcast.to(socket.code).emit('closedoor', color);
             socket.emit('closedoor', color);
         }
@@ -130,8 +145,8 @@ io.on('connection', function (socket) {
     socket.on('inexit', function () {
         server.lobbies[socket.code].exitCount++;
         if (server.lobbies[socket.code].exitCount === 2) {
-            socket.emit('success');
-            socket.broadcast.to(socket.code).emit('success');
+            socket.emit('levelcompleted');
+            socket.broadcast.to(socket.code).emit('levelcompleted');
         }
     });
 
@@ -140,7 +155,8 @@ io.on('connection', function (socket) {
         server.lobbies[socket.code].exitCount--;
     });
 
-    socket.on('resetexit', function () {
+    socket.on('finishlevel', function () {
         server.lobbies[socket.code].exitCount = 0;
+        server.lobbies[socket.code].levelReady = 0;
     });
 });

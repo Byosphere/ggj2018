@@ -9,6 +9,7 @@ const NB_LEVELS = 7;
 const DEFAULT_SOUND_VOLUME = 1;
 const DEFAULT_MUSIC_VOLUME = 1;
 const DEFAULT_MUSIC_FADING = 1000;
+
 /* COLORS & FONTS */
 const LOADER_BACKGROUND = '#000';
 const MENU_BACKGROUND_COLOR = '#1d2b53';
@@ -24,6 +25,7 @@ const SCENE_BACKGROUND = '#1d2b53';
 const GAME_TEXT_NEXT_LEVEL = 'Appuie sur ';
 const GAME_TEXT_NEXT_LEVEL_FONT = 'normal 40px uni0553';
 const GAME_TEXT_NEXT_LEVEL_COLOR = '#FFF';
+const HUGE_FONT = 'normal 120px uni0553';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;
