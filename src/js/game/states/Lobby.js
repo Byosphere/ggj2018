@@ -15,12 +15,19 @@ class Lobby extends Phaser.State {
 		this.game.serverManager.getSocket().emit('init');
 	}
 
+	/**
+	 * Quand le server est actif
+	 */
 	onGameInit() {
 		this.connexionText.text = '- ' + this.game.translate.LOBBY_TEXT_CONNECTED;
 		this.connected = true;
 		this.startChoice();
 	}
 
+	/**
+	 * Quand un nouveau lobby est créé
+	 * @param {number} code : code du nouveau lobby
+	 */
 	onNewLobby(code) {
 		this.code = code;
 		this.joinLobby.destroy();
@@ -34,11 +41,18 @@ class Lobby extends Phaser.State {
 		this.choice = 3;
 	}
 
+	/**
+	 * Quand le lobby a été rejoins avec succes
+	 * @param {*boolean} success 
+	 */
 	onJoinLobby(success) {
 		if (success)
 			this.game.state.start('menu', true, false, this.code);
 	}
 
+	/**
+	 * affiche les choix dans le lobby
+	 */
 	startChoice() {
 		this.game.add.text(20, 80, '- ' + this.game.translate.LOBBY_TEXT_INSTRUCTIONS, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 		this.createLobby = this.game.add.text(this.game.world.width / 4, this.game.world.centerY, '- ' + this.game.translate.LOBBY_TEXT_CREATE + ' -', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });

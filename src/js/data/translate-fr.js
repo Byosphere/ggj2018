@@ -35,7 +35,7 @@ const TEXT_FR = {
     ELAPSED_TIME: 'Temps écoulé : ',
     LEVEL_NAMES: [
         'Loin du légume, près du coeur',
-        'Un bouton vaut mieux que deux, tu l\'auras',
+        'Un bouton vaut mieux que deux',
         'Coli suspect et pâte à Chou',
     ]
 }

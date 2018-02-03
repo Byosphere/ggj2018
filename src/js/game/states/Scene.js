@@ -26,12 +26,8 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.overlapedButton = null;
-        this.animatedDoors = [];
         this.exitActive = false;
-        this.exitPosX = 0;
-        this.exitPosY = 0;
         this.end = false;
-        this.openedDoorsColors = [];
         this.timer = new Timer(this.game);
     }
 
@@ -170,6 +166,9 @@ class Scene extends Phaser.State {
 
     }
 
+    /**
+     * Si un joueur se déconnecte
+     */
     onDisconnect() {
         this.disconnectScreen.display();
     }
@@ -302,8 +301,6 @@ class Scene extends Phaser.State {
         this.overlapedButton = null;
         this.exitActive = false;
         this.game.controlsManager.enableControls();
-        this.exitPosX = 0;
-        this.exitPosY = 0;
         this.end = false;
         this.timer.resetTime();
         this.timer = null;

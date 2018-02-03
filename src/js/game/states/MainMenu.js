@@ -42,6 +42,11 @@ class MainMenu extends Phaser.State {
         this.game.serverManager.getSocket().emit('newplayer');
     }
 
+    /**
+     * 
+     * @param {Object} self : si le player initialisé est soi meme
+     * @param {array} playerList : liste des joueurs du lobby
+     */
     onInitNewPlayer(self, playerList) {
         if (self) {
             this.self = self;
@@ -228,7 +233,6 @@ class MainMenu extends Phaser.State {
 
         let coli = this.heros[COLI_HEROS];
         let fleur = this.heros[FLEUR_HEROS];
-
 
         coli.sprite = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
         coli.sprite.alpha = 0.6;
