@@ -120,6 +120,7 @@ class Scene extends Phaser.State {
         }
 
         this.pauseScreen = new PauseScreen(this.game);
+        this.disconnectScreen = new DisconnectScreen(this.game);
         this.game.serverManager.getSocket().emit('levelready', DEBUG);
     }
 
@@ -169,6 +170,10 @@ class Scene extends Phaser.State {
 
     }
 
+    onDisconnect() {
+        this.disconnectScreen.display();
+    }
+
     onResetLevel() {
         this.game.camera.fade('#000000', 200);
         this.game.camera.onFadeComplete.add(() => {
@@ -193,6 +198,9 @@ class Scene extends Phaser.State {
         if (this.pauseScreen.isOnPause()) {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
+        }
+        if(this.disconnectScreen.isDisconnected) {
+            this.game.state.start('lobby');
         }
     }
 
@@ -299,5 +307,7 @@ class Scene extends Phaser.State {
         this.end = false;
         this.timer.resetTime();
         this.timer = null;
+        this.disconnectScreen.destroy();
+        this.pauseScreen.destroy();
     }
 }

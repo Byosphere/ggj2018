@@ -39,4 +39,8 @@ class PauseScreen {
     isOnPause() {
         return this.onPause;
     }
+
+    destroy() {
+        this.pauseGroup.destroy();
+    }
 }

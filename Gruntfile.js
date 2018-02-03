@@ -19,6 +19,7 @@ module.exports = function (grunt) {
         'src/js/game/objects/Rock.js',
         'src/js/game/objects/Character.js',
         'src/js/game/objects/PauseScreen.js',
+        'src/js/game/objects/DisconnectScreen.js',
         'src/js/game/objects/Timer.js'
     ];
 

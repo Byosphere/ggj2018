@@ -15,7 +15,7 @@ const TEXT_FR = {
     MENU_TEXT_PAUSE: 'PAUSE',
     MENU_TEXT_RESET: 'réinitialise le niveau',
     MENU_TEXT_ERROR: 'Erreur de connexion entre les joueurs',
-    MENU_TEXT_BACKMENU: 'pour retourner au menu principal',
+    MENU_TEXT_BACKMENU: 'pour retourner à la sélection de lobby',
     P1: '<- J1',
     P2: '<- J2',
     PAD_ACTION_BUTTON: 'le bouton A',
@@ -34,7 +34,8 @@ const TEXT_FR = {
     KEY_CANCEL_BUTTON: 'la touche ESC',
     ELAPSED_TIME: 'Temps écoulé : ',
     LEVEL_NAMES: [
-        'Loin du légume, loin du coeur',
+        'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux, tu l\'auras',
+        'Coli suspect et pâte à Chou',
     ]
 }
