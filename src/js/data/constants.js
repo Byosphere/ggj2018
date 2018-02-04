@@ -1,5 +1,6 @@
 /* GENERAL */
 const DEBUG = false;
+const DEBUG_LEVEL = 5;
 const GAME_WIDTH = 1280;
 const GAME_HEIGHT = 896;
 const CELL_SIZE = 64;
