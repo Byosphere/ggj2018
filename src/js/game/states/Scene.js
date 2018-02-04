@@ -7,7 +7,7 @@ class Scene extends Phaser.State {
      */
     init(player, level) {
         if (DEBUG) {
-            this.player = { id: 0, selectedHero: FLEUR_HEROS, position: FLEUR_HEROS };
+            this.player = { id: 0, selectedHero: DEBUG_HEROS, position: DEBUG_HEROS };
             this.currentLevel = DEBUG_LEVEL;
         } else {
             this.player = player;
