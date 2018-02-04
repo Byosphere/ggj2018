@@ -7,7 +7,7 @@ class Button extends Phaser.Sprite {
         this.anchor.setTo(0, 1);
         this.setColor(this.colorParam);
         this.game.physics.arcade.enable(this);
-        this.body.setSize(32, 32, 0, 0);
+        this.body.setSize(40, 36, 12, 20);
         this.activated = false;
     }
 

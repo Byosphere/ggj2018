@@ -7,6 +7,7 @@ class Exit extends Phaser.Sprite {
         this.anchor.setTo(0, 1);
         this.animations.add(EXIT_ANIMATIONS.EXIT_ACTIVE.NAME, EXIT_ANIMATIONS.EXIT_ACTIVE.FRAMES, 4, true).play();
         this.game.physics.arcade.enable(this);
+        this.body.setSize(64, 64, 64, 64);
 
         if (reverse) {
             this.scale.setTo(-1, 1);

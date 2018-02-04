@@ -8,15 +8,20 @@ class Door extends Phaser.Sprite {
             this.key = 'door_horizontal';
         }
         this.game.physics.arcade.enable(this);
+        if (this.key === 'door_horizontal') {
+            this.body.setSize(192, 48, 0, 8);
+        } else {
+            this.body.setSize(48, 192, 8, 0);
+            this.anchor.setTo(0, 1);
+        }
         this.body.immovable = true;
-        this.anchor.setTo(0, 1);
         this.colorParam = data.properties.Color;
         this.setColor(this.colorParam);
         this.isAnimating = false;
     }
 
     openDoor() {
-        if(this.body.enable) {
+        if (this.body.enable) {
             this.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {
@@ -44,22 +49,22 @@ class Door extends Phaser.Sprite {
     setColor(color) {
         switch (color) {
             case GREEN:
-                this.frame = 20;
+                this.frame = DOOR_ANIMATIONS.GREEN_OPEN.FRAMES[0];
                 this.animations.add(DOOR_ANIMATIONS.GREEN_OPEN.NAME, DOOR_ANIMATIONS.GREEN_OPEN.FRAMES, 14, false)
                 this.animations.add(DOOR_ANIMATIONS.GREEN_CLOSE.NAME, DOOR_ANIMATIONS.GREEN_CLOSE.FRAMES, 14, false)
                 break;
             case ORANGE:
-                this.frame = 10;
+                this.frame = DOOR_ANIMATIONS.ORANGE_OPEN.FRAMES[0];
                 this.animations.add(DOOR_ANIMATIONS.ORANGE_OPEN.NAME, DOOR_ANIMATIONS.ORANGE_OPEN.FRAMES, 14, false)
                 this.animations.add(DOOR_ANIMATIONS.ORANGE_CLOSE.NAME, DOOR_ANIMATIONS.ORANGE_CLOSE.FRAMES, 14, false)
                 break;
             case RED:
-                this.frame = 0;
+                this.frame = DOOR_ANIMATIONS.RED_OPEN.FRAMES[0];
                 this.animations.add(DOOR_ANIMATIONS.RED_OPEN.NAME, DOOR_ANIMATIONS.RED_OPEN.FRAMES, 14, false)
                 this.animations.add(DOOR_ANIMATIONS.RED_CLOSE.NAME, DOOR_ANIMATIONS.RED_CLOSE.FRAMES, 14, false)
                 break;
             case WHITE:
-                this.frame = 30;
+                this.frame = DOOR_ANIMATIONS.WHITE_OPEN.FRAMES[0];
                 this.animations.add(DOOR_ANIMATIONS.WHITE_OPEN.NAME, DOOR_ANIMATIONS.WHITE_OPEN.FRAMES, 14, false)
                 this.animations.add(DOOR_ANIMATIONS.WHITE_CLOSE.NAME, DOOR_ANIMATIONS.WHITE_CLOSE.FRAMES, 14, false)
                 break;
