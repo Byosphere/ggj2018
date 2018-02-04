@@ -94,8 +94,13 @@ class Scene extends Phaser.State {
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
+        this.background = this.map.createLayer('Background');
+        this.background.resizeWorld();
 
-        this.map.setCollisionBetween(3, 4, true, 'Walls');
+        this.foreground = this.map.createLayer('Foreground');
+        this.foreground.resizeWorld();
+
+        this.map.setCollisionBetween(17, 50, true, 'Walls');
 
         // Groups
         this.exitGroup = this.game.add.group();
@@ -144,7 +149,9 @@ class Scene extends Phaser.State {
             case 'exit':
                 this.exitGroup.add(new Exit(this.game, obj, this.player.id));
                 break;
-            default: break;
+            default: 
+                console.log(type);
+            break;
         }
     }
 

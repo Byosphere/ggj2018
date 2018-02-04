@@ -105,7 +105,6 @@ io.on('connection', function (socket) {
                 socket.broadcast.to(socket.code).emit('startlevel');
                 socket.emit('startlevel');
             }
-            console.log(server.lobbies[socket.code]);
         }
     });
 
