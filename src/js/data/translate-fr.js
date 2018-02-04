@@ -37,5 +37,7 @@ const TEXT_FR = {
         'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux',
         'Coli suspect et pâte à Chou',
+        'T\'es vraiment un bro, bro.',
+        'Des portes et des légumes verts'
     ]
 }
