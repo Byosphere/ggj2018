@@ -8,6 +8,15 @@ class Lobby extends Phaser.State {
 		this.input = null;
 		this.game.controlsManager.setCallbackContext(this);
 		this.code = null;
+		this.input = this.game.add.inputField(this.game.world.centerX - 110, this.game.world.centerY + 80, {
+			font: '44px uni0553',
+			width: 220,
+			height: 60,
+			padding: 4,
+			placeHolder: 'Code',
+			blockInput: true
+		});
+		this.input.visible = false;
 	}
 
 	create() {
@@ -64,30 +73,31 @@ class Lobby extends Phaser.State {
 
 	actionButtonReleased() {
 		if (!this.connected) return;
-		if (this.input === null) {
+		if (!this.input.visible) {
 			if (this.choice === 0) {
 				this.game.serverManager.getSocket().emit('newlobby');
 			} else if (this.choice === 1) {
-				this.input = this.game.add.inputField(this.game.world.centerX - 110, this.game.world.centerY + 80, {
-					font: '44px uni0553',
-					width: 220,
-					height: 60,
-					padding: 4,
-					placeHolder: 'Code'
-				});
+				this.input.visible = true;
 				this.input.startFocus();
+				this.joinLobby.alpha = 0.4;
 			} else if (this.choice === 3) {
 				this.game.state.start('menu', true, false, this.code);
 			}
 		} else {
 			this.code = this.input.text.text;
-			console.log(this.code);
 			this.game.serverManager.getSocket().emit('joinlobby', this.code);
 		}
 	}
 
+	cancelButtonReleased() {
+		if(this.choice === 1 && this.input.visible) {
+			this.input.visible = false;
+			this.joinLobby.alpha = 1;
+		}
+	}
+
 	leftButtonReleased() {
-		if (this.choice === 1 && this.connected) {
+		if (this.choice === 1 && this.connected && !this.input.visible) {
 			this.choice = 0;
 			this.joinLobby.alpha = 0.4;
 			this.joinLobby.text = this.game.translate.LOBBY_TEXT_JOIN;
@@ -97,7 +107,7 @@ class Lobby extends Phaser.State {
 	}
 
 	rightButtonReleased() {
-		if (this.choice === 0 && this.connected) {
+		if (this.choice === 0 && this.connected && !this.input.visible) {
 			this.choice = 1;
 			this.joinLobby.alpha = 1;
 			this.joinLobby.text = '- ' + this.game.translate.LOBBY_TEXT_JOIN + ' -';

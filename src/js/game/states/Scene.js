@@ -7,12 +7,13 @@ class Scene extends Phaser.State {
      */
     init(player, level) {
         if (DEBUG) {
-            this.player = { id: 0, selectedHero: FLEUR_HEROS, position: FLEUR_HEROS };
+            this.player = { id: 0, selectedHero: DEBUG_HEROS, position: DEBUG_HEROS };
+            this.currentLevel = DEBUG_LEVEL;
         } else {
             this.player = player;
+            this.currentLevel = level || 1;
         }
         this.characterName = this.player.selectedHero;
-        this.currentLevel = level || 1;
     }
 
     preload() {
@@ -56,7 +57,7 @@ class Scene extends Phaser.State {
      */
     onOpenDoor(color) {
         this.doorsGroup.forEach(door => {
-            if(door.colorParam == color)
+            if (door.colorParam == color)
                 door.openDoor();
         });
     }
@@ -67,7 +68,7 @@ class Scene extends Phaser.State {
      */
     onCloseDoor(color) {
         this.doorsGroup.forEach(door => {
-            if(door.colorParam == color)
+            if (door.colorParam == color)
                 door.closeDoor();
         });
     }
@@ -198,7 +199,7 @@ class Scene extends Phaser.State {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
         }
-        if(this.disconnectScreen.isDisconnected) {
+        if (this.disconnectScreen.isDisconnected) {
             this.game.state.start('lobby');
         }
     }

@@ -153,7 +153,6 @@ class ControlsManager {
                 if (this.callbackContext.rightButtonReleased && this.controlsEnabled[RIGHT])
                     this.callbackContext.rightButtonReleased();
                 break;
-            case Phaser.KeyCode.BACKSPACE:
             case Phaser.KeyCode.ESC:
                 if (this.callbackContext.cancelButtonReleased && this.controlsEnabled[CANCEL])
                     this.callbackContext.cancelButtonReleased();
@@ -236,7 +235,6 @@ class ControlsManager {
                 if (this.callbackContext.rightButtonDown && this.controlsEnabled[DOWN])
                     this.callbackContext.rightButtonDown();
                 break;
-            case Phaser.KeyCode.BACKSPACE:
             case Phaser.KeyCode.ESC:
                 if (this.callbackContext.cancelButtonDown && this.controlsEnabled[CANCEL])
                     this.callbackContext.cancelButtonDown();

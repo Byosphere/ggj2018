@@ -1,5 +1,4 @@
 /* GENERAL */
-const DEBUG = false;
 const GAME_WIDTH = 1280;
 const GAME_HEIGHT = 896;
 const CELL_SIZE = 64;
@@ -70,3 +69,8 @@ const ORANGE = 'orange';
 const GREEN = 'green';
 const RED = 'red';
 const WHITE = 'white';
+
+/* DEBUG */
+const DEBUG = false;
+const DEBUG_LEVEL = 5;
+const DEBUG_HEROS = COLI_HEROS;
