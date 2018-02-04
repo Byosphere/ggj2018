@@ -27,6 +27,7 @@ class MainMenu extends Phaser.State {
 
         this.soundPlaying = false;
         this.game.controlsManager.setCallbackContext(this);
+        this.game.serverManager.setCallbackContext(this);
     }
 
     /**
@@ -37,14 +38,26 @@ class MainMenu extends Phaser.State {
         this.createTitle();
         this.createCharacters();
         this.createTexts();
-        this.connectServer();
         this.game.audioManager.playMusic('main_menu');
+        this.game.serverManager.getSocket().emit('newplayer');
+    }
+
+    /**
+     * 
+     * @param {Object} self : si le player initialisé est soi meme
+     * @param {array} playerList : liste des joueurs du lobby
+     */
+    onInitNewPlayer(self, playerList) {
+        if (self) {
+            this.self = self;
+        }
+        this.onUpdatePlayers(playerList);
     }
 
 
     actionButtonReleased() {
         if (!this.heros[this.self.position].selected) {
-            this.game.socket.emit('selecthero', this.heros[this.self.position].name);
+            this.game.serverManager.getSocket().emit('selecthero', this.heros[this.self.position].name);
         } else if (this.self.selectedHero === this.self.position) {
             if (!this.soundPlaying) {
                 this.soundPlaying = true;
@@ -55,56 +68,28 @@ class MainMenu extends Phaser.State {
 
     cancelButtonReleased() {
         if (this.self.selectedHero === this.self.position) {
-            this.game.socket.emit('selecthero', null);
+            this.game.serverManager.getSocket().emit('selecthero', null);
         }
     }
 
     leftButtonReleased() {
         if (this.self.position == COLI_HEROS && !this.self.selectedHero) {
             this.changePosition(this.self, FLEUR_HEROS);
-            this.game.socket.emit('updateposition', FLEUR_HEROS);
+            this.game.serverManager.getSocket().emit('updateposition', FLEUR_HEROS);
         }
     }
 
     rightButtonReleased() {
         if (this.self.position == FLEUR_HEROS && !this.self.selectedHero) {
             this.changePosition(this.self, COLI_HEROS);
-            this.game.socket.emit('updateposition', COLI_HEROS);
+            this.game.serverManager.getSocket().emit('updateposition', COLI_HEROS);
         }
-    }
-
-    /**
-     * Fonction rassemblant tous les écouteurs de socket IO
-     */
-    connectServer() {
-        // connexion au jeu
-        this.game.socket.emit('newplayer');
-
-        this.game.socket.on('newplayer', (self, playerList) => {
-            if (self) {
-                this.self = self;
-            }
-            this.updatePlayers(playerList);
-
-        });
-
-        this.game.socket.on('updateplayers', (playerList) => {
-            this.updatePlayers(playerList);
-        });
-
-        this.game.socket.on('startgame', () => {
-            this.startGame();
-        });
-
-        this.game.socket.on('disconnect', () => {
-            this.removePlayer();
-        });
     }
 
     /**
      * fonction lançant la partie (scene)
      */
-    startGame() {
+    onStartGame() {
         this.game.camera.fade('#000000', 3000);
         this.game.audioManager.stopCurrentMusic(3000);
         this.game.camera.onFadeComplete.add(() => {
@@ -117,7 +102,7 @@ class MainMenu extends Phaser.State {
      * @param {Object} player : joueur à définir
      * @param {Object} playerData : données à utiliser
      */
-    updatePlayers(playerList) {
+    onUpdatePlayers(playerList) {
 
         playerList.forEach(player => {
             if (player === null) return;
@@ -150,7 +135,7 @@ class MainMenu extends Phaser.State {
     /**
      * Fonction permettant de supprimer un joueur s'il se déconnecte
      */
-    removePlayer() {
+    onDisconnect() {
 
         if (this.other.selectedHero) {
             this.desactivateHero(this.other);
@@ -248,7 +233,6 @@ class MainMenu extends Phaser.State {
 
         let coli = this.heros[COLI_HEROS];
         let fleur = this.heros[FLEUR_HEROS];
-
 
         coli.sprite = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
         coli.sprite.alpha = 0.6;

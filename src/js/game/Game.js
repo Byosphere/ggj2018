@@ -2,16 +2,13 @@ class Game extends Phaser.Game {
 
     constructor() {
 
-        super(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO);
+        super(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, '', null, false, false);
 
         this.state.add('boot', Booter);
         this.state.add('loader', Loader);
         this.state.add('lobby', Lobby);
         this.state.add('menu', MainMenu);
         this.state.add('scene', Scene);
-
-        //add socket IO to the game
-        this.socket = io.connect();
 
         //set some parameters
         this.controller = CONTROLLER;
@@ -22,6 +19,9 @@ class Game extends Phaser.Game {
 
         //audiomanager
         this.audioManager = new AudioManager(this);
+
+        //server socket io
+        this.serverManager = new ServerManager(this);
 
         this.state.start('boot');
     }

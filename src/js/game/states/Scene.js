@@ -18,6 +18,7 @@ class Scene extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
         this.game.controlsManager.setCallbackContext(this);
+        this.game.serverManager.setCallbackContext(this);
         this.victoryMusic = this.game.add.audio('win');
         this.buttonsGroup = null;
         this.doorsGroup = null;
@@ -25,127 +26,68 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.overlapedButton = null;
-        this.noCollisionGroup = null;
-        this.animatedDoors = [];
         this.exitActive = false;
-        this.exitPosX = 0;
-        this.exitPosY = 0;
         this.end = false;
-        this.openedDoorsColors = [];
-        this.onPause = false;
+        this.timer = new Timer(this.game);
     }
 
     /**
-     * preload the graphical elements for the pause menu (externaliser dans une classe peut etre)
+     * Initialise le niveau
      */
-    preloadPauseScreen() {
-        let darkBack = this.game.add.graphics(0, 0);
-        this.pauseGroup.add(darkBack);
-        darkBack.beginFill(0x00000, 0.7);
-        darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        darkBack.endFill();
-        let pauseText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, this.game.translate.MENU_TEXT_PAUSE, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-        this.pauseGroup.add(pauseText);
-        pauseText.anchor.setTo(0.5);
-        let resetText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.controlsManager.getCancelButtonName() + ' ' + this.game.translate.MENU_TEXT_RESET, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-        resetText.anchor.setTo(0.5);
-        this.pauseGroup.add(resetText);
-        this.pauseGroup.alpha = 0;
+    create() {
+        this.game.controlsManager.disableControls();
+        this.generateLevel(this.currentLevel);
     }
 
-    create() {
-        this.generateLevel(this.currentLevel);
-        this.initAnimations();
-        this.connectServer();
-        this.game.audioManager.playMusic('game');
+    /**
+     * Lance le niveau
+     */
+    onStartLevel() {
+        this.loadGroup.destroy();
+        this.timer.start(this.currentLevel, () => {
+            this.game.controlsManager.enableControls();
+            this.game.audioManager.playMusic('game');
+        });
     }
 
     /**
      * Fonction pour animer les portes à ouvrir
      * @param {String} color : Couleur des portes à ouvrir
      */
-    openDoor(color) {
-        if (!this.openedDoorsColors.includes(color)) {
-            this.doorsGroup.forEach((door) => {
-                if (door.colorParam == color) {
-                    //ouverture de la porte
-                    this.openedDoorsColors.push(door.colorParam);
-                    door.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
-                    this.animatedDoors.push(door);
-                    door.animations.currentAnim.onComplete.add(() => {
-                        // on stoppe la collision
-                        this.noCollisionGroup.add(door);
-                        this.doorsGroup.remove(door);
-                        const idx = this.animatedDoors.findIndex((x) => x === door);
-                        this.animatedDoors.splice(idx, idx + 1);
-                    });
-                }
-            });
-        }
+    onOpenDoor(color) {
+        this.doorsGroup.forEach(door => {
+            if(door.colorParam == color)
+                door.openDoor();
+        });
     }
 
     /**
      * Fonction pour animer les portes à fermer
      * @param {String} color : Couleur des portes à ouvrir
      */
-    closeDoor(color) {
-        if (this.openedDoorsColors.includes(color) && (!this.overlapedButton || (this.overlapedButton && this.overlapedButton.colorParam !== color))) {
-            this.animatedDoors.forEach((door) => {
-                if (door.colorParam == color) {
-                    const anim = door.animations.currentAnim;
-                    const frame = anim.frame;
-                    anim.onComplete.removeAll();
-                    anim.reverseOnce();
-                    const idx = this.animatedDoors.findIndex((x) => x === door);
-                    this.animatedDoors.splice(idx, idx + 1);
-                }
-            });
-            this.noCollisionGroup.forEach((door) => {
-                if (door.colorParam == color) {
-                    //fermeture de la porte
-                    door.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
-                    door.animations.currentAnim.onComplete.add(() => {
-                        // on stoppe la collision
-                        this.doorsGroup.add(door);
-                        this.noCollisionGroup.remove(door);
-                    });
-                }
-            });
-            const idx2 = this.openedDoorsColors.findIndex((x) => x === color);
-            this.openedDoorsColors.splice(idx2, idx2 + 1);
-        }
-    }
-
-    /**
-     * Fonction rassemblant tous les écouteurs de socket IO
-     */
-    connectServer() {
-        this.game.socket.on('opendoor', (color) => {
-            this.openDoor(color);
-        });
-
-        this.game.socket.on('closedoor', (color) => {
-            this.closeDoor(color);
-        });
-
-        this.game.socket.on('reset', () => {
-            this.resetLevel();
-        });
-
-        this.game.socket.on('success', () => {
-            this.endScene();
-        });
-
-        this.game.socket.on('disconnect', () => {
-            console.log('player disconnected');
+    onCloseDoor(color) {
+        this.doorsGroup.forEach(door => {
+            if(door.colorParam == color)
+                door.closeDoor();
         });
     }
 
     /**
      * Génère l'environnement du niveau passé en paramètre
      * @param {*int} level : niveau à générer
+     * @param {function} callback : fonction appelée une fois le niveau généré
      */
-    generateLevel(level) {
+    generateLevel(level, callback) {
+
+        let loadBack = this.game.add.graphics(0, 0);
+        loadBack.beginFill(0x00000, 1);
+        loadBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        loadBack.endFill();
+        let preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
+        preload.anchor.setTo(0.5);
+        preload.animations.add('default', [0, 1, 2, 3], 10, true);
+        preload.animations.play('default');
+
         this.map = this.game.add.tilemap('level' + level + this.characterName);
         this.map.addTilesetImage('decor');
 
@@ -163,7 +105,9 @@ class Scene extends Phaser.State {
         this.doorsGroup = this.game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = this.game.add.group();
-        this.noCollisionGroup = this.game.add.group();
+        this.loadGroup = this.game.add.group();
+        this.loadGroup.add(loadBack);
+        this.loadGroup.add(preload);
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
@@ -171,8 +115,36 @@ class Scene extends Phaser.State {
             this.createObject(mapObjects[i]);
         }
 
-        this.pauseGroup = this.game.add.group();
-        this.preloadPauseScreen();
+        this.pauseScreen = new PauseScreen(this.game);
+        this.disconnectScreen = new DisconnectScreen(this.game);
+        this.game.serverManager.getSocket().emit('levelready', DEBUG);
+    }
+
+    /**
+     * Factory pour les différents objets possibles à instancier pour la scene
+     * @param {Object} obj : objet à instancier
+     */
+    createObject(obj) {
+        const type = obj.properties.Type;
+        switch (type) {
+            case 'character':
+                this.character = new Character(this.game, obj, this.characterName);
+                this.characterGroup.add(this.character);
+                break;
+            case 'button':
+                this.buttonsGroup.add(new Button(this.game, obj));
+                break;
+            case 'door':
+                this.doorsGroup.add(new Door(this.game, obj));
+                break;
+            case 'rock':
+                this.rocksGroup.add(new Rock(this.game, obj));
+                break;
+            case 'exit':
+                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
+                break;
+            default: break;
+        }
     }
 
     update() {
@@ -182,20 +154,26 @@ class Scene extends Phaser.State {
 
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
-            this.overlapedButton.frame -= 1;
-            this.game.socket.emit('releasebutton', this.overlapedButton.colorParam);
+            this.overlapedButton.toggleOff();
             this.overlapedButton = null;
         }
 
         let exit = this.game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
         if (!exit && this.exitActive) {
-            this.game.socket.emit('outexit');
+            this.game.serverManager.getSocket().emit('outexit');
             this.exitActive = false;
         }
 
     }
 
-    resetLevel() {
+    /**
+     * Si un joueur se déconnecte
+     */
+    onDisconnect() {
+        this.disconnectScreen.display();
+    }
+
+    onResetLevel() {
         this.game.camera.fade('#000000', 200);
         this.game.camera.onFadeComplete.add(() => {
             this.game.state.start('scene', true, false, this.player, this.currentLevel);
@@ -208,151 +186,53 @@ class Scene extends Phaser.State {
     }
 
     startButtonReleased() {
-        if (this.onPause) {
-            this.resumeLevel();
+        if (this.pauseScreen.isOnPause()) {
+            this.pauseScreen.hide();
         } else {
-            this.pauseLevel();
+            this.pauseScreen.display();
         }
     }
 
     cancelButtonReleased() {
-        if (this.onPause) {
-            this.game.socket.emit('reset');
-            this.resetLevel();
+        if (this.pauseScreen.isOnPause()) {
+            this.game.serverManager.getSocket().emit('reset');
+            this.onResetLevel();
+        }
+        if(this.disconnectScreen.isDisconnected) {
+            this.game.state.start('lobby');
         }
     }
 
     leftButtonDown() {
-        this.character.body.velocity.x = -200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_LEFT.NAME, true);
+        this.character.moveLeft();
     }
 
     rightButtonDown() {
-        this.character.body.velocity.x = 200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveRight();
     }
 
     upButtonDown() {
-        this.character.body.velocity.y = -200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_UP.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveUp();
     }
 
     downButtonDown() {
-        this.character.body.velocity.y = 200;
-        this.character.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
-        this.character.scale.setTo(1, 1);
+        this.character.moveDown();
     }
 
     leftButtonReleased() {
-        this.character.body.velocity.x = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
+        this.character.stopLeft();
     }
 
     rightButtonReleased() {
-        this.character.body.velocity.x = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
+        this.character.stopRight();
     }
 
     downButtonReleased() {
-        this.character.body.velocity.y = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
+        this.character.stopDown();
     }
 
     upButtonReleased() {
-        this.character.body.velocity.y = 0;
-        this.character.animations.stop();
-        this.character.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
-    }
-
-    /**
-     * initialise character animations
-     */
-    initAnimations() {
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
-        this.character.animations.add(HEROS_ANIMATIONS.WALK_UP.NAME, HEROS_ANIMATIONS.WALK_UP.FRAMES, 12, true);
-    }
-
-    /**
-     * Factory pour les différents objets possibles à instancier pour la scene
-     * @param {Object} obj : objet à instancier
-     */
-    createObject(obj) {
-        const type = obj.properties.Type;
-        switch (type) {
-            case 'character': this.createCharacter(obj.x, obj.y);
-                break;
-            case 'button': this.createButton(obj);
-                break;
-            case 'door': this.createDoor(obj);
-                break;
-            case 'rock': this.createRock(obj);
-                break;
-            case 'exit': this.createExit(obj);
-                break;
-            default: break;
-        }
-    }
-
-    /**
-     * Créé le personnage et le place sur la scene
-     * @param {int} posX : position en X
-     * @param {int} posY : position en Y
-     */
-    createCharacter(posX, posY) {
-        this.character = this.game.add.sprite(posX, posY, this.characterName);
-        this.characterGroup.add(this.character);
-        this.character.anchor.setTo(0, 1);
-        this.game.physics.arcade.enable(this.character);
-        this.character.body.setSize(64, 64, 0, 0);
-    }
-
-    /**
-     * Créé un bouton
-     * @param {Object} button 
-     */
-    createButton(button) {
-        let buttonSprite = new Button(button, this.buttonsGroup, this.game);
-    }
-
-    /**
-     * Créé une porte
-     * @param {*Object} door 
-     */
-    createDoor(door) {
-        let doorSprite = new Door(door, this.doorsGroup, this.game);
-    }
-
-    /**
-     * Créé un rocher
-     * @param {*Object} rock 
-     */
-    createRock(rock) {
-        let rockSprite = new Rock(rock, this.rocksGroup, this.game);
-    }
-
-    /**
-     * Créé la zone d'objectif
-     * @param {*Object} exit 
-     */
-    createExit(exit) {
-        this.exitPosX = exit.x;
-        this.exitPosY = exit.y;
-        let exitSprite = this.game.add.sprite(exit.x, exit.y, 'exit');
-        exitSprite.anchor.setTo(0, 1);
-        exitSprite.animations.add(EXIT_ANIMATIONS.EXIT_ACTIVE.NAME, EXIT_ANIMATIONS.EXIT_ACTIVE.FRAMES, 4, true).play();
-        if (this.player.id === 1) {
-            exitSprite.scale.setTo(-1, 1);
-            exitSprite.x -= exitSprite.width;
-        }
-
-        this.game.physics.arcade.enable(exitSprite);
-        this.exitGroup.add(exitSprite);
+        this.character.stopUp();
     }
 
     /**
@@ -362,9 +242,8 @@ class Scene extends Phaser.State {
      */
     pressButton(playerSprite, buttonSprite) {
         if (!this.overlapedButton) {
-            buttonSprite.frame += 1;
+            buttonSprite.toggleOn();
             this.overlapedButton = buttonSprite;
-            this.game.socket.emit('pressbutton', buttonSprite.colorParam);
         }
     }
 
@@ -375,7 +254,7 @@ class Scene extends Phaser.State {
      */
     onExit(playerSprite, exitSprite) {
         if (!this.exitActive) {
-            this.game.socket.emit('inexit');
+            this.game.serverManager.getSocket().emit('inexit');
             this.exitActive = true;
         }
     }
@@ -383,13 +262,11 @@ class Scene extends Phaser.State {
     /**
      * Action lorsque le niveau est terminé
      */
-    endScene() {
-        this.game.socket.emit('resetexit');
+    onLevelCompleted() {
+        this.game.serverManager.getSocket().emit('finishlevel');
         this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
-        this.exitPerso = this.game.add.sprite(this.exitPosX, this.exitPosY, 'exit_perso');
-        this.exitPerso.anchor.setTo(0, 1);
-        this.exitPerso.animations.add(EXIT_HEROS.DANCE.NAME, EXIT_HEROS.DANCE.FRAMES, 8, true).play();
+        this.exitGroup.children[0].animateSuccess();
         setTimeout(() => {
             this.game.audioManager.stopCurrentMusic();
             this.victoryMusic.fadeIn(500, false);
@@ -409,24 +286,6 @@ class Scene extends Phaser.State {
         }, 3000);
     }
 
-
-    /**
-     * relance le niveau
-     * @param {number} level 
-     */
-    pauseLevel(level) {
-        this.onPause = true;
-        this.game.controlsManager.disableControls([START, CANCEL]);
-        this.audioManager.getCurrentMusic().pause();
-        this.pauseGroup.alpha = 1;
-    }
-
-    resumeLevel() {
-        this.onPause = false;
-        this.game.controlsManager.enableControls();
-        this.audioManager.getCurrentMusic().resume();
-        this.pauseGroup.alpha = 0;
-    }
     /**
      * Fonction appelée au moment du changement de scene
      */
@@ -439,15 +298,13 @@ class Scene extends Phaser.State {
         this.rocksGroup.destroy();
         this.buttonsGroup.destroy();
         this.exitGroup.destroy();
-        this.noCollisionGroup.destroy();
         this.overlapedButton = null;
         this.exitActive = false;
         this.game.controlsManager.enableControls();
-        this.exitPosX = 0;
-        this.exitPosY = 0;
-        this.animatedDoors = [];
-        this.openedDoorsColors = [];
         this.end = false;
-        this.onPause = false;
+        this.timer.resetTime();
+        this.timer = null;
+        this.disconnectScreen.destroy();
+        this.pauseScreen.destroy();
     }
 }

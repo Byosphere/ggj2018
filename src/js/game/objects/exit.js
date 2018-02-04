@@ -1,5 +1,0 @@
-class Exit {
-
-    constructor() {}
-
-}

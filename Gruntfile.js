@@ -6,15 +6,21 @@ module.exports = function (grunt) {
         'src/js/data/animations.js',
         'src/js/utils/controlsManager.js',
         'src/js/utils/AudioManager.js',
+        'src/js/utils/ServerManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
         'src/js/game/states/Lobby.js',
         'src/js/game/states/MainMenu.js',
         'src/js/game/states/Scene.js',
-        'src/js/game/objects/button.js',
-        'src/js/game/objects/door.js',
-        'src/js/game/objects/exit.js'
+        'src/js/game/objects/Button.js',
+        'src/js/game/objects/Door.js',
+        'src/js/game/objects/Exit.js',
+        'src/js/game/objects/Rock.js',
+        'src/js/game/objects/Character.js',
+        'src/js/game/objects/PauseScreen.js',
+        'src/js/game/objects/DisconnectScreen.js',
+        'src/js/game/objects/Timer.js'
     ];
 
     var jsSourcesDev = ['src/js/utils/storage-dev.js'];
@@ -91,15 +97,21 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: 'src/js/*.js',
-                tasks: ['scripts:dev']
+                files: ['src/**'],
+                tasks: ['scripts:dev'],
+                options: {
+                    livereload: {
+                        host: 'localhost',
+                        port: 35729,
+                    }
+                }
             }
         }
     });
 
     // Tasks definition
     grunt.registerTask('default', ['dev']);
-    grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets']);
+    grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets', 'watch:scripts']);
     grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
 
     grunt.registerTask('scripts:dev', ['concat:src']);

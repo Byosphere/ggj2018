@@ -19,6 +19,7 @@ class Booter extends Phaser.State {
 
         // Loading the game title asset
         this.game.load.image('title', BASE_URL + 'title.png');
+        
         // Loading the preload bar asset
         this.game.load.spritesheet('preloadbar', BASE_URL + 'sprites/loader.png', 64, 64);
 

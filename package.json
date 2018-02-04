@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/campignon/ggj2018#readme",
   "devDependencies": {
+    "grunt-contrib-watch": "^1.0.0",
     "http-server": "^0.11.1"
   },
   "dependencies": {
