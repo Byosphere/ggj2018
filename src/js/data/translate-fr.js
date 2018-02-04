@@ -33,6 +33,7 @@ const TEXT_FR = {
     KEY_START_BUTTON: 'la barre espace',
     KEY_CANCEL_BUTTON: 'la touche ESC',
     ELAPSED_TIME: 'Temps écoulé : ',
+    END_TIME: 'Terminé en',
     LEVEL_NAMES: [
         'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux',

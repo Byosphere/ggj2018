@@ -20,7 +20,7 @@ class Timer {
         level.anchor.setTo(0.5, 0.5);
         this.timerGroup.add(level);
 
-        let levelName = this.game.translate.LEVEL_NAMES[levelNum-1] || 'no-name';
+        let levelName = this.game.translate.LEVEL_NAMES[levelNum - 1] || 'no-name';
         let levelSubtitle = this.game.add.text(GAME_WIDTH - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         levelSubtitle.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         levelSubtitle.anchor.setTo(0.5, 0.5);
@@ -60,17 +60,30 @@ class Timer {
 
     _timerTick() {
         this.time++;
-        let minutes = Math.floor(this.time / 60);
-        let seconds = this.time % 60;
-        this.timerText.text = this.game.translate.ELAPSED_TIME + minutes + 'min ' + seconds + 's';
+        this.timerText.text = this.game.translate.ELAPSED_TIME + ' ' + this.getFormatedTime();
     }
 
     getTime() {
         return this.time;
     }
 
+    getFormatedTime() {
+        let minutes = Math.floor(this.time / 60);
+        let seconds = this.time % 60;
+        return minutes + 'min ' + seconds + 's';
+    }
+
     stopTime() {
         clearInterval(this.interval);
+
+    }
+
+    hideTimer() {
+        this.timeScreenGrounp.visible = false;
+    }
+
+    showTimer() {
+        this.timeScreenGrounp.visible = true;
     }
 
     resetTime() {
