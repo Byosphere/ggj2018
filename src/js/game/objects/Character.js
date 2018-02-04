@@ -5,7 +5,11 @@ class Character extends Phaser.Sprite {
 		this.game = game;
 		this.anchor.setTo(0, 1);
 		this.game.physics.arcade.enable(this);
-		this.body.setSize(64, 64, 0, 0);
+		if (characterName === FLEUR_HEROS) {
+			this.body.setSize(60, 64, 2, 0);
+		} else {
+			this.body.setSize(48, 64, 8, 0);
+		}
 		this.initAnimations();
 	}
 

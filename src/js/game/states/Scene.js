@@ -153,6 +153,19 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         this.game.physics.arcade.collide(this.character, this.rocksGroup);
 
+        if(DEBUG) {
+            this.game.debug.body(this.layer);
+            this.game.debug.body(this.character);
+            this.doorsGroup.forEach(door => {
+                this.game.debug.body(door);
+            });
+            this.game.debug.body(this.exitGroup.children[0]);
+            this.buttonsGroup.forEach(button => {
+                this.game.debug.body(button);
+            });
+
+        }
+
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.toggleOff();

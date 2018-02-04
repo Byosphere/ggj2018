@@ -8,15 +8,20 @@ class Door extends Phaser.Sprite {
             this.key = 'door_horizontal';
         }
         this.game.physics.arcade.enable(this);
+        if (this.key === 'door_horizontal') {
+            this.body.setSize(192, 48, 0, 8);
+        } else {
+            this.body.setSize(48, 192, 8, 0);
+            this.anchor.setTo(0, 1);
+        }
         this.body.immovable = true;
-        this.anchor.setTo(0, 1);
         this.colorParam = data.properties.Color;
         this.setColor(this.colorParam);
         this.isAnimating = false;
     }
 
     openDoor() {
-        if(this.body.enable) {
+        if (this.body.enable) {
             this.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {
