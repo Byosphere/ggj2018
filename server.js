@@ -17,7 +17,7 @@ server.listen(process.env.PORT || 8081, function () {
 });
 server.debugLobby = 'L_DEBUG';
 server.lobbies = [];
-server.lobbies[server.debugLobby] = { players: [{id: 0, selectedHero: 'fleur', position: 'fleur'}, null], buttonsState: [], exitCount: 0, playerCount: 1, levelReady: 1 }
+server.lobbies[server.debugLobby] = { players: [{ id: 0, selectedHero: 'fleur', position: 'fleur' }, null], buttonsState: [], exitCount: 0, playerCount: 1, levelReady: 1 }
 /*
 idées pour la gestion des lobby
 {
@@ -151,7 +151,8 @@ io.on('connection', function (socket) {
 
     // player out of exit spot
     socket.on('outexit', function () {
-        server.lobbies[socket.code].exitCount--;
+        if (server.lobbies[socket.code].exitCount > 0)
+            server.lobbies[socket.code].exitCount--;
     });
 
     socket.on('finishlevel', function () {
