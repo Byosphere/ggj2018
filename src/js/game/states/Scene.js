@@ -108,9 +108,6 @@ class Scene extends Phaser.State {
         this.doorsGroup = this.game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = this.game.add.group();
-        this.loadGroup = this.game.add.group();
-        this.loadGroup.add(loadBack);
-        this.loadGroup.add(preload);
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
@@ -120,6 +117,10 @@ class Scene extends Phaser.State {
 
         this.foreground = this.map.createLayer('Foreground');
         this.foreground.resizeWorld();
+
+        this.loadGroup = this.game.add.group();
+        this.loadGroup.add(loadBack);
+        this.loadGroup.add(preload);
 
         this.pauseScreen = new PauseScreen(this.game);
         this.disconnectScreen = new DisconnectScreen(this.game);
@@ -336,5 +337,8 @@ class Scene extends Phaser.State {
         this.timer = null;
         this.disconnectScreen.destroy();
         this.pauseScreen.destroy();
+        this.layer.destroy();
+        this.background.destroy();
+        this.foreground.destroy();
     }
 }
