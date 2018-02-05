@@ -37,8 +37,13 @@ const TEXT_FR = {
     LEVEL_NAMES: [
         'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux',
+        "Cultures alternées",
         'Coli suspect et pâte à Chou',
+        'Tous différents, tous pareils',
         'T\'es vraiment un bro, bro.',
-        'Des portes et des légumes verts'
+        'Des portes et encore des portes',
+        'Fleuraison du bro Coli',
+        'Chou et soupe de brocoli',
+        'Parcelles équitables'
     ]
 }
