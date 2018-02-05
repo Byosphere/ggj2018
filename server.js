@@ -92,6 +92,8 @@ io.on('connection', function (socket) {
 
     // reset le niveau en cours
     socket.on('reset', function () {
+        server.lobbies[socket.code].exitCount = 0;
+        server.lobbies[socket.code].levelReady = 0;
         socket.broadcast.to(socket.code).emit('reset');
     });
 
