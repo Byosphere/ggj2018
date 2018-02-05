@@ -223,7 +223,8 @@ class Scene extends Phaser.State {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
         }
-        if (this.disconnectScreen.isDisconnected) {
+
+        if (this.disconnectScreen.isDisconnected()) {
             this.game.state.start('lobby');
         }
     }
