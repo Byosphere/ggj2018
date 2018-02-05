@@ -94,8 +94,10 @@ class Scene extends Phaser.State {
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
+        this.background = this.map.createLayer('Background');
+        this.background.resizeWorld();
 
-        this.map.setCollisionBetween(3, 4, true, 'Walls');
+        this.map.setCollisionBetween(17, 50, true, 'Walls');
 
         // Groups
         this.exitGroup = this.game.add.group();
@@ -106,15 +108,19 @@ class Scene extends Phaser.State {
         this.doorsGroup = this.game.add.group();
         this.doorsGroup.enableBody = true;
         this.characterGroup = this.game.add.group();
-        this.loadGroup = this.game.add.group();
-        this.loadGroup.add(loadBack);
-        this.loadGroup.add(preload);
 
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
             this.createObject(mapObjects[i]);
         }
+
+        this.foreground = this.map.createLayer('Foreground');
+        this.foreground.resizeWorld();
+
+        this.loadGroup = this.game.add.group();
+        this.loadGroup.add(loadBack);
+        this.loadGroup.add(preload);
 
         this.pauseScreen = new PauseScreen(this.game);
         this.disconnectScreen = new DisconnectScreen(this.game);
@@ -144,7 +150,9 @@ class Scene extends Phaser.State {
             case 'exit':
                 this.exitGroup.add(new Exit(this.game, obj, this.player.id));
                 break;
-            default: break;
+            default:
+                console.log(type);
+                break;
         }
     }
 
@@ -153,7 +161,7 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         this.game.physics.arcade.collide(this.character, this.rocksGroup);
 
-        if(DEBUG) {
+        if (DEBUG) {
             this.game.debug.body(this.layer);
             this.game.debug.body(this.character);
             this.doorsGroup.forEach(door => {
@@ -164,6 +172,10 @@ class Scene extends Phaser.State {
                 this.game.debug.body(button);
             });
 
+        }
+
+        if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
+            this.character.resetPosition();
         }
 
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
@@ -212,7 +224,8 @@ class Scene extends Phaser.State {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
         }
-        if (this.disconnectScreen.isDisconnected) {
+
+        if (this.disconnectScreen.isDisconnected()) {
             this.game.state.start('lobby');
         }
     }
@@ -324,5 +337,8 @@ class Scene extends Phaser.State {
         this.timer = null;
         this.disconnectScreen.destroy();
         this.pauseScreen.destroy();
+        this.layer.destroy();
+        this.background.destroy();
+        this.foreground.destroy();
     }
 }

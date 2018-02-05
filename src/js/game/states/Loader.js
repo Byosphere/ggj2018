@@ -65,11 +65,18 @@ class Loader extends Phaser.State {
         this.game.load.tilemap('level6coli', BASE_URL + 'tilemaps/maps/level6_coli.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.tilemap('level7fleur', BASE_URL + 'tilemaps/maps/level7_fleur.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.tilemap('level7coli', BASE_URL + 'tilemaps/maps/level7_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level8fleur', BASE_URL + 'tilemaps/maps/level8_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level8coli', BASE_URL + 'tilemaps/maps/level8_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level9fleur', BASE_URL + 'tilemaps/maps/level9_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level9coli', BASE_URL + 'tilemaps/maps/level9_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level10fleur', BASE_URL + 'tilemaps/maps/level10_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('level10coli', BASE_URL + 'tilemaps/maps/level10_coli.json', null, Phaser.Tilemap.TILED_JSON);
     }
 
     loadAudio() {
         this.game.load.audio('sound_coli', BASE_URL + 'sound/phrase1.wav');
         this.game.load.audio('sound_fleur', BASE_URL + 'sound/phrase11.wav');
+        this.game.load.audio('reset', BASE_URL + 'sound/phrase17.wav');
         this.game.load.audio('main_menu', BASE_URL + 'sound/loader.wav');
         this.game.load.audio('game', BASE_URL + 'sound/niveau.wav');
         this.game.load.audio('win', BASE_URL + 'sound/win.wav');

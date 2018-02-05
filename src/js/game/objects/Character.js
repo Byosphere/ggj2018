@@ -6,11 +6,14 @@ class Character extends Phaser.Sprite {
 		this.anchor.setTo(0, 1);
 		this.game.physics.arcade.enable(this);
 		if (characterName === FLEUR_HEROS) {
-			this.body.setSize(60, 64, 2, 0);
+			this.body.setSize(60, 55, 2, 9);
 		} else {
-			this.body.setSize(48, 64, 8, 0);
+			this.body.setSize(48, 55, 8, 9);
 		}
 		this.initAnimations();
+		this.previousX = data.x;
+		this.previousY = data.y;
+		this.resetSound = this.game.add.audio('reset');
 	}
 
 	addToGame() {
@@ -21,6 +24,21 @@ class Character extends Phaser.Sprite {
 		this.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
 		this.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
 		this.animations.add(HEROS_ANIMATIONS.WALK_UP.NAME, HEROS_ANIMATIONS.WALK_UP.FRAMES, 12, true);
+	}
+
+	resetPosition() {
+		this.x = this.previousX;
+		this.y = this.previousY;
+		let blink = true;
+		this.resetSound.play();
+		this.blinkInterval = setInterval(() => {
+			blink ? this.alpha = 0 : this.alpha = 1;
+			blink = !blink;
+		}, 300);
+		this.blinkTimeout = setTimeout(() => {
+			clearInterval(this.blinkInterval);
+			clearTimeout(this.blinkTimeout);
+		}, 2000);
 	}
 
 	moveLeft() {
