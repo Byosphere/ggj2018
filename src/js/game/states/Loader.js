@@ -76,6 +76,7 @@ class Loader extends Phaser.State {
     loadAudio() {
         this.game.load.audio('sound_coli', BASE_URL + 'sound/phrase1.wav');
         this.game.load.audio('sound_fleur', BASE_URL + 'sound/phrase11.wav');
+        this.game.load.audio('reset', BASE_URL + 'sound/phrase17.wav');
         this.game.load.audio('main_menu', BASE_URL + 'sound/loader.wav');
         this.game.load.audio('game', BASE_URL + 'sound/niveau.wav');
         this.game.load.audio('win', BASE_URL + 'sound/win.wav');
