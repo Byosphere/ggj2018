@@ -14,8 +14,8 @@ class Game extends Phaser.Game {
         //set some parameters shortcuts
         this.parameters = {
             translate: { nameKey: 'LANGUAGE', value: 0, allValues: [{ name: 'FRENCH', value: 'TEXT_FR' }, { name: 'ENGLISH', value: 'TEXT_EN' }] },
-            musicVolume: { nameKey: 'MUSIC_VOLUME', value: 0, allValues: [{ name: '10', value: 1 }] },
-            soundVolume: { nameKey: 'SOUND_VOLUME', value: 0, allValues: [{ name: '10', value: 1 }] },
+            //musicVolume: { nameKey: 'MUSIC_VOLUME', value: 0, allValues: null},
+            //soundVolume: { nameKey: 'SOUND_VOLUME', value: 0, allValues: null},
             debugMode: { nameKey: 'DEBUG_MODE', value: 1, level: DEBUG_LEVEL, heros: DEBUG_HEROS, allValues: [{ name: 'ACTIVATED', value: true }, { name: 'DESACTIVATED', value: false }] }
         };
 

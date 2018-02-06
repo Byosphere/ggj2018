@@ -20,6 +20,7 @@ class Parameters extends Phaser.State {
 			text.alpha = 0.5;
 			text.paramKey = key;
 			this.parametersTexts.push(text);
+			param.tempVal = param.value;
 		}
 		this.parametersTexts.push(this.backButton);
 		this.parametersTexts.push(this.validButton);
@@ -48,21 +49,35 @@ class Parameters extends Phaser.State {
 	leftButtonReleased() {
 		let text = this.parametersTexts[this.index];
 		let gameParam = this.game.parameters[this.parametersTexts[this.index].paramKey]
-		if(gameParam) {
-
+		if (gameParam) {
+			if (gameParam.tempVal > 0) {
+				gameParam.tempVal--;
+			} else {
+				gameParam.tempVal = gameParam.allValues.length - 1;
+			}
+			text.text = this.game.translate(gameParam.nameKey) + ' ' + this.game.translate(gameParam.allValues[gameParam.tempVal].name)
 		}
 	}
 
 	rightButtonReleased() {
-
+		let text = this.parametersTexts[this.index];
+		let gameParam = this.game.parameters[this.parametersTexts[this.index].paramKey]
+		if (gameParam) {
+			if (gameParam.tempVal < gameParam.allValues.length - 1) {
+				gameParam.tempVal++;
+			} else {
+				gameParam.tempVal = 0;
+			}
+			text.text = this.game.translate(gameParam.nameKey) + ' ' + this.game.translate(gameParam.allValues[gameParam.tempVal].name)
+		}
 	}
 
 	cancelButtonReleased() {
-
+		//retour au menu
 	}
 
 	actionButtonDown() {
-
+		//apply modifications
 	}
 
 	shutdown() {
