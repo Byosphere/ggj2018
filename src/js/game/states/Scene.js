@@ -29,7 +29,7 @@ class Scene extends Phaser.State {
         this.overlapedButton = null;
         this.exitActive = false;
         this.end = false;
-        this.timer = new Timer(this.game);
+        this.hud = new SceneHud(this.game);
     }
 
     /**
@@ -45,7 +45,7 @@ class Scene extends Phaser.State {
      */
     onStartLevel() {
         this.loadGroup.destroy();
-        this.timer.start(this.currentLevel, () => {
+        this.hud.start(this.currentLevel, () => {
             this.game.controlsManager.enableControls();
             this.game.audioManager.playMusic('game');
         });
@@ -176,6 +176,7 @@ class Scene extends Phaser.State {
 
         if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
             this.character.resetPosition();
+            this.hud.removeLife(1);
         }
 
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
@@ -199,11 +200,22 @@ class Scene extends Phaser.State {
         this.disconnectScreen.display();
     }
 
-    onResetLevel() {
-        this.game.camera.fade('#000000', 200);
-        this.game.camera.onFadeComplete.add(() => {
-            this.game.state.start('scene', true, false, this.player, this.currentLevel);
-        }, this);
+    onResetLevel(gameover) {
+        if (gameover) {
+            this.gameOverScreen = new GameOverScreen(this.game);
+            this.gameOverScreen.display(() => {
+                this.gameOverScreen.destroy();
+                this.game.camera.fade('#000000', 200);
+                this.game.camera.onFadeComplete.add(() => {
+                    this.game.state.start('scene', true, false, this.player, this.currentLevel);
+                }, this);
+            });
+        } else {
+            this.game.camera.fade('#000000', 200);
+            this.game.camera.onFadeComplete.add(() => {
+                this.game.state.start('scene', true, false, this.player, this.currentLevel);
+            }, this);
+        }
     }
 
     actionButtonReleased() {
@@ -294,9 +306,9 @@ class Scene extends Phaser.State {
         this.game.controlsManager.disableControls([ACTION]);
         this.character.alpha = 0;
         this.exitGroup.children[0].animateSuccess();
-        this.timer.stopTime();
+        this.hud.stopTime();
         setTimeout(() => {
-            this.timer.hideTimer();
+            this.hud.hideHud();
             this.game.audioManager.stopCurrentMusic();
             this.victoryMusic.fadeIn(500, false);
             this.game.camera.flash();
@@ -333,8 +345,8 @@ class Scene extends Phaser.State {
         this.exitActive = false;
         this.game.controlsManager.enableControls();
         this.end = false;
-        this.timer.resetTime();
-        this.timer = null;
+        this.hud.resetTime();
+        this.hud = null;
         this.disconnectScreen.destroy();
         this.pauseScreen.destroy();
         this.layer.destroy();

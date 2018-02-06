@@ -42,6 +42,7 @@ const MENU_HEROS_POS_Y = 350;
 const HEROS_WIDTH = 1;
 const HEROS_HEIGHT = 1;
 const HEROS_SITTING_FRAME = 8;
+const HEROS_MAX_LIVES = 3;
 
 const DOOR_WIDTH = 1;
 const DOOR_HEIGHT = 3;

@@ -2,6 +2,7 @@ const TEXT_FR = {
     GENERIC_PRESS_BUTTON: 'Appuie sur',
     GENERIC_TO_START: 'pour commencer',
     LOADING_TEXT: 'Chargement...',
+    GAME_OVER: 'Game Over',
     LOBBY_TEXT_CONNECTING: 'Tentative de connexion...',
     LOBBY_TEXT_CONNECTED: 'Connexion établie avec le serveur',
     LOBBY_TEXT_CODE_INSTRUCTIONS: "Donne ce code à ton partenaire de jeu pour qu'il retrouve !",

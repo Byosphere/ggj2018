@@ -91,10 +91,14 @@ io.on('connection', function (socket) {
     });
 
     // reset le niveau en cours
-    socket.on('reset', function () {
+    socket.on('reset', function (gameover) {
+        gameover = gameover || false;
         server.lobbies[socket.code].exitCount = 0;
         server.lobbies[socket.code].levelReady = 0;
-        socket.broadcast.to(socket.code).emit('reset');
+        if(gameover)
+            socket.emit('reset', gameover);
+            
+        socket.broadcast.to(socket.code).emit('reset', gameover);
     });
 
     socket.on('levelready', (debug) => {

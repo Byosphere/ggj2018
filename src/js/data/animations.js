@@ -34,6 +34,7 @@ const BUTTON_ANIMATIONS = {
 
 const BULLE_ANIMATIONS = {
     PUSH_BUTTON: { NAME: 'bulle_button', FRAMES: [0, 1] },
+    HEART_DEFAULT: { NAME: 'heart_default', FRAMES: 2 },
     HEART_BREAK: { NAME: 'heart_break', FRAMES: [2, 3, 4, 5] },
     HEART_FLASH: { NAME: 'heart_flash', FRAMES: [6, 7, 8, 9, 10, 11] },
 }
