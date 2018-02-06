@@ -56,5 +56,9 @@ var TEXT_FR = {
     SOUND_VOLUME: 'VOLUME DES EFFETS SONORE :',
     DEBUG_MODE: 'MODE DEBUG :',
     FRENCH: 'Français',
-    ENGLISH: 'Anglais'
+    ENGLISH: 'Anglais',
+    DESACTIVATED: 'désactivé',
+    ACTIVATED: 'activé',
+    BACK_FROM_PARAMETERS: 'Retour (annule les modifications)',
+    CONFIRM: 'Valider'
 }

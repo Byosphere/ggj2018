@@ -45,7 +45,7 @@ class AudioManager {
         this.currentMusic = this.game.add.audio(name);
         this.currentMusic.onDecoded.add(() => {
             this.currentMusic.play('', 0, 0, true);
-            this.currentMusic.fadeTo(fade, this.game.parameters.musicVolume.value);
+            this.currentMusic.fadeTo(fade, (this.game.parameters.musicVolume.value/10));
         });
     }
 }

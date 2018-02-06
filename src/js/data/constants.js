@@ -25,6 +25,7 @@ const GAME_TEXT_NEXT_LEVEL = 'Appuie sur ';
 const GAME_TEXT_NEXT_LEVEL_FONT = 'normal 40px uni0553';
 const GAME_TEXT_NEXT_LEVEL_COLOR = '#FFF';
 const HUGE_FONT = 'normal 120px uni0553';
+const HEAD_FONT = 'normal 50px uni0553';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;
