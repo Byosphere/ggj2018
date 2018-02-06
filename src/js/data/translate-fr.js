@@ -1,4 +1,7 @@
-const TEXT_FR = {
+/**
+ * Attention : à mettre en 'var' pour que ce soit accessible au niveau window (marche pas avec const)
+ */
+var TEXT_FR = {
     GENERIC_PRESS_BUTTON: 'Appuie sur',
     GENERIC_TO_START: 'pour commencer',
     LOADING_TEXT: 'Chargement...',
@@ -46,5 +49,12 @@ const TEXT_FR = {
         'Fleuraison du bro Coli',
         'Chou et soupe de brocoli',
         'Parcelles équitables'
-    ]
+    ],
+    PARAMETERS_TITLE: 'Paramètres',
+    LANGUAGE: 'LANGUE :',
+    MUSIC_VOLUME: 'VOLUME DE LA MUSIQUE :',
+    SOUND_VOLUME: 'VOLUME DES EFFETS SONORE :',
+    DEBUG_MODE: 'MODE DEBUG :',
+    FRENCH: 'Français',
+    ENGLISH: 'Anglais'
 }

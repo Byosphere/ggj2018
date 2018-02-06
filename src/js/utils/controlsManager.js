@@ -38,7 +38,10 @@ class ControlsManager {
     }
 
     init() {
-        if (this.game.controller) {
+        this.game.input.gamepad.start();
+        let pad = this.game.input.gamepad.pad1;
+
+        if (pad.connected) {
             this.initController();
         } else {
             this.initKeyboard();
@@ -46,34 +49,32 @@ class ControlsManager {
     }
 
     initController() {
-        this.game.input.gamepad.start();
-        let pad = this.game.input.gamepad.pad1;
         pad.callbackContext = this;
         pad.onUpCallback = this.onControllerButtonReleased;
         pad.onDownCallback = this.onControllerButtonDown;
         pad.onAxisCallback = this.onControllerAxisChanged;
 
         //button names
-        this.actionButtonName = this.game.translate.PAD_ACTION_BUTTON;
-        this.cancelButtonName = this.game.translate.PAD_CANCEL_BUTTON;
-        this.upButtonName = this.game.translate.PAD_UP_BUTTON;
-        this.downButtonName = this.game.translate.PAD_DOWN_BUTTON;
-        this.leftButtonName = this.game.translate.PAD_LEFT_BUTTON;
-        this.rightButtonName = this.game.translate.PAD_RIGHT_BUTTON;
-        this.startButtonName = this.game.translate.PAD_START_BUTTON;
+        this.actionButtonName = this.game.translate('PAD_ACTION_BUTTON');
+        this.cancelButtonName = this.game.translate('PAD_CANCEL_BUTTON');
+        this.upButtonName = this.game.translate('PAD_UP_BUTTON');
+        this.downButtonName = this.game.translate('PAD_DOWN_BUTTON');
+        this.leftButtonName = this.game.translate('PAD_LEFT_BUTTON');
+        this.rightButtonName = this.game.translate('PAD_RIGHT_BUTTON');
+        this.startButtonName = this.game.translate('PAD_START_BUTTON');
     }
 
     initKeyboard() {
         let keyboard = this.game.input.keyboard.addCallbacks(this, this.onKeyboardButtonDown, this.onKeyboardButtonReleased, this.onKeyboardButtonPressed);
 
         //button names
-        this.actionButtonName = this.game.translate.KEY_ACTION_BUTTON;
-        this.cancelButtonName = this.game.translate.KEY_CANCEL_BUTTON;
-        this.upButtonName = this.game.translate.KEY_UP_BUTTON;
-        this.downButtonName = this.game.translate.KEY_DOWN_BUTTON;
-        this.leftButtonName = this.game.translate.KEY_LEFT_BUTTON;
-        this.rightButtonName = this.game.translate.KEY_RIGHT_BUTTON;
-        this.startButtonName = this.game.translate.KEY_START_BUTTON;
+        this.actionButtonName = this.game.translate('KEY_ACTION_BUTTON');
+        this.cancelButtonName = this.game.translate('KEY_CANCEL_BUTTON');
+        this.upButtonName = this.game.translate('KEY_UP_BUTTON');
+        this.downButtonName = this.game.translate('KEY_DOWN_BUTTON');
+        this.leftButtonName = this.game.translate('KEY_LEFT_BUTTON');
+        this.rightButtonName = this.game.translate('KEY_RIGHT_BUTTON');
+        this.startButtonName = this.game.translate('KEY_START_BUTTON');
     }
 
     setCallbackContext(context) {

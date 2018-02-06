@@ -2,7 +2,6 @@ class AudioManager {
 
     constructor(game) {
         this.soundVolume = DEFAULT_SOUND_VOLUME;
-        this.musicVolume = DEFAULT_MUSIC_VOLUME;
         this.mute = false;
         this.game = game;
         this.isSoundPlaying = false;
@@ -46,7 +45,7 @@ class AudioManager {
         this.currentMusic = this.game.add.audio(name);
         this.currentMusic.onDecoded.add(() => {
             this.currentMusic.play('', 0, 0, true);
-            this.currentMusic.fadeTo(fade, this.musicVolume);
+            this.currentMusic.fadeTo(fade, this.game.parameters.musicVolume.value);
         });
     }
 }

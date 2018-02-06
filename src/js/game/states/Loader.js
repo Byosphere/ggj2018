@@ -13,7 +13,7 @@ class Loader extends Phaser.State {
         preload.animations.add('default', [0, 1, 2, 3], 10, true);
         preload.animations.play('default');
 
-        let loadingText = this.game.add.text(0, 0, this.game.translate.LOADING_TEXT, { font: DEFAULT_FONT, fill: LOADER_COLOR });
+        let loadingText = this.game.add.text(0, 0, this.game.translate('LOADING_TEXT'), { font: DEFAULT_FONT, fill: LOADER_COLOR });
         loadingText.x = preload.x - loadingText.width - (preload.width / 2) - 10;
         loadingText.y = preload.y - loadingText.height / 2;
 
@@ -83,8 +83,8 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        if(DEBUG) {
-            this.game.state.start('scene');
+        if(this.game.parameters.debugMode.value) {
+            this.game.state.start('param');
         } else {
             this.game.state.start('lobby');
         }

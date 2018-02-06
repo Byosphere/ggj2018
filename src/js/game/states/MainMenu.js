@@ -3,7 +3,7 @@ class MainMenu extends Phaser.State {
 
     init(lobbyCode) {
         if (lobbyCode) {
-            this.codeMessage = this.game.add.text(250, 780, this.game.translate.MENU_TEXT_CODE + ' : ' + lobbyCode, { font: DEFAULT_FONT, fill: '#000' });
+            this.codeMessage = this.game.add.text(250, 780, this.game.translate('MENU_TEXT_CODE') + ' : ' + lobbyCode, { font: DEFAULT_FONT, fill: '#000' });
             this.codeMessage.alpha = 0.7;
         }
     }
@@ -271,21 +271,21 @@ class MainMenu extends Phaser.State {
      * Créé les textes de l'écran titre
      */
     createTexts() {
-        this.waitingText = this.game.add.text(this.game.world.centerX, 0, this.game.translate.MENU_TEXT_WAITING, { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.waitingText = this.game.add.text(this.game.world.centerX, 0, this.game.translate('MENU_TEXT_WAITING'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         this.waitingText.y = this.game.world.centerY + this.waitingText.height;
         this.waitingText.anchor.set(0.5);
         this.game.add.tween(this.waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
 
-        this.fleurText = this.game.add.text(this.heros[FLEUR_HEROS].sprite.x + (this.heros[FLEUR_HEROS].sprite.width / 2), this.heros[FLEUR_HEROS].sprite.y + this.heros[FLEUR_HEROS].sprite.height + 20, this.game.translate.MENU_TEXT_FLEUR, { font: DEFAULT_FONT, fill: MENU_TEXT_FLEUR_COLOR });
+        this.fleurText = this.game.add.text(this.heros[FLEUR_HEROS].sprite.x + (this.heros[FLEUR_HEROS].sprite.width / 2), this.heros[FLEUR_HEROS].sprite.y + this.heros[FLEUR_HEROS].sprite.height + 20, this.game.translate('MENU_TEXT_FLEUR'), { font: DEFAULT_FONT, fill: MENU_TEXT_FLEUR_COLOR });
         this.fleurText.anchor.set(0.5);
-        this.ColiText = this.game.add.text(this.heros[COLI_HEROS].sprite.x + (this.heros[COLI_HEROS].sprite.width / 2), this.heros[COLI_HEROS].sprite.y + this.heros[COLI_HEROS].sprite.height + 20, this.game.translate.MENU_TEXT_COLI, { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
+        this.ColiText = this.game.add.text(this.heros[COLI_HEROS].sprite.x + (this.heros[COLI_HEROS].sprite.width / 2), this.heros[COLI_HEROS].sprite.y + this.heros[COLI_HEROS].sprite.height + 20, this.game.translate('MENU_TEXT_COLI'), { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
         this.ColiText.anchor.set(0.5);
 
         this.displayPlayerFleurX = this.heros[FLEUR_HEROS].sprite.x + this.heros[FLEUR_HEROS].sprite.width + 10;
         this.displayPlayerColiX = this.heros[COLI_HEROS].sprite.x + this.heros[COLI_HEROS].sprite.width + 10;
 
-        this.p1 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y, this.game.translate.P1, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-        this.p2 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y + 30, this.game.translate.P2, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.p1 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y, this.game.translate('P1'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.p2 = this.game.add.text(this.displayPlayerFleurX, this.heros[FLEUR_HEROS].sprite.y + 30, this.game.translate('P2'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.p1.alpha = 0;
         this.p2.alpha = 0;
     }
@@ -294,6 +294,6 @@ class MainMenu extends Phaser.State {
      * fonction de shutdown de phaser.state
      */
     shutdown() {
-        
+
     }
 }
