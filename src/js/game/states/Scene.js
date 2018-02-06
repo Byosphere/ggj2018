@@ -226,8 +226,10 @@ class Scene extends Phaser.State {
     startButtonReleased() {
         if (this.pauseScreen.isOnPause()) {
             this.pauseScreen.hide();
+            this.hud.resumeTime();
         } else {
             this.pauseScreen.display();
+            this.hud.pauseTime();
         }
     }
 
