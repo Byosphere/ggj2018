@@ -116,6 +116,10 @@ class Lobby extends Phaser.State {
 		}
 	}
 
+	secretCodeReleased() {
+		this.game.state.start('param', true, false, 'lobby', true);
+	}
+
 	shutdown() {
 		this.connected = false;
 		this.joinLobby.destroy();

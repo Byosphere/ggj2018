@@ -5,14 +5,14 @@ class Scene extends Phaser.State {
      * @param {int} player
      * @param {int} level 
      */
-    init(player, level) {
-        if (DEBUG) {
-            this.player = { id: 0, selectedHero: DEBUG_HEROS, position: DEBUG_HEROS };
-            this.currentLevel = DEBUG_LEVEL;
+    init(player, level, debug) {
+        this.debug = debug || false;
+        if (this.debug) {
+            this.player = { id: 0, selectedHero: debug.heros, position: debug.heros };
         } else {
             this.player = player;
-            this.currentLevel = level || 1;
         }
+        this.currentLevel = level || 1;
         this.characterName = this.player.selectedHero;
     }
 
@@ -124,7 +124,7 @@ class Scene extends Phaser.State {
 
         this.pauseScreen = new PauseScreen(this.game);
         this.disconnectScreen = new DisconnectScreen(this.game);
-        this.game.serverManager.getSocket().emit('levelready', DEBUG);
+        this.game.serverManager.getSocket().emit('levelready', this.debug);
     }
 
     /**
@@ -161,7 +161,7 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         this.game.physics.arcade.collide(this.character, this.rocksGroup);
 
-        if (DEBUG) {
+        if (this.debug) {
             this.game.debug.body(this.layer);
             this.game.debug.body(this.character);
             this.doorsGroup.forEach(door => {

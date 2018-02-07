@@ -55,10 +55,12 @@ var TEXT_FR = {
     MUSIC_VOLUME: 'VOLUME DE LA MUSIQUE :',
     SOUND_VOLUME: 'VOLUME DES EFFETS SONORE :',
     DEBUG_MODE: 'MODE DEBUG :',
+    DEBUG_MODE_LEVEL: 'NIVEAU POUR DEBUG :',
+    DEBUG_MODE_HEROS: 'HEROS POUR DEBUG :',
     FRENCH: 'Français',
     ENGLISH: 'Anglais',
     DESACTIVATED: 'désactivé',
     ACTIVATED: 'activé',
     BACK_FROM_PARAMETERS: 'Retour (annule les modifications)',
-    CONFIRM: 'Valider'
+    CONFIRM: 'Valider',
 }

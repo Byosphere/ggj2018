@@ -35,6 +35,7 @@ class ControlsManager {
         this.controlsEnabled[RIGHT] = true;
         this.controlsEnabled[CANCEL] = true;
         this.controlsEnabled[START] = true;
+        this.secretCode = 0;
     }
 
     init() {
@@ -125,7 +126,6 @@ class ControlsManager {
 
     onKeyboardButtonReleased(keyboardEvent) {
         let button = keyboardEvent.keyCode;
-
         switch (button) {
             case Phaser.KeyCode.ENTER:
                 if (this.callbackContext.actionButtonReleased && this.controlsEnabled[ACTION])
@@ -161,6 +161,15 @@ class ControlsManager {
             case Phaser.KeyCode.SPACEBAR:
                 if (this.callbackContext.startButtonReleased && this.controlsEnabled[START])
                     this.callbackContext.startButtonReleased();
+                break;
+            case Phaser.KeyCode.P:
+                this.secretCode++;
+                if (this.callbackContext.secretCodeReleased && this.secretCode === 5) {
+                    this.secretCode = 0;
+                    this.callbackContext.secretCodeReleased();
+                }
+
+                    
                 break;
             default:
                 console.log('Button pressed unknown : ' + button);

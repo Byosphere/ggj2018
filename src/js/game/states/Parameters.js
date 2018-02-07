@@ -1,7 +1,8 @@
 class Parameters extends Phaser.State {
 
-	init(from) {
+	init(from, debugMode) {
 		this.from = from || 'lobby';
+		this.debug = debugMode || false;
 	}
 
 	preload() {
@@ -19,17 +20,20 @@ class Parameters extends Phaser.State {
 		let height = 100;
 		for (let key in this.game.parameters) {
 			let param = this.game.parameters[key];
-			height += 40;
-			let text;
-			if (param.allValues)
-				text = this.game.add.text(this.paddingLeft, height, this.game.translate(param.nameKey) + ' ' + this.game.translate(param.allValues[param.value].name), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-			else
-				text = this.game.add.text(this.paddingLeft, height, this.game.translate(param.nameKey) + ' ' + param.value, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-			text.alpha = 0.5;
-			text.paramKey = key;
-			this.parametersTexts.push(text);
-			param.tempVal = param.value;
+			if (!param.hidden || this.debug) {
+				height += 40;
+				let text;
+				if (param.allValues)
+					text = this.game.add.text(this.paddingLeft, height, this.game.translate(param.nameKey) + ' ' + this.game.translate(param.allValues[param.value].name), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+				else
+					text = this.game.add.text(this.paddingLeft, height, this.game.translate(param.nameKey) + ' ' + param.value, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+				text.alpha = 0.5;
+				text.paramKey = key;
+				this.parametersTexts.push(text);
+				param.tempVal = param.value;
+			}
 		}
+
 		this.parametersTexts.push(this.backButton);
 		this.parametersTexts.push(this.validButton);
 	}
@@ -94,7 +98,7 @@ class Parameters extends Phaser.State {
 		this.state.start(this.from);
 	}
 
-	actionButtonDown() {
+	actionButtonReleased() {
 		// si on est sur valider
 		if (this.index === this.parametersTexts.length - 1) {
 			for (let key in this.game.parameters) {
@@ -104,7 +108,11 @@ class Parameters extends Phaser.State {
 				}
 				delete param.tempVal;
 			}
-			this.state.start(this.from);
+			if (this.game.parameters.debugMode.value && this.game.parameters.testLevel.value) {
+				this.state.start('scene', true, false, 0, this.game.parameters.testLevel.value, { heros: this.game.parameters.herosDebug.allValues[this.game.parameters.herosDebug.value].value });
+			} else {
+				this.state.start(this.from);
+			}
 		} else if (this.index === this.parametersTexts.length - 2) {
 			this.state.start(this.from);
 		}

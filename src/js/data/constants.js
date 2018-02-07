@@ -5,8 +5,12 @@ const CELL_SIZE = 64;
 const CONTROLLER = false;
 const DEFAULT_CURSOR_POSITION = 'fleur';
 const NB_LEVELS = 10;
-const DEFAULT_SOUND_VOLUME = 1;
-const DEFAULT_MUSIC_VOLUME = 1;
+
+/** Default values */
+const DEFAULT_LANGUAGE = 0;
+const DEFAULT_DEBUG_MODE = 0;
+const DEFAULT_SOUND_VOLUME = 10;
+const DEFAULT_MUSIC_VOLUME = 10;
 const DEFAULT_MUSIC_FADING = 1000;
 
 /* COLORS & FONTS */
@@ -73,6 +77,5 @@ const RED = 'red';
 const WHITE = 'white';
 
 /* DEBUG */
-const DEBUG = false;
 const DEBUG_LEVEL = 5;
 const DEBUG_HEROS = COLI_HEROS;

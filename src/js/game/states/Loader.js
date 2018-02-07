@@ -35,18 +35,18 @@ class Loader extends Phaser.State {
 
     loadSpritesheets() {
         //spritesheets
-        this.game.load.spritesheet('fleur', BASE_URL + 'sprites/fleur.png', CELL_SIZE*HEROS_WIDTH, CELL_SIZE*HEROS_HEIGHT);
-        this.game.load.spritesheet('coli', BASE_URL + 'sprites/coli.png', CELL_SIZE*HEROS_WIDTH, CELL_SIZE*HEROS_HEIGHT);
+        this.game.load.spritesheet('fleur', BASE_URL + 'sprites/fleur.png', CELL_SIZE * HEROS_WIDTH, CELL_SIZE * HEROS_HEIGHT);
+        this.game.load.spritesheet('coli', BASE_URL + 'sprites/coli.png', CELL_SIZE * HEROS_WIDTH, CELL_SIZE * HEROS_HEIGHT);
         this.game.load.spritesheet('background_title', BASE_URL + 'sprites/background_title.png', this.game.world.width, this.game.world.height);
         this.game.load.spritesheet('bulle', BASE_URL + 'sprites/bulle.png', CELL_SIZE, CELL_SIZE);
         this.game.load.spritesheet('anim_title', BASE_URL + 'sprites/titre_anim.png', HEAD_TITLE_WIDTH, HEAD_TITLE_HEIGHT);
-        this.game.load.spritesheet('door', BASE_URL + 'sprites/door.png', CELL_SIZE*DOOR_WIDTH, CELL_SIZE*DOOR_HEIGHT);
-        this.game.load.spritesheet('door_horizontal', BASE_URL + 'sprites/door_horizontal.png', CELL_SIZE*DOOR_HEIGHT, CELL_SIZE*DOOR_WIDTH);
-        this.game.load.spritesheet('button', BASE_URL + 'sprites/button.png', CELL_SIZE*BUTTON_WIDTH, CELL_SIZE*BUTTON_HEIGHT);
-        this.game.load.spritesheet('rock', BASE_URL + 'sprites/caillou.png', CELL_SIZE*ROCK_WIDTH, CELL_SIZE*ROCK_HEIGHT);
-        this.game.load.spritesheet('exit', BASE_URL + 'sprites/exit.png', CELL_SIZE*EXIT_WIDTH, CELL_SIZE*EXIT_HEIGHT);
+        this.game.load.spritesheet('door', BASE_URL + 'sprites/door.png', CELL_SIZE * DOOR_WIDTH, CELL_SIZE * DOOR_HEIGHT);
+        this.game.load.spritesheet('door_horizontal', BASE_URL + 'sprites/door_horizontal.png', CELL_SIZE * DOOR_HEIGHT, CELL_SIZE * DOOR_WIDTH);
+        this.game.load.spritesheet('button', BASE_URL + 'sprites/button.png', CELL_SIZE * BUTTON_WIDTH, CELL_SIZE * BUTTON_HEIGHT);
+        this.game.load.spritesheet('rock', BASE_URL + 'sprites/caillou.png', CELL_SIZE * ROCK_WIDTH, CELL_SIZE * ROCK_HEIGHT);
+        this.game.load.spritesheet('exit', BASE_URL + 'sprites/exit.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         this.game.load.spritesheet('victory', BASE_URL + 'sprites/vousavezgagne.png', VICTORY_WIDTH, VICTORY_HEIGHT);
-        this.game.load.spritesheet('exit_perso', BASE_URL + 'sprites/exit_perso.png', CELL_SIZE*EXIT_WIDTH, CELL_SIZE*EXIT_HEIGHT);
+        this.game.load.spritesheet('exit_perso', BASE_URL + 'sprites/exit_perso.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         this.game.load.spritesheet('felicitations', BASE_URL + 'sprites/felicitations.png', CREDITS_WIDTH, CREDITS_HEIGHT);
     }
 
@@ -83,11 +83,6 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        if(this.game.parameters.debugMode.value) {
-            this.game.state.start('param');
-        } else {
-            this.game.state.start('lobby');
-        }
-        
+        this.game.state.start('lobby');
     }
 }
