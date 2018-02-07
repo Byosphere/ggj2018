@@ -36,6 +36,7 @@ var TEXT_EN = {
     ELAPSED_TIME: 'Time : ',
     END_TIME: 'Over in',
     LEVEL_NAMES: [
+        '',
         'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux',
         "Cultures alternées",

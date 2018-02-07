@@ -39,6 +39,7 @@ var TEXT_FR = {
     ELAPSED_TIME: 'Temps écoulé : ',
     END_TIME: 'Terminé en',
     LEVEL_NAMES: [
+        '',
         'Loin du légume, près du coeur',
         'Un bouton vaut mieux que deux',
         "Cultures alternées",
