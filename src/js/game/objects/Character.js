@@ -13,7 +13,6 @@ class Character extends Phaser.Sprite {
 		this.initAnimations();
 		this.previousX = data.x;
 		this.previousY = data.y;
-		this.resetSound = this.game.add.audio('reset');
 	}
 
 	addToGame() {
@@ -30,7 +29,7 @@ class Character extends Phaser.Sprite {
 		this.x = this.previousX;
 		this.y = this.previousY;
 		let blink = true;
-		this.resetSound.play();
+		this.game.audioManager.playSound('reset');
 		this.blinkInterval = setInterval(() => {
 			blink ? this.alpha = 0 : this.alpha = 1;
 			blink = !blink;

@@ -20,7 +20,6 @@ class Scene extends Phaser.State {
         this.game.stage.backgroundColor = SCENE_BACKGROUND;
         this.game.controlsManager.setCallbackContext(this);
         this.game.serverManager.setCallbackContext(this);
-        this.victoryMusic = this.game.add.audio('win');
         this.buttonsGroup = null;
         this.doorsGroup = null;
         this.characterGroup = null;
@@ -312,7 +311,7 @@ class Scene extends Phaser.State {
         setTimeout(() => {
             this.hud.hideHud();
             this.game.audioManager.stopCurrentMusic();
-            this.victoryMusic.fadeIn(500, false);
+            this.game.audioManager.playSound('win');
             this.game.camera.flash();
             if (this.currentLevel < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
@@ -335,8 +334,7 @@ class Scene extends Phaser.State {
      * Fonction appelée au moment du changement de scene
      */
     shutdown() {
-        this.victoryMusic.stop();
-        this.victoryMusic.destroy();
+        this.game.audioManager.stop();
         this.map.destroy();
         this.doorsGroup.destroy();
         this.characterGroup.destroy();

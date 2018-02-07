@@ -12,20 +12,12 @@ class MainMenu extends Phaser.State {
      */
     preload() {
         this.heros = [];
-        this.heros[FLEUR_HEROS] = { sprite: null, bulle: null, selected: false, sound: null, name: FLEUR_HEROS };
-        this.heros[COLI_HEROS] = { sprite: null, bulle: null, selected: false, sound: null, name: COLI_HEROS };
+        this.heros[FLEUR_HEROS] = { sprite: null, bulle: null, selected: false, sound: 'sound_fleur', name: FLEUR_HEROS };
+        this.heros[COLI_HEROS] = { sprite: null, bulle: null, selected: false, sound: 'sound_coli', name: COLI_HEROS };
 
         this.self = { id: null, selectedHero: null, position: FLEUR_HEROS };
         this.other = { id: null, selectedHero: null, position: FLEUR_HEROS };
 
-        //sons
-        this.heros[COLI_HEROS].sound = this.add.audio('sound_coli');
-        this.heros[COLI_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
-
-        this.heros[FLEUR_HEROS].sound = this.add.audio('sound_fleur');
-        this.heros[FLEUR_HEROS].sound.onStop.add(() => this.soundPlaying = false, this);
-
-        this.soundPlaying = false;
         this.game.controlsManager.setCallbackContext(this);
         this.game.serverManager.setCallbackContext(this);
     }
@@ -59,9 +51,8 @@ class MainMenu extends Phaser.State {
         if (!this.heros[this.self.position].selected) {
             this.game.serverManager.getSocket().emit('selecthero', this.heros[this.self.position].name);
         } else if (this.self.selectedHero === this.self.position) {
-            if (!this.soundPlaying) {
-                this.soundPlaying = true;
-                this.heros[this.self.selectedHero].sound.play();
+            if (!this.game.audioManager.isSoundPlaying) {
+                this.game.audioManager.playSound(this.heros[this.self.selectedHero].sound);
             }
         }
     }
@@ -163,8 +154,7 @@ class MainMenu extends Phaser.State {
             selectedHero.bulle.alpha = 0;
             text.alpha = 0;
         } else {
-            this.soundPlaying = true;
-            selectedHero.sound.play();
+            this.game.audioManager.playSound(selectedHero.sound);
             this.game.add.tween(selectedHero.bulle).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
             this.game.add.tween(text).to({ alpha: 0 }, 500, "Quart.easeInOut").start();
         }
@@ -294,6 +284,6 @@ class MainMenu extends Phaser.State {
      * fonction de shutdown de phaser.state
      */
     shutdown() {
-
+        this.game.audioManager.stop();
     }
 }
