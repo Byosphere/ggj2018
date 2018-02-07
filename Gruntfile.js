@@ -48,14 +48,16 @@ module.exports = function (grunt) {
                     { src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/js/phaser.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.js', dest: 'public/js/phaser-input.js' },
                     { src: 'src/index-dev.html', dest: 'public/index.html' },
-                    { src: 'src/css/style.css', dest: 'public/css/style.css' }
+                    { src: 'src/css/style.css', dest: 'public/css/style.css' },
+                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' }
                 ]
             },
             prod: {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/js/phaser.min.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.min.js', dest: 'public/js/phaser-input.min.js' },
-                    { src: 'src/index-prod.html', dest: 'public/index.html' }
+                    { src: 'src/index-prod.html', dest: 'public/index.html' },
+                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' }
                 ]
             },
             assets: {

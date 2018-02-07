@@ -6,6 +6,10 @@ body, html {
     font-family: 'uni0553', Arial, Helvetica, sans-serif;
 }
 
+canvas {
+    margin: 0 auto;
+}
+
 @font-face {
     font-family: 'uni0553';
     src: url('fonts/uni0553-webfont.eot');

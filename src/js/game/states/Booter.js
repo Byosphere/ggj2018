@@ -14,8 +14,8 @@ class Booter extends Phaser.State {
         this.game.controlsManager.init();
 
         // Centering game
-        this.game.scale.pageAlignHorizontally = true;
-        this.game.scale.pageAlignVertically = true;
+        //this.game.scale.pageAlignHorizontally = true;
+        //this.game.scale.pageAlignVertically = true;
 
         // Loading the game title asset
         this.game.load.image('title', BASE_URL + 'title.png');
