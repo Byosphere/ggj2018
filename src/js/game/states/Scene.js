@@ -157,14 +157,21 @@ class Scene extends Phaser.State {
 
     update() {
         this.game.physics.arcade.collide(this.character, this.layer);
+        this.game.physics.arcade.collide(this.rocksGroup, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
-        this.game.physics.arcade.collide(this.character, this.rocksGroup);
+        this.game.physics.arcade.collide(this.character, this.rocksGroup, (char, rock) => {
+            rock.catch(char);
+        });
 
         if (this.debug) {
             this.game.debug.body(this.layer);
             this.game.debug.body(this.character);
             this.doorsGroup.forEach(door => {
                 this.game.debug.body(door);
+            });
+
+            this.rocksGroup.forEach(rock => {
+                this.game.debug.body(rock);
             });
             this.game.debug.body(this.exitGroup.children[0]);
             this.buttonsGroup.forEach(button => {
@@ -221,8 +228,9 @@ class Scene extends Phaser.State {
         if (this.end) {
             this.currentLevel.level++;
             this.game.state.start('scene', true, false, this.player, this.currentLevel);
+        } else {
+            this.character.dropStone();
         }
-
     }
 
     startButtonReleased() {
