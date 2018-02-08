@@ -108,8 +108,10 @@ class Parameters extends Phaser.State {
 				}
 				delete param.tempVal;
 			}
-			if (this.game.parameters.debugMode.value && this.game.parameters.testLevel.value) {
-				this.state.start('scene', true, false, 0, this.game.parameters.testLevel.value, { heros: this.game.parameters.herosDebug.allValues[this.game.parameters.herosDebug.value].value });
+			if (this.game.parameters.debugMode.value && this.game.parameters.debugLevel.value) {
+				let value = this.game.parameters.debugLevel.value - 1;
+				let level = { level: (value % NB_LEVELS) + 1, world: Math.floor(value / NB_LEVELS) + 1 };
+				this.state.start('scene', true, false, 0, level, { heros: this.game.parameters.debugHeros.allValues[this.game.parameters.debugHeros.value].value });
 			} else {
 				this.state.start(this.from);
 			}
