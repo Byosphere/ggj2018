@@ -72,6 +72,7 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        this.game.state.start('lobby');
+        //this.game.state.start('lobby');
+        this.game.state.start('scene', true, false, 0, { level: 2, world: 2 }, { heros: 'coli' });
     }
 }

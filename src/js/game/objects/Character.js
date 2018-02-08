@@ -8,7 +8,8 @@ class Character extends Phaser.Sprite {
 		if (characterName === FLEUR_HEROS) {
 			this.body.setSize(60, 55, 2, 9);
 		} else {
-			this.body.setSize(48, 55, 8, 9);
+			//this.body.setSize(48, 55, 8, 9);
+			this.body.setSize(60, 60, 2, 2);
 		}
 		this.initAnimations();
 		this.previousX = data.x;
@@ -33,23 +34,29 @@ class Character extends Phaser.Sprite {
 	}
 
 	dropStone() {
-		if (!this.carry) return;
-		this.carry.drop();
-		this.carry = null;
-		switch (this.facing) {
-			case DOWN:
-				this.stopDown();
-				break;
-			case UP:
-				this.stopUp();
-				break;
-			case LEFT:
-				this.stopLeft();
-				break;
-			case RIGHT:
-				this.stopRight();
-				break;
+
+		if (this.carry && this.carry.fittingDropZone()) {
+
+			this.carry.drop();
+			setTimeout(() => {
+				this.carry = null;
+				switch (this.facing) {
+					case DOWN:
+						this.stopDown();
+						break;
+					case UP:
+						this.stopUp();
+						break;
+					case LEFT:
+						this.stopLeft();
+						break;
+					case RIGHT:
+						this.stopRight();
+						break;
+				}
+			}, 50);
 		}
+
 	}
 
 	resetPosition() {
@@ -68,7 +75,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveLeft() {
-
+		this.facing = LEFT;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.x = -100;
@@ -79,7 +86,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveRight() {
-
+		this.facing = RIGHT;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.x = 100;
@@ -91,6 +98,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveUp() {
+		this.facing = UP;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.y = -100;
@@ -102,6 +110,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveDown() {
+		this.facing = DOWN;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.y = 100;

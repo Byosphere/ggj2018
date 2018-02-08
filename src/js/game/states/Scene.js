@@ -7,6 +7,7 @@ class Scene extends Phaser.State {
      */
     init(player, level, debug) {
         this.debug = debug || false;
+
         if (this.debug) {
             this.player = { id: 0, selectedHero: debug.heros, position: debug.heros };
         } else {
@@ -159,26 +160,28 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.layer);
         this.game.physics.arcade.collide(this.rocksGroup, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
-        this.game.physics.arcade.collide(this.character, this.rocksGroup, (char, rock) => {
-            rock.catch(char);
-        });
-
-        if (this.debug) {
-            this.game.debug.body(this.layer);
-            this.game.debug.body(this.character);
-            this.doorsGroup.forEach(door => {
-                this.game.debug.body(door);
+        if (!this.character.carry) {
+            this.game.physics.arcade.overlap(this.character, this.rocksGroup, (char, rock) => {
+                rock.catch(char);
             });
-
-            this.rocksGroup.forEach(rock => {
-                this.game.debug.body(rock);
-            });
-            this.game.debug.body(this.exitGroup.children[0]);
-            this.buttonsGroup.forEach(button => {
-                this.game.debug.body(button);
-            });
-
         }
+
+        // if (this.debug) {
+        //     this.game.debug.body(this.layer);
+        //     this.game.debug.body(this.character);
+        //     this.doorsGroup.forEach(door => {
+        //         this.game.debug.body(door);
+        //     });
+
+        //     this.rocksGroup.forEach(rock => {
+        //         this.game.debug.body(rock);
+        //     });
+        //     this.game.debug.body(this.exitGroup.children[0]);
+        //     this.buttonsGroup.forEach(button => {
+        //         this.game.debug.body(button);
+        //     });
+
+        // }
 
         if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
             this.character.resetPosition();
@@ -189,6 +192,15 @@ class Scene extends Phaser.State {
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.toggleOff();
             this.overlapedButton = null;
+        }
+
+        let lebutton = null
+        if (!this.game.physics.arcade.overlap(this.rocksGroup, this.buttonsGroup, (rock, button) => {
+            lebutton = button;
+            button.toggleOn();
+        }, null, this)) {
+            if(lebutton)
+                lebutton.toggleOff();
         }
 
         let exit = this.game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);

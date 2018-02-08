@@ -25,6 +25,7 @@ class Button extends Phaser.Sprite {
     }
 
     toggleOn() {
+       
         if (!this.activated) {
             this.frame++;
             this.activated = true;
@@ -33,6 +34,7 @@ class Button extends Phaser.Sprite {
     }
 
     toggleOff() {
+
         if (this.activated) {
             this.frame--;
             this.activated = false;
