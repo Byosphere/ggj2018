@@ -31,6 +31,9 @@ class Loader extends Phaser.State {
     loadImages() {
         //simple images
         this.game.load.image('decor', BASE_URL + 'tilemaps/tiles/decor.png');
+        // for (let w = 0; w < WORLDS.length; w++) {
+        //     this.game.load.image(WORLDS[w], BASE_URL + 'tilemaps/tiles/'+WORLDS+'.png');
+        // }
     }
 
     loadSpritesheets() {
@@ -51,26 +54,12 @@ class Loader extends Phaser.State {
     }
 
     loadTilemaps() {
-        this.game.load.tilemap('level1fleur', BASE_URL + 'tilemaps/maps/level1_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level1coli', BASE_URL + 'tilemaps/maps/level1_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level2fleur', BASE_URL + 'tilemaps/maps/level2_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level2coli', BASE_URL + 'tilemaps/maps/level2_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level3fleur', BASE_URL + 'tilemaps/maps/level3_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level3coli', BASE_URL + 'tilemaps/maps/level3_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level4fleur', BASE_URL + 'tilemaps/maps/level4_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level4coli', BASE_URL + 'tilemaps/maps/level4_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level5fleur', BASE_URL + 'tilemaps/maps/level5_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level5coli', BASE_URL + 'tilemaps/maps/level5_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level6fleur', BASE_URL + 'tilemaps/maps/level6_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level6coli', BASE_URL + 'tilemaps/maps/level6_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level7fleur', BASE_URL + 'tilemaps/maps/level7_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level7coli', BASE_URL + 'tilemaps/maps/level7_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level8fleur', BASE_URL + 'tilemaps/maps/level8_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level8coli', BASE_URL + 'tilemaps/maps/level8_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level9fleur', BASE_URL + 'tilemaps/maps/level9_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level9coli', BASE_URL + 'tilemaps/maps/level9_coli.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level10fleur', BASE_URL + 'tilemaps/maps/level10_fleur.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('level10coli', BASE_URL + 'tilemaps/maps/level10_coli.json', null, Phaser.Tilemap.TILED_JSON);
+        for (let w = 0; w < WORLDS.length; w++) {
+            for (let i = 1; i <= NB_LEVELS; i++) {
+                this.game.load.tilemap('level' + i + '_world' + (w + 1) + '_fleur', BASE_URL + 'tilemaps/maps/' + WORLDS[w] + '/level' + i + '_fleur.json', null, Phaser.Tilemap.TILED_JSON);
+                this.game.load.tilemap('level' + i + '_world' + (w + 1) + '_coli', BASE_URL + 'tilemaps/maps/' + WORLDS[w] + '/level' + i + '_coli.json', null, Phaser.Tilemap.TILED_JSON);
+            }
+        }
     }
 
     loadAudio() {

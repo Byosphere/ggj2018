@@ -10,7 +10,7 @@ class SceneHud {
         this.heroLife = HEROS_MAX_LIVES;
     }
 
-    start(levelNum, callback) {
+    start(currentLevel, callback) {
         let darkBack = this.game.add.graphics(0, 0);
         this.timerGroup.add(darkBack);
         darkBack.beginFill(0x00000, 0.7);
@@ -18,12 +18,12 @@ class SceneHud {
         darkBack.endFill();
         this.game.world.bringToTop(this.timerGroup);
 
-        let level = this.game.add.text(this.game.world.centerX, 120, 'Niveau ' + levelNum, { font: HUGE_FONT, fill: DEFAULT_COLOR });
+        let level = this.game.add.text(this.game.world.centerX, 120, 'Niveau ' + currentLevel.world + '-' + currentLevel.level, { font: HUGE_FONT, fill: DEFAULT_COLOR });
         level.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         level.anchor.setTo(0.5, 0.5);
         this.timerGroup.add(level);
 
-        let levelName = this.game.translate('LEVEL_NAMES', levelNum);
+        let levelName = this.game.translate('LEVEL_NAMES', currentLevel.world*currentLevel.level);
         let levelSubtitle = this.game.add.text(GAME_WIDTH - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         levelSubtitle.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         levelSubtitle.anchor.setTo(0.5, 0.5);

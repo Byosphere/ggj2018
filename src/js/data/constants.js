@@ -5,6 +5,7 @@ const CELL_SIZE = 64;
 const CONTROLLER = false;
 const DEFAULT_CURSOR_POSITION = 'fleur';
 const NB_LEVELS = 10;
+const WORLDS = ['laserWorld'];
 
 /** Default values */
 const DEFAULT_LANGUAGE = 0;

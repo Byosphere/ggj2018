@@ -12,7 +12,7 @@ class Scene extends Phaser.State {
         } else {
             this.player = player;
         }
-        this.currentLevel = level || 1;
+        this.currentLevel = level || { level: 1, world: 1 };
         this.characterName = this.player.selectedHero;
     }
 
@@ -77,7 +77,7 @@ class Scene extends Phaser.State {
      * @param {*int} level : niveau à générer
      * @param {function} callback : fonction appelée une fois le niveau généré
      */
-    generateLevel(level, callback) {
+    generateLevel(currentLevel, callback) {
 
         let loadBack = this.game.add.graphics(0, 0);
         loadBack.beginFill(0x00000, 1);
@@ -88,7 +88,7 @@ class Scene extends Phaser.State {
         preload.animations.add('default', [0, 1, 2, 3], 10, true);
         preload.animations.play('default');
 
-        this.map = this.game.add.tilemap('level' + level + this.characterName);
+        this.map = this.game.add.tilemap('level' + currentLevel.level + '_world' + currentLevel.world + '_' + this.characterName);
         this.map.addTilesetImage('decor');
 
         this.layer = this.map.createLayer('Walls');
@@ -218,8 +218,11 @@ class Scene extends Phaser.State {
     }
 
     actionButtonReleased() {
-        if (this.end)
-            this.game.state.start('scene', true, false, this.player, this.currentLevel + 1);
+        if (this.end) {
+            this.currentLevel.level++;
+            this.game.state.start('scene', true, false, this.player, this.currentLevel);
+        }
+
     }
 
     startButtonReleased() {
@@ -313,7 +316,7 @@ class Scene extends Phaser.State {
             this.game.audioManager.stopCurrentMusic();
             this.game.audioManager.playSound('win');
             this.game.camera.flash();
-            if (this.currentLevel < NB_LEVELS) {
+            if (this.currentLevel.level < NB_LEVELS) {
                 this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
                 this.endTitle.anchor.setTo(0.5);
                 this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
