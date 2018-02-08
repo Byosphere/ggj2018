@@ -64,4 +64,5 @@ var TEXT_FR = {
     ACTIVATED: 'activé',
     BACK_FROM_PARAMETERS: 'Retour (annule les modifications)',
     CONFIRM: 'Valider',
+    LEVEL_SELECT_TITLE: 'Choisis le niveau'
 }
