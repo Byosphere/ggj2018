@@ -11,15 +11,19 @@ class LocalStorageManager {
 
 			let data = this.getObject();
 
-			if (data && data.parameters) {
+			if (data && data.parameters && data.levels) {
 				this.game.parameters = this.getObject().parameters;
+				this.game.levels = this.getObject().levels;
 			} else {
 				this.setObject('parameters', this.getDefaultParamData());
+				this.setObject('levels', this.getDefaultLevels());
 				this.game.parameters = this.getDefaultParamData();
+				this.game.levels = this.getDefaultLevels();
 			}
 
 		} else {
 			this.game.parameters = this.getDefaultParamData();
+			this.game.levels = this.getDefaultLevels();
 		}
 	}
 
@@ -32,6 +36,10 @@ class LocalStorageManager {
 			debugLevel: { nameKey: 'DEBUG_MODE_LEVEL', hidden: true, value: 0, allValues: null, max: NB_LEVELS * WORLDS.length, min: 0 },
 			debugHeros: { nameKey: 'DEBUG_MODE_HEROS', hidden: true, value: 0, allValues: [{ name: 'Coli', value: COLI_HEROS }, { name: 'Fleur', value: FLEUR_HEROS }] }
 		};
+	}
+
+	getDefaultLevels() {
+		return [1,2];
 	}
 
 	save(key) {

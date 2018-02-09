@@ -1,8 +1,7 @@
 class LevelSelect {
 
-
 	init(player) {
-		this.player = player || null;
+		this.player = player;
 	}
 
 	preload() {
@@ -10,17 +9,28 @@ class LevelSelect {
 		this.title = this.game.add.text(this.paddingLeft, 20, this.game.translate('LEVEL_SELECT_TITLE'), { font: HEAD_FONT, fill: DEFAULT_COLOR });
 		this.subline = this.game.add.text(this.paddingLeft, 40, "_______________________________", { font: HEAD_FONT, fill: DEFAULT_COLOR });
 		this.levelList = [];
-		this.posY = 150;
 		let index = 1;
 		this.worldPos = 1;
 		this.herosPosition = 0;
 		for (let w = 1; w <= WORLDS.length; w++) {
+			this.levelList[w] = [];
+			this.posY = 150;
+
 			for (let i = 0; i < NB_LEVELS; i++) {
-				this.levelList.push({
+
+				let isLocked = true;
+				this.game.levels.forEach(el => {
+					if (el === index) {
+						isLocked = false;
+						return;
+					}
+				})
+
+				this.levelList[w].push({
 					name: this.game.translate('LEVEL_NAMES', index),
 					levelNum: i,
 					world: w,
-					locked: index != 1,
+					locked: isLocked,
 					text: this.game.add.text(this.game.world.centerX, this.posY, this.game.translate('LEVEL_NAMES', index), { font: DEFAULT_FONT, fill: DEFAULT_COLOR })
 				});
 				index++;
@@ -40,25 +50,41 @@ class LevelSelect {
 	}
 
 	displayLevels(world) {
-		this.levelList.forEach(level => {
+
+		this.showOnly(world);
+		this.levelList[world].forEach(level => {
 			level.text.anchor.setTo(0.5, 0);
 			level.text.alpha = 0.6;
 
-			if (level.world != world) {
-				level.text.visible = false;
-			}
+			// if (level.world != world) {
+			// 	level.text.visible = false;
+			// } else {
+			// 	level.text.visible = true;
+			// }
 			if (level.locked) {
 				level.text.text = "????????";
 			}
 		});
 		if (this.herosPosition < NB_LEVELS)
-			this.levelList[this.herosPosition].text.alpha = 1;
+			this.levelList[world][this.herosPosition].text.alpha = 1;
 
-		this.previousWorld.visible = true;//world > 1;
+		this.previousWorld.visible = world > 1;
 		this.previousWorld.alpha = (this.herosPosition === NB_LEVELS) ? 1 : 0.6;
 
-		this.nextWorld.visible = true;//world < WORLDS.length;
+		this.nextWorld.visible = world < WORLDS.length;
 		this.nextWorld.alpha = (this.herosPosition === NB_LEVELS + 1) ? 1 : 0.6;
+	}
+
+	showOnly(world) {
+		this.levelList.forEach(w => {
+			w.forEach(l => {
+				if (l.world != world) {
+					l.text.visible = false;
+				} else {
+					l.text.visible = true;
+				}
+			});
+		});
 	}
 
 	downButtonReleased() {
@@ -101,8 +127,19 @@ class LevelSelect {
 		this.displayLevels(this.worldPos);
 	}
 
-	update() {
-
+	actionButtonReleased() {
+		if (this.herosPosition === NB_LEVELS) {
+			this.worldPos--;
+			this.herosPosition = 0;
+			this.displayLevels(this.worldPos);
+		} else if (this.herosPosition === NB_LEVELS + 1) {
+			this.worldPos++;
+			this.herosPosition = 0;
+			this.displayLevels(this.worldPos);
+		} else {
+			if (!this.levelList[this.worldPos][this.herosPosition].locked)
+				this.game.state.start('scene', true, false, this.player, { level: this.herosPosition + 1, world: this.worldPos }, { heros: 'coli' });
+		}
 	}
 
 	shutdown() {
