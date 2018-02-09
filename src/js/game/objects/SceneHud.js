@@ -23,7 +23,8 @@ class SceneHud {
         level.anchor.setTo(0.5, 0.5);
         this.timerGroup.add(level);
 
-        let levelName = this.game.translate('LEVEL_NAMES', currentLevel.world*currentLevel.level);
+        let index = (currentLevel.world-1)*10 + currentLevel.level;
+        let levelName = this.game.translate('LEVEL_NAMES', index);
         let levelSubtitle = this.game.add.text(GAME_WIDTH - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         levelSubtitle.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         levelSubtitle.anchor.setTo(0.5, 0.5);
