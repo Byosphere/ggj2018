@@ -188,6 +188,7 @@ class Scene extends Phaser.State {
         let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.toggleOff();
+            this.onCloseDoor(this.overlapedButton.colorParam);
             this.overlapedButton = null;
         }
 
@@ -294,6 +295,7 @@ class Scene extends Phaser.State {
     pressButton(playerSprite, buttonSprite) {
         if (!this.overlapedButton) {
             buttonSprite.toggleOn();
+            this.onOpenDoor(buttonSprite.colorParam);
             this.overlapedButton = buttonSprite;
         }
     }
