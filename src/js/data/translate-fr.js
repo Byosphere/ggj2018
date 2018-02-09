@@ -21,6 +21,7 @@ var TEXT_FR = {
     MENU_TEXT_ERROR: 'Erreur de connexion entre les joueurs',
     MENU_TEXT_BACKMENU: 'pour retourner à la sélection de lobby',
     P1: '<- J1',
+    P1_REVERSE: 'J1 ->',
     P2: '<- J2',
     PAD_ACTION_BUTTON: 'le bouton A',
     PAD_UP_BUTTON: 'le bouton haut',
@@ -64,5 +65,7 @@ var TEXT_FR = {
     ACTIVATED: 'activé',
     BACK_FROM_PARAMETERS: 'Retour (annule les modifications)',
     CONFIRM: 'Valider',
-    LEVEL_SELECT_TITLE: 'Choisis le niveau'
+    LEVEL_SELECT_TITLE: 'Choisis le niveau',
+    LEVEL_NEXT_WORLD: 'Monde suivant ->',
+    LEVEL_PREV_WORLD: '<- Monde précédent'
 }

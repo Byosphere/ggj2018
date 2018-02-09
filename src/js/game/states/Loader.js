@@ -72,6 +72,6 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        this.game.state.start('lobby');
+        this.game.state.start('levelhub', true, false, { id: 0 });
     }
 }

@@ -6,8 +6,22 @@ class LevelSelect {
 
 	preload() {
 		this.paddingLeft = 60;
+		this.posY = 150;
 		this.title = this.game.add.text(this.paddingLeft, 20, this.game.translate('LEVEL_SELECT_TITLE'), { font: HEAD_FONT, fill: DEFAULT_COLOR });
 		this.subline = this.game.add.text(this.paddingLeft, 40, "_______________________________", { font: HEAD_FONT, fill: DEFAULT_COLOR });
+		this.p1 = this.game.add.text(this.paddingLeft, this.posY, this.game.translate('P1_REVERSE'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.p2 = this.game.add.text(this.game.world.width - this.paddingLeft, this.posY, this.game.translate('P2'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.p2.anchor.setTo(1, 0);
+		this.playerCursor = null;
+		if (this.player.id === 0) {
+			this.playerCursor = this.p1;
+			this.p1.alpha = 1;
+			this.p2.alpha = 0.4;
+		} else {
+			this.playerCursor = this.p2;
+			this.p1.alpha = 0.4;
+			this.p2.alpha = 1;
+		}
 		this.levelList = [];
 		let index = 1;
 		this.worldPos = 1;
@@ -31,14 +45,15 @@ class LevelSelect {
 					levelNum: i,
 					world: w,
 					locked: isLocked,
+					posY: this.posY,
 					text: this.game.add.text(this.game.world.centerX, this.posY, this.game.translate('LEVEL_NAMES', index), { font: DEFAULT_FONT, fill: DEFAULT_COLOR })
 				});
 				index++;
 				this.posY += 50;
 			}
 		}
-		this.nextWorld = this.game.add.text(this.game.world.width - this.paddingLeft, this.game.world.height - 200, 'Next World ->', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
-		this.previousWorld = this.game.add.text(this.paddingLeft, this.game.world.height - 200, '<- Previous World', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.nextWorld = this.game.add.text(this.game.world.width - this.paddingLeft, this.game.world.height - 200, this.game.translate('LEVEL_NEXT_WORLD'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.previousWorld = this.game.add.text(this.paddingLeft, this.game.world.height - 200, this.game.translate('LEVEL_PREV_WORLD'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 		this.nextWorld.anchor.setTo(1, 0);
 		this.nextWorld.visible = false;
 		this.previousWorld.visible = false;
@@ -54,14 +69,20 @@ class LevelSelect {
 		this.showOnly(world);
 		this.levelList[world].forEach(level => {
 			level.text.anchor.setTo(0.5, 0);
-			level.text.alpha = 0.6;
+			level.text.alpha = 0.4;
 
 			if (level.locked) {
 				level.text.text = "????????";
 			}
 		});
-		if (this.herosPosition < NB_LEVELS)
+		if (this.herosPosition < NB_LEVELS) {
 			this.levelList[world][this.herosPosition].text.alpha = 1;
+			this.playerCursor.alpha = 1;
+			this.playerCursor.y = this.levelList[world][this.herosPosition].posY;
+		} else {
+			this.playerCursor.alpha = 0;
+		}
+			
 
 		this.previousWorld.visible = world > 1;
 		this.previousWorld.alpha = (this.herosPosition === NB_LEVELS) ? 1 : 0.6;
