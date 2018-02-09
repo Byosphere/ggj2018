@@ -56,11 +56,6 @@ class LevelSelect {
 			level.text.anchor.setTo(0.5, 0);
 			level.text.alpha = 0.6;
 
-			// if (level.world != world) {
-			// 	level.text.visible = false;
-			// } else {
-			// 	level.text.visible = true;
-			// }
 			if (level.locked) {
 				level.text.text = "????????";
 			}
