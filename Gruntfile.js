@@ -8,6 +8,7 @@ module.exports = function (grunt) {
         'src/js/utils/controlsManager.js',
         'src/js/utils/AudioManager.js',
         'src/js/utils/ServerManager.js',
+        'src/js/utils/LocalStorageManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Parameters.js',
         'src/js/game/states/Booter.js',

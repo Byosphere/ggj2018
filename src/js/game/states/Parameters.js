@@ -1,8 +1,8 @@
 class Parameters extends Phaser.State {
 
-	init(from, debugMode) {
+	init(from) {
 		this.from = from || 'lobby';
-		this.debug = debugMode || false;
+		this.debug = DEBUG_VISIBLE;
 	}
 
 	preload() {
@@ -108,6 +108,7 @@ class Parameters extends Phaser.State {
 				}
 				delete param.tempVal;
 			}
+			this.game.localStorageManager.save('parameters');
 			if (this.game.parameters.debugMode.value && this.game.parameters.debugLevel.value) {
 				let value = this.game.parameters.debugLevel.value - 1;
 				let level = { level: (value % NB_LEVELS) + 1, world: Math.floor(value / NB_LEVELS) + 1 };

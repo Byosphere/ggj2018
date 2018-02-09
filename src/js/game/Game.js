@@ -11,15 +11,9 @@ class Game extends Phaser.Game {
         this.state.add('menu', MainMenu);
         this.state.add('scene', Scene);
 
-        //set some parameters shortcuts
-        this.parameters = {
-            translate: { nameKey: 'LANGUAGE', value: DEFAULT_LANGUAGE, allValues: [{ name: 'FRENCH', value: 'TEXT_FR' }, { name: 'ENGLISH', value: 'TEXT_EN' }] },
-            musicVolume: { nameKey: 'MUSIC_VOLUME', value: DEFAULT_MUSIC_VOLUME, allValues: null, max: 10, min: 0 },
-            soundVolume: { nameKey: 'SOUND_VOLUME', value: DEFAULT_SOUND_VOLUME, allValues: null, max: 10, min: 0 },
-            debugMode: { nameKey: 'DEBUG_MODE', hidden: true, value: DEFAULT_DEBUG_MODE, allValues: [{ name: 'DESACTIVATED', value: 0 }, { name: 'ACTIVATED', value: 1 }] },
-            debugLevel: { nameKey: 'DEBUG_MODE_LEVEL', hidden: true, value: 0, allValues: null, max: NB_LEVELS * WORLDS.length, min: 0 },
-            debugHeros: { nameKey: 'DEBUG_MODE_HEROS', hidden: true, value: 0, allValues: [{ name: 'Coli', value: COLI_HEROS }, { name: 'Fleur', value: FLEUR_HEROS }] }
-        };
+        //localstoragemanager
+        this.localStorageManager = new LocalStorageManager(this);
+        this.localStorageManager.init();
 
         //add the controlsMananger to the game
         this.controlsManager = new ControlsManager(this);
