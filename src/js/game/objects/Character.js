@@ -29,34 +29,44 @@ class Character extends Phaser.Sprite {
 		this.animations.add(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES, 12, true);
 	}
 
-	getStone(stone) {
-		this.carry = stone;
+	/**
+	 * 
+	 */
+	hasItem() {
+		return this.carry;
 	}
 
-	dropStone() {
+	/**
+	 * 
+	 * @param {Sprite} item
+	 */
+	catchItem(item) {
+		this.carry = item;
+		item.catchedBy(this);
+	}
 
-		if (this.carry && this.carry.fittingDropZone()) {
-
-			this.carry.drop();
-			setTimeout(() => {
-				this.carry = null;
-				switch (this.facing) {
-					case DOWN:
-						this.stopDown();
-						break;
-					case UP:
-						this.stopUp();
-						break;
-					case LEFT:
-						this.stopLeft();
-						break;
-					case RIGHT:
-						this.stopRight();
-						break;
-				}
-			}, 50);
+	/**
+	 * Pose l'objet
+	 */
+	dropItem() {
+		if (this.carry.canBeDropped()) {
+			this.carry.droppedBy(this);
+			this.carry = null;
+			switch (this.facing) {
+				case DOWN:
+					this.stopDown();
+					break;
+				case UP:
+					this.stopUp();
+					break;
+				case LEFT:
+					this.stopLeft();
+					break;
+				case RIGHT:
+					this.stopRight();
+					break;
+			}
 		}
-
 	}
 
 	resetPosition() {

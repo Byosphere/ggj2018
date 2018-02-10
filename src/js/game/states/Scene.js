@@ -145,7 +145,7 @@ class Scene extends Phaser.State {
                 this.doorsGroup.add(new Door(this.game, obj));
                 break;
             case 'rock':
-                this.rocksGroup.add(new Rock(this.game, obj));
+                this.rocksGroup.add(new Rock(this.game, obj, this.buttonsGroup));
                 break;
             case 'exit':
                 this.exitGroup.add(new Exit(this.game, obj, this.player.id));
@@ -158,30 +158,29 @@ class Scene extends Phaser.State {
 
     update() {
         this.game.physics.arcade.collide(this.character, this.layer);
-        this.game.physics.arcade.collide(this.rocksGroup, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         if (!this.character.carry) {
             this.game.physics.arcade.overlap(this.character, this.rocksGroup, (char, rock) => {
-                rock.catch(char);
+                char.catchItem(rock);
             });
         }
 
-        // if (this.debug) {
-        //     this.game.debug.body(this.layer);
-        //     this.game.debug.body(this.character);
-        //     this.doorsGroup.forEach(door => {
-        //         this.game.debug.body(door);
-        //     });
+        if (this.debug) {
+            this.game.debug.body(this.layer);
+            this.game.debug.body(this.character);
+            this.doorsGroup.forEach(door => {
+                this.game.debug.body(door);
+            });
 
-        //     this.rocksGroup.forEach(rock => {
-        //         this.game.debug.body(rock);
-        //     });
-        //     this.game.debug.body(this.exitGroup.children[0]);
-        //     this.buttonsGroup.forEach(button => {
-        //         this.game.debug.body(button);
-        //     });
+            this.rocksGroup.forEach(rock => {
+                this.game.debug.body(rock);
+            });
+            this.game.debug.body(this.exitGroup.children[0]);
+            this.buttonsGroup.forEach(button => {
+                this.game.debug.body(button);
+            });
 
-        // }
+        }
 
         if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
             this.character.resetPosition();
@@ -192,15 +191,6 @@ class Scene extends Phaser.State {
         if (!overlap && this.overlapedButton) {
             this.overlapedButton.toggleOff();
             this.overlapedButton = null;
-        }
-
-        let lebutton = null
-        if (!this.game.physics.arcade.overlap(this.rocksGroup, this.buttonsGroup, (rock, button) => {
-            lebutton = button;
-            button.toggleOn();
-        }, null, this)) {
-            if(lebutton)
-                lebutton.toggleOff();
         }
 
         let exit = this.game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
@@ -240,8 +230,8 @@ class Scene extends Phaser.State {
         if (this.end) {
             this.currentLevel.level++;
             this.game.state.start('scene', true, false, this.player, this.currentLevel);
-        } else {
-            this.character.dropStone();
+        } else if (this.character.hasItem()){
+            this.character.dropItem();
         }
     }
 
