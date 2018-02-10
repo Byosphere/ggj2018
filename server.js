@@ -66,7 +66,10 @@ io.on('connection', function (socket) {
         socket.player = {
             id: id,
             selectedHero: false,
-            position: 'fleur'
+            position: 'fleur',
+            levelSelect: null,
+            levelPosition: 0,
+            world: 1
         };
         server.lobbies[socket.code].players[id] = socket.player;
         socket.emit('newplayer', socket.player, server.lobbies[socket.code].players);
@@ -88,6 +91,22 @@ io.on('connection', function (socket) {
     socket.on('updateposition', function (position) {
         server.lobbies[socket.code].players[socket.player.id].position = position;
         socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+    });
+
+    socket.on('updatelevelselect', function (levelPosition, levelSelect, world) {
+        let player = server.lobbies[socket.code].players[socket.player.id];
+        player.levelPosition = levelPosition;
+        player.levelSelect = levelSelect;
+        player.world = world;
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+        socket.emit('updateplayers', server.lobbies[socket.code].players);
+        if (server.lobbies[socket.code].players[0].levelSelect > 0
+            && server.lobbies[socket.code].players[1].levelSelect > 0
+            && server.lobbies[socket.code].players[0].levelSelect === server.lobbies[socket.code].players[1].levelSelect
+            && server.lobbies[socket.code].players[0].world === server.lobbies[socket.code].players[1].world) {
+            socket.broadcast.to(socket.code).emit('startlevel');
+            socket.emit('startlevel');
+        }
     });
 
     // reset le niveau en cours

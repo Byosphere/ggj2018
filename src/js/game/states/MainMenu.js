@@ -84,7 +84,7 @@ class MainMenu extends Phaser.State {
         this.game.camera.fade('#000000', 3000);
         this.game.audioManager.stopCurrentMusic(3000);
         this.game.camera.onFadeComplete.add(() => {
-            this.game.state.start('scene', true, false, this.self);
+            this.game.state.start('levelhub', true, false, this.self);
         }, this);
     }
 
