@@ -41,31 +41,51 @@ class Character extends Phaser.Sprite {
 	 * @param {Sprite} item
 	 */
 	catchItem(item) {
-		this.carry = item;
-		item.catchedBy(this);
+		this.carry = item.name;
+		item.destroy();
 	}
 
 	/**
 	 * Pose l'objet
 	 */
-	dropItem() {
-		if (this.carry.canBeDropped()) {
-			this.carry.droppedBy(this);
+	dropItem(group) {
+		if (!this.carry) return;
+		let x, y;
+		switch (this.facing) {
+			case DOWN:
+				x = this.x;
+				y = this.y + 60;
+				break;
+			case UP:
+				x = this.x;
+				y = this.y - 50;
+				break;
+			case LEFT:
+				x = this.x - 60;
+				y = this.y;
+				break;
+			case RIGHT:
+				x = this.x + 60;
+				y = this.y;
+				break;
+		}
+		let rock = new Rock(this.game, { x: x, y: y, invisible: true });
+		if (rock.isDroppable()) {
+			rock.visible = true;
+			group.add(rock);
 			this.carry = null;
 			switch (this.facing) {
-				case DOWN:
-					this.stopDown();
+				case DOWN: this.stopDown();
 					break;
-				case UP:
-					this.stopUp();
+				case UP: this.stopUp();
 					break;
-				case LEFT:
-					this.stopLeft();
+				case LEFT: this.stopLeft();
 					break;
-				case RIGHT:
-					this.stopRight();
+				case RIGHT: this.stopRight();
 					break;
 			}
+		} else {
+			rock.destroy();
 		}
 	}
 

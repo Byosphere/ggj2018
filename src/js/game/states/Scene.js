@@ -145,7 +145,7 @@ class Scene extends Phaser.State {
                 this.doorsGroup.add(new Door(this.game, obj));
                 break;
             case 'rock':
-                this.rocksGroup.add(new Rock(this.game, obj, this.buttonsGroup));
+                this.rocksGroup.add(new Rock(this.game, obj));
                 break;
             case 'exit':
                 this.exitGroup.add(new Exit(this.game, obj, this.player.id));
@@ -230,8 +230,8 @@ class Scene extends Phaser.State {
         if (this.end) {
             this.currentLevel.level++;
             this.game.state.start('scene', true, false, this.player, this.currentLevel);
-        } else if (this.character.hasItem()){
-            this.character.dropItem();
+        } else if (this.character.hasItem()) {
+            this.character.dropItem(this.rocksGroup);
         }
     }
 

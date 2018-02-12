@@ -41,5 +41,4 @@ class Button extends Phaser.Sprite {
         }
         console.log(this.activated);
     }
-
 }
