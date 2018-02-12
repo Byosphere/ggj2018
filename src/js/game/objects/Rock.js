@@ -9,8 +9,18 @@ class Rock extends Phaser.Sprite {
         this.visible = !data.invisible;
     }
 
-    isDroppable() {
-        // TODO
-        return true;
+    isDroppable(walls) {
+        let test = [];
+        let droppable = true;
+        this.game.physics.arcade.overlap(this, walls, (e, w) => {
+            test.push(w.isInteresting(true));
+            console.log(w);
+        });
+        test.forEach((i) => {
+            if (i) {
+                droppable = false;
+            }
+        });
+        return droppable;
     }
 }

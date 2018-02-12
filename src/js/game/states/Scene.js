@@ -26,7 +26,6 @@ class Scene extends Phaser.State {
         this.characterGroup = null;
         this.exitGroup = null;
         this.rocksGroup = null;
-        this.overlapedButton = null;
         this.exitActive = false;
         this.end = false;
         this.hud = new SceneHud(this.game);
@@ -97,7 +96,7 @@ class Scene extends Phaser.State {
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();
 
-        this.map.setCollisionBetween(17, 50, true, 'Walls');
+        this.map.setCollisionBetween(16, 50, true, 'Walls');
 
         // Groups
         this.exitGroup = this.game.add.group();
@@ -135,11 +134,11 @@ class Scene extends Phaser.State {
         const type = obj.properties.Type;
         switch (type) {
             case 'character':
-                this.character = new Character(this.game, obj, this.characterName);
+                this.character = new Character(this.game, obj, this.characterName, this.layer);
                 this.characterGroup.add(this.character);
                 break;
             case 'button':
-                this.buttonsGroup.add(new Button(this.game, obj));
+                this.buttonsGroup.add(new Button(this.game, obj, this.character, this.rocksGroup));
                 break;
             case 'door':
                 this.doorsGroup.add(new Door(this.game, obj));
@@ -185,12 +184,6 @@ class Scene extends Phaser.State {
         if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
             this.character.resetPosition();
             this.hud.removeLife(1);
-        }
-
-        let overlap = this.game.physics.arcade.overlap(this.character, this.buttonsGroup, this.pressButton, null, this);
-        if (!overlap && this.overlapedButton) {
-            this.overlapedButton.toggleOff();
-            this.overlapedButton = null;
         }
 
         let exit = this.game.physics.arcade.overlap(this.character, this.exitGroup, this.onExit, null, this);
@@ -289,18 +282,6 @@ class Scene extends Phaser.State {
     }
 
     /**
-     * Action lorsqu'un bouton est pressé
-     * @param {Phaser.Sprite} playerSprite 
-     * @param {Phaser.Sprite} buttonSprite 
-     */
-    pressButton(playerSprite, buttonSprite) {
-        if (!this.overlapedButton) {
-            buttonSprite.toggleOn();
-            this.overlapedButton = buttonSprite;
-        }
-    }
-
-    /**
      * Action lorsque la zone de sortie est atteinte
      * @param {Phaser.Sprite} playerSprite 
      * @param {Phaser.Sprite} exitSprite 
@@ -354,7 +335,6 @@ class Scene extends Phaser.State {
         this.rocksGroup.destroy();
         this.buttonsGroup.destroy();
         this.exitGroup.destroy();
-        this.overlapedButton = null;
         this.exitActive = false;
         this.game.controlsManager.enableControls();
         this.end = false;
