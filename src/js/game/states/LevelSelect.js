@@ -63,7 +63,7 @@ class LevelSelect {
 					world: w,
 					locked: isLocked,
 					posY: this.posY,
-					text: this.game.add.text(this.game.world.centerX, this.posY, this.game.translate('LEVEL_NAMES', index), { font: DEFAULT_FONT, fill: DEFAULT_COLOR })
+					text: this.game.add.text(this.game.world.centerX, this.posY, w + '-' + (i + 1) + ' ' + this.game.translate('LEVEL_NAMES', index), { font: DEFAULT_FONT, fill: DEFAULT_COLOR })
 				});
 				index++;
 				this.posY += 50;
@@ -198,7 +198,19 @@ class LevelSelect {
 				this.levelSelected = this.herosPosition + 1;
 				this.game.serverManager.getSocket().emit('updatelevelselect', this.herosPosition, this.levelSelected, this.worldPos);
 				this.game.controlsManager.disableControls([CANCEL]);
+				this.levelList[this.worldPos][this.herosPosition].text.addColor("#ff0000", 0);
+				this.playerCursor.addColor("#ff0000", 0);
 			}
+		}
+	}
+
+	cancelButtonReleased() {
+		if(this.levelSelected) {
+			this.levelSelected = 0;
+			this.game.serverManager.getSocket().emit('updatelevelselect', this.herosPosition, this.levelSelected, this.worldPos);
+			this.levelList[this.worldPos][this.herosPosition].text.addColor("#ffffff", 0);
+			this.playerCursor.addColor("#ffffff", 0);
+			this.game.controlsManager.enableControls();
 		}
 	}
 
