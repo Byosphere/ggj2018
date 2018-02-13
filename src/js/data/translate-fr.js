@@ -51,6 +51,7 @@ var TEXT_FR = {
         'Chou et soupe de brocoli',
         'Parcelles équitables'
     ],
+    LEVEL: 'niveau',
     PARAMETERS_TITLE: 'Paramètres',
     LANGUAGE: 'LANGUE :',
     MUSIC_VOLUME: 'VOLUME DE LA MUSIQUE :',
