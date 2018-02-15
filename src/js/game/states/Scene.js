@@ -111,6 +111,12 @@ class Scene extends Phaser.State {
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
+            if(mapObjects[i].properties.Type == 'character') {
+                this.character = new Character(this.game, mapObjects[i], this.characterName, this.layer);
+                this.characterGroup.add(this.character);
+            }
+        }
+        for (let i = 0; i < mapObjects.length; i++) {
             this.createObject(mapObjects[i]);
         }
 
@@ -133,10 +139,6 @@ class Scene extends Phaser.State {
     createObject(obj) {
         const type = obj.properties.Type;
         switch (type) {
-            case 'character':
-                this.character = new Character(this.game, obj, this.characterName, this.layer);
-                this.characterGroup.add(this.character);
-                break;
             case 'button':
                 this.buttonsGroup.add(new Button(this.game, obj, this.character, this.rocksGroup));
                 break;
