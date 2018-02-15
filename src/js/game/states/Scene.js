@@ -111,7 +111,7 @@ class Scene extends Phaser.State {
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
-            if(mapObjects[i].properties.Type == 'character') {
+            if (mapObjects[i].properties.Type == 'character') {
                 this.character = new Character(this.game, mapObjects[i], this.characterName, this.layer);
                 this.characterGroup.add(this.character);
             }
@@ -241,14 +241,16 @@ class Scene extends Phaser.State {
     }
 
     cancelButtonReleased() {
-        if (this.pauseScreen.isOnPause()) {
+
+        if (this.disconnectScreen.isDisconnected()) {
+            this.game.state.start('lobby');
+        } else if (this.end) {
+            // todo retour à la selection de niveau
+        } else if (this.pauseScreen.isOnPause()) {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
         }
 
-        if (this.disconnectScreen.isDisconnected()) {
-            this.game.state.start('lobby');
-        }
     }
 
     leftButtonDown() {
@@ -304,24 +306,20 @@ class Scene extends Phaser.State {
         this.character.alpha = 0;
         this.exitGroup.children[0].animateSuccess();
         this.hud.stopTime();
+        let levelNum = this.currentLevel.level + ((this.currentLevel.world - 1) * 10);
+        this.game.localStorageManager.unlockLevel(levelNum + 1);
         setTimeout(() => {
             this.hud.hideHud();
             this.game.audioManager.stopCurrentMusic();
             this.game.audioManager.playSound('win');
             this.game.camera.flash();
-            if (this.currentLevel.level < NB_LEVELS) {
-                this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
-                this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
-                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-                this.endText.anchor.setTo(0.5);
-                this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-                this.timerText.anchor.setTo(0.5);
-            } else {
-                this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');
-                this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, false).play();
-            }
+            this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
+            this.endTitle.anchor.setTo(0.5);
+            this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
+            this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+            this.endText.anchor.setTo(0.5);
+            this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+            this.timerText.anchor.setTo(0.5);
             this.end = true;
         }, 3000);
     }

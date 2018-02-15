@@ -55,7 +55,7 @@ class LevelSelect {
 						isLocked = false;
 						return;
 					}
-				})
+				});
 
 				this.levelList[w].push({
 					name: this.game.translate('LEVEL_NAMES', index),
@@ -110,6 +110,11 @@ class LevelSelect {
 			this.otherPlayerCursor.y = this.levelList[this.otherPlayer.world][this.otherPlayer.levelPosition].posY;
 		} else {
 			this.otherPlayerCursor.alpha = 0;
+		}
+		if (this.otherPlayer && this.otherPlayer.levelSelect) {
+			this.otherPlayerCursor.addColor("#ff0000", 0);
+		} else {
+			this.otherPlayerCursor.addColor("#ffffff", 0);
 		}
 	}
 
@@ -205,7 +210,7 @@ class LevelSelect {
 	}
 
 	cancelButtonReleased() {
-		if(this.levelSelected) {
+		if (this.levelSelected) {
 			this.levelSelected = 0;
 			this.game.serverManager.getSocket().emit('updatelevelselect', this.herosPosition, this.levelSelected, this.worldPos);
 			this.levelList[this.worldPos][this.herosPosition].text.addColor("#ffffff", 0);

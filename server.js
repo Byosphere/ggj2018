@@ -184,5 +184,6 @@ io.on('connection', function (socket) {
     socket.on('finishlevel', function () {
         server.lobbies[socket.code].exitCount = 0;
         server.lobbies[socket.code].levelReady = 0;
+        server.lobbies[socket.code].buttonsState = [];
     });
 });

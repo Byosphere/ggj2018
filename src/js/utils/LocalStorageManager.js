@@ -14,6 +14,8 @@ class LocalStorageManager {
 			if (data && data.parameters && data.levels) {
 				this.game.parameters = this.getObject().parameters;
 				this.game.levels = this.getObject().levels;
+				this.localData['parameters'] = this.game.parameters;
+				this.localData['levels'] = this.game.levels;
 			} else {
 				this.setObject('parameters', this.getDefaultParamData());
 				this.setObject('levels', this.getDefaultLevels());
@@ -39,11 +41,17 @@ class LocalStorageManager {
 	}
 
 	getDefaultLevels() {
-		return [1,2];
+		return [1, 2];
 	}
 
 	save(key) {
 		this.setObject(key, this.game[key]);
+	}
+
+	unlockLevel(num) {
+		if (num in this.game.levels) return;
+		this.game.levels.push(num);
+		this.setObject('levels', this.game.levels);
 	}
 
 	/**
