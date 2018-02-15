@@ -95,6 +95,7 @@ io.on('connection', function (socket) {
         gameover = gameover || false;
         server.lobbies[socket.code].exitCount = 0;
         server.lobbies[socket.code].levelReady = 0;
+        server.lobbies[socket.code].buttonsState = [];
         if (gameover)
             socket.emit('reset', gameover);
 
