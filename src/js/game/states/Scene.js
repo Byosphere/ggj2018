@@ -152,7 +152,7 @@ class Scene extends Phaser.State {
                 this.exitGroup.add(new Exit(this.game, obj, this.player.id));
                 break;
             default:
-                console.log(type);
+                console.warn(type);
                 break;
         }
     }

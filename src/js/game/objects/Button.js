@@ -33,7 +33,6 @@ class Button extends Phaser.Sprite {
             this.activated = true;
             this.game.serverManager.getSocket().emit('pressbutton', this.colorParam);
         }
-        console.log(this.activated);
     }
 
     toggleOff() {
@@ -42,7 +41,6 @@ class Button extends Phaser.Sprite {
             this.activated = false;
             this.game.serverManager.getSocket().emit('releasebutton', this.colorParam);
         }
-        console.log(this.activated);
     }
 
     update() {
