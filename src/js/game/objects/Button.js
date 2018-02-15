@@ -1,14 +1,17 @@
 class Button extends Phaser.Sprite {
 
-    constructor(game, data) {
+    constructor(game, data, char, rocks) {
         super(game, data.x, data.y, 'button', 0);
         this.game = game;
+        this.character = char;
+        this.rocksGroup = rocks;
         this.colorParam = data.properties.Color;
         this.anchor.setTo(0, 1);
         this.setColor(this.colorParam);
         this.game.physics.arcade.enable(this);
         this.body.setSize(40, 36, 12, 20);
         this.activated = false;
+        this.herosTrigger = false;
     }
 
     setColor(color) {
@@ -30,6 +33,7 @@ class Button extends Phaser.Sprite {
             this.activated = true;
             this.game.serverManager.getSocket().emit('pressbutton', this.colorParam);
         }
+        console.log(this.activated);
     }
 
     toggleOff() {
@@ -38,6 +42,16 @@ class Button extends Phaser.Sprite {
             this.activated = false;
             this.game.serverManager.getSocket().emit('releasebutton', this.colorParam);
         }
+        console.log(this.activated);
     }
 
+    update() {
+
+        this.herosTrigger = this.game.physics.arcade.overlap(this.character, this, this.toggleOn, null, this);
+        this.rockTrigger = this.game.physics.arcade.overlap(this.rocksGroup, this, this.toggleOn, null, this);
+
+        if(!this.herosTrigger && !this.rockTrigger && this.activated) {
+            this.toggleOff();
+        }
+    }
 }

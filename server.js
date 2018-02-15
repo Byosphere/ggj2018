@@ -114,6 +114,7 @@ io.on('connection', function (socket) {
         gameover = gameover || false;
         server.lobbies[socket.code].exitCount = 0;
         server.lobbies[socket.code].levelReady = 0;
+        server.lobbies[socket.code].buttonsState = [];
         if (gameover)
             socket.emit('reset', gameover);
 
@@ -151,7 +152,7 @@ io.on('connection', function (socket) {
             server.lobbies[socket.code].buttonsState[color] = 1;
         }
         socket.broadcast.to(socket.code).emit('opendoor', color);
-        //socket.emit('opendoor', color);
+        socket.emit('opendoor', color);
     });
 
     // Interrupteur inactif 
@@ -161,7 +162,7 @@ io.on('connection', function (socket) {
         }
         if (!server.lobbies[socket.code].buttonsState[color]) {
             socket.broadcast.to(socket.code).emit('closedoor', color);
-            //socket.emit('closedoor', color);
+            socket.emit('closedoor', color);
         }
     });
 

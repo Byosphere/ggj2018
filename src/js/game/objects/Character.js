@@ -1,14 +1,16 @@
 class Character extends Phaser.Sprite {
 
-	constructor(game, data, characterName) {
+	constructor(game, data, characterName, walls) {
 		super(game, data.x, data.y, characterName, 0);
 		this.game = game;
+		this.walls = walls;
 		this.anchor.setTo(0, 1);
 		this.game.physics.arcade.enable(this);
 		if (characterName === FLEUR_HEROS) {
 			this.body.setSize(60, 55, 2, 9);
 		} else {
-			this.body.setSize(48, 55, 8, 9);
+			//this.body.setSize(48, 55, 8, 9);
+			this.body.setSize(60, 60, 2, 2);
 		}
 		this.initAnimations();
 		this.previousX = data.x;
@@ -28,27 +30,63 @@ class Character extends Phaser.Sprite {
 		this.animations.add(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES, 12, true);
 	}
 
-	getStone(stone) {
-		this.carry = stone;
+	/**
+	 * 
+	 */
+	hasItem() {
+		return this.carry;
 	}
 
-	dropStone() {
+	/**
+	 * 
+	 * @param {Sprite} item
+	 */
+	catchItem(item) {
+		this.carry = item.name;
+		item.destroy();
+	}
+
+	/**
+	 * Pose l'objet
+	 */
+	dropItem(group) {
 		if (!this.carry) return;
-		this.carry.drop();
-		this.carry = null;
+		let x, y;
 		switch (this.facing) {
 			case DOWN:
-				this.stopDown();
+				x = this.x;
+				y = this.y + 60;
 				break;
 			case UP:
-				this.stopUp();
+				x = this.x;
+				y = this.y - 50;
 				break;
 			case LEFT:
-				this.stopLeft();
+				x = this.x - 60;
+				y = this.y;
 				break;
 			case RIGHT:
-				this.stopRight();
+				x = this.x + 60;
+				y = this.y;
 				break;
+		}
+		let rock = new Rock(this.game, { x: x, y: y, invisible: true });
+		if (rock.isDroppable(this.walls)) {
+			rock.visible = true;
+			group.add(rock);
+			this.carry = null;
+			switch (this.facing) {
+				case DOWN: this.stopDown();
+					break;
+				case UP: this.stopUp();
+					break;
+				case LEFT: this.stopLeft();
+					break;
+				case RIGHT: this.stopRight();
+					break;
+			}
+		} else {
+			rock.destroy();
 		}
 	}
 
@@ -68,7 +106,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveLeft() {
-
+		this.facing = LEFT;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.x = -100;
@@ -79,7 +117,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveRight() {
-
+		this.facing = RIGHT;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.x = 100;
@@ -91,6 +129,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveUp() {
+		this.facing = UP;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.y = -100;
@@ -102,6 +141,7 @@ class Character extends Phaser.Sprite {
 	}
 
 	moveDown() {
+		this.facing = DOWN;
 		if (this.carry) {
 			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
 			this.body.velocity.y = 100;

@@ -120,7 +120,7 @@ class ControlsManager {
                     this.callbackContext.startButtonReleased();
                 break;
             default:
-                console.log('Button pressed unknown : ' + button);
+                console.warn('Button pressed unknown : ' + button);
         }
     }
 
@@ -172,7 +172,7 @@ class ControlsManager {
                     
                 break;
             default:
-                console.log('Button pressed unknown : ' + button);
+                console.warn('Button pressed unknown : ' + button);
         }
     }
 
@@ -208,7 +208,7 @@ class ControlsManager {
                     this.callbackContext.startButtonDown();
                 break;
             default:
-                console.log('Button pressed unknown : ' + button);
+                console.warn('Button pressed unknown : ' + button);
 
         }
     }
@@ -254,7 +254,7 @@ class ControlsManager {
                     this.callbackContext.startButtonDown();
                 break;
             default:
-                console.log('Button pressed unknown : ' + button);
+                console.warn('Button pressed unknown : ' + button);
         }
     }
 

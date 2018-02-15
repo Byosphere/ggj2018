@@ -8,9 +8,11 @@ class SceneHud {
         this.hudGroup = null;
         this.pausedTime = false;
         this.heroLife = HEROS_MAX_LIVES;
+        this.currentLevel = null;
     }
 
     start(currentLevel, callback) {
+        this.currentLevel = currentLevel;
         let darkBack = this.game.add.graphics(0, 0);
         this.timerGroup.add(darkBack);
         darkBack.beginFill(0x00000, 0.7);
@@ -18,12 +20,12 @@ class SceneHud {
         darkBack.endFill();
         this.game.world.bringToTop(this.timerGroup);
 
-        let level = this.game.add.text(this.game.world.centerX, 120, 'Niveau ' + currentLevel.world + '-' + currentLevel.level, { font: HUGE_FONT, fill: DEFAULT_COLOR });
+        let level = this.game.add.text(this.game.world.centerX, 120, this.game.translate('LEVEL') + ' ' + currentLevel.world + '-' + currentLevel.level, { font: HUGE_FONT, fill: DEFAULT_COLOR });
         level.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         level.anchor.setTo(0.5, 0.5);
         this.timerGroup.add(level);
 
-        let index = (currentLevel.world-1)*10 + currentLevel.level;
+        let index = (currentLevel.world - 1) * 10 + currentLevel.level;
         let levelName = this.game.translate('LEVEL_NAMES', index);
         let levelSubtitle = this.game.add.text(GAME_WIDTH - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         levelSubtitle.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
@@ -153,6 +155,9 @@ class SceneHud {
         this.hudBack.drawRect(0, 8, GAME_WIDTH, 46);
         this.hudBack.endFill();
         this.hudGroup.add(this.hudBack);
+        this.hudGroup.add(this.game.add.sprite(264, -1, 'bulle'));
+        this.hudGroup.add(this.game.add.sprite(10, -1, 'bulle'));
+        this.hudGroup.add(this.game.add.text(254 + CELL_SIZE, 10, ': ' + this.game.translate('LEVEL') + ' ' + this.currentLevel.world + '-' + this.currentLevel.level, { font: DEFAULT_FONT, fill: DEFAULT_COLOR }));
         this.hudGroup.add(this._startTimer());
         this.hudGroup.add(this._displayLife());
     }
@@ -172,7 +177,7 @@ class SceneHud {
     }
 
     _startTimer() {
-        this.timerText = this.game.add.text(20, 10, this.game.translate('ELAPSED_TIME') + '0min 0s', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.timerText = this.game.add.text(CELL_SIZE, 10, ': 0min 0s', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.interval = setInterval(() => {
             if (!this.pausedTime)
                 this._timerTick();
@@ -183,6 +188,6 @@ class SceneHud {
 
     _timerTick() {
         this.time++;
-        this.timerText.text = this.game.translate('ELAPSED_TIME') + ' ' + this.getFormatedTime();
+        this.timerText.text = ': ' + this.getFormatedTime();
     }
 }
