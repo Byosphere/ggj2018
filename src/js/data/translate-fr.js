@@ -52,6 +52,11 @@ var TEXT_FR = {
         'Chou et soupe de brocoli',
         'Parcelles équitables'
     ],
+    WORLD_NAMES: [
+        '',
+        'Porte de Saint Laser',
+        'Forêt de Brocolande'
+    ],
     LEVEL: 'niveau',
     PARAMETERS_TITLE: 'Paramètres',
     LANGUAGE: 'LANGUE :',
