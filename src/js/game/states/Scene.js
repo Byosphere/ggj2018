@@ -308,6 +308,7 @@ class Scene extends Phaser.State {
         this.hud.stopTime();
         let levelNum = this.currentLevel.level + ((this.currentLevel.world - 1) * 10);
         this.game.localStorageManager.unlockLevel(levelNum + 1);
+        this.game.localStorageManager.saveLevelScore(levelNum, this.hud.getTime());
         setTimeout(() => {
             this.hud.hideHud();
             this.game.audioManager.stopCurrentMusic();

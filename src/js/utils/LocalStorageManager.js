@@ -41,16 +41,26 @@ class LocalStorageManager {
 	}
 
 	getDefaultLevels() {
-		return [1, 2];
+		return [
+			{ num: 1, finished: false, highScore: null },
+			{ num: 2, finished: false, highScore: null }
+		];
 	}
 
 	save(key) {
 		this.setObject(key, this.game[key]);
 	}
 
+	saveLevelScore(num, score) {
+		this.game.levels[num - 1].finished = true;
+		if (score > this.game.levels[num - 1].highScore)
+			this.game.levels[num - 1].highScore = score;
+		this.save('levels');
+	}
+
 	unlockLevel(num) {
-		if (num in this.game.levels) return;
-		this.game.levels.push(num);
+		if (this.game.levels[num - 1]) return;
+		this.game.levels[num - 1] = { num: num, finished: false, highScore: null };
 		this.setObject('levels', this.game.levels);
 	}
 

@@ -51,7 +51,7 @@ class LevelSelect {
 
 				let isLocked = true;
 				this.game.levels.forEach(el => {
-					if (el === index) {
+					if (el.num === index) {
 						isLocked = false;
 						return;
 					}
