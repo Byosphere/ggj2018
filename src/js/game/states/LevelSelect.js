@@ -97,7 +97,7 @@ class LevelSelect {
 				let isLocked = true;
 				let finished = null;
 				let savedLevel = this.game.levels[index - 1];
-				if (savedLevel || this.game.parameters.debugMode.value) {
+				if (savedLevel) {
 					isLocked = false;
 					if (savedLevel.finished) {
 						finished = this.game.add.sprite(graph.x, graph.centerY, 'completed');
@@ -105,6 +105,12 @@ class LevelSelect {
 						levelGroup.add(finished);
 						score.text = this.game.translate('BEST_TIME') + ': ' + this.getFormatedTime(savedLevel.highScore) + ' | ' + this.game.translate('COLLECTIBLE') + ': -';
 					}
+				} else if (this.game.parameters.debugMode.value) {
+					isLocked = false;
+					finished = this.game.add.sprite(graph.x, graph.centerY, 'completed');
+					finished.anchor.setTo(0.5, 0.5);
+					levelGroup.add(finished);
+					score.text = 'debug mode';
 				}
 
 				this.levelList[w].push({

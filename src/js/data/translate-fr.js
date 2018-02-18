@@ -50,7 +50,10 @@ var TEXT_FR = {
         'Des potes et des portes',
         'Fleuraison du bro Coli',
         'Chou et soupe de brocoli',
-        'Parcelles équitables'
+        'Parcelles équitables',
+        'Rock \'n\' Roll',
+        'Pierre, bouton, porte',
+        'Va et viens de légumes'
     ],
     WORLD_NAMES: [
         '',
