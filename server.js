@@ -89,12 +89,14 @@ io.on('connection', function (socket) {
             socket.emit('startlevel');
             socket.broadcast.to(socket.code).emit('startlevel');
         } else {
+            socket.emit('updateplayers', server.lobbies[socket.code].players);
             socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
         }
     });
 
     socket.on('unselectlevel', function () {
         server.lobbies[socket.code].players[socket.player.id].levelData = null;
+        socket.emit('updateplayers', server.lobbies[socket.code].players);
         socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
     });
     // ---------------------------- GAME STATE ------------------------------------ //
