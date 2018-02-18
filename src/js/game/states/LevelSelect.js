@@ -305,6 +305,9 @@ class LevelSelect {
 				this.game.serverManager.getSocket().emit('unselectlevel');
 				break;
 		}
+		if (this.disconnectScreen.isDisconnected()) {
+			this.game.state.start('lobby');
+		}
 	}
 
 	leftButtonReleased() {

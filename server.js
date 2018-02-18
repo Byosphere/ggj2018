@@ -66,33 +66,16 @@ io.on('connection', function (socket) {
     socket.on('newplayer', function () {
         if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) return;
         let id = server.lobbies[socket.code].players[0] ? 1 : 0;
-
-        socket.player = {
-            id: id,
-            selectedHero: false,
-            position: 'fleur',
-        };
+        socket.player = {id: id};
         server.lobbies[socket.code].players[id] = socket.player;
-        socket.emit('newplayer', socket.player, server.lobbies[socket.code].players);
-        socket.broadcast.to(socket.code).emit('newplayer', null, server.lobbies[socket.code].players);
-    });
-
-    // selection d'un personnage par un joueur sur l'écran titre
-    socket.on('selecthero', function (selectedHero) {
-        server.lobbies[socket.code].players[socket.player.id].selectedHero = selectedHero;
-        socket.emit('updateplayers', server.lobbies[socket.code].players);
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
-        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[0].selectedHero && server.lobbies[socket.code].players[1] && server.lobbies[socket.code].players[1].selectedHero) {
+        socket.emit('newplayer', server.lobbies[socket.code].players);
+        socket.broadcast.to(socket.code).emit('newplayer', server.lobbies[socket.code].players);
+        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) {
             socket.emit('startgame');
             socket.broadcast.to(socket.code).emit('startgame');
         }
     });
 
-    // mets à jour la position du curseur d'un joueur sur l'écran titre
-    socket.on('updateposition', function (position) {
-        server.lobbies[socket.code].players[socket.player.id].position = position;
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
-    });
     // ----------------------------------------------------------------------------- //
 
     socket.on('selectlevel', function (levelData) {
