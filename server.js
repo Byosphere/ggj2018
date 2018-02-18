@@ -79,12 +79,13 @@ io.on('connection', function (socket) {
     // ----------------------------------------------------------------------------- //
 
     socket.on('selectlevel', function (levelData) {
+        console.log(levelData);
         server.lobbies[socket.code].players[socket.player.id].levelData = levelData;
         let player1 = server.lobbies[socket.code].players[0];
         let player2 = server.lobbies[socket.code].players[1];
         if (player1.levelData && player2.levelData
             && player1.levelData.world === player2.levelData.world
-            && player1.levelData.world === player2.levelData.world
+            && player1.levelData.level === player2.levelData.level
             && player1.levelData.heros != player2.levelData.heros) {
             socket.emit('startlevel');
             socket.broadcast.to(socket.code).emit('startlevel');
