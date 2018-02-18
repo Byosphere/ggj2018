@@ -47,7 +47,7 @@ var TEXT_FR = {
         'Coli suspect et pâte à Chou',
         'Tous différents, tous pareils',
         'T\'es vraiment un bro, bro.',
-        'Des portes et encore des portes',
+        'Des potes et des portes',
         'Fleuraison du bro Coli',
         'Chou et soupe de brocoli',
         'Parcelles équitables'
@@ -71,7 +71,10 @@ var TEXT_FR = {
     ACTIVATED: 'activé',
     BACK_FROM_PARAMETERS: 'Retour (annule les modifications)',
     CONFIRM: 'Valider',
-    LEVEL_SELECT_TITLE: 'Choisis le niveau',
-    LEVEL_NEXT_WORLD: 'Monde suivant ->',
-    LEVEL_PREV_WORLD: '<- Monde précédent'
+    WORLD_SELECT: 'Choisis un Monde...',
+    LEVEL_SELECT: 'Choisis un niveau...',
+    HEROS_SELECT: 'Choisis un personnage...',
+    WORLD: 'Monde',
+    BEST_TIME: 'Meilleur temps',
+    COLLECTIBLE: 'Collection'
 }

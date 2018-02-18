@@ -2,19 +2,18 @@ class Scene extends Phaser.State {
 
     /**
      * Initialisation de la scene avec l'id du player et le niveau dans lequel il va jouer
-     * @param {int} player
+     * @param {int} heros
      * @param {int} level 
      */
-    init(player, level, debug) {
+    init(heros, level, debug) {
         this.debug = debug || false;
 
         if (this.debug) {
-            this.player = { id: 0, selectedHero: debug.heros, position: debug.heros };
+            this.characterName = debug.heros;
         } else {
-            this.player = player;
+            this.characterName = heros;
         }
         this.currentLevel = level || { level: 1, world: 1 };
-        this.characterName = this.player.selectedHero;
     }
 
     preload() {
@@ -149,7 +148,7 @@ class Scene extends Phaser.State {
                 this.rocksGroup.add(new Rock(this.game, obj));
                 break;
             case 'exit':
-                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
+                this.exitGroup.add(new Exit(this.game, obj));
                 break;
             default:
                 console.log(type);
@@ -210,13 +209,13 @@ class Scene extends Phaser.State {
                 this.gameOverScreen.destroy();
                 this.game.camera.fade('#000000', 200);
                 this.game.camera.onFadeComplete.add(() => {
-                    this.game.state.start('scene', true, false, this.player, this.currentLevel);
+                    this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
                 }, this);
             });
         } else {
             this.game.camera.fade('#000000', 200);
             this.game.camera.onFadeComplete.add(() => {
-                this.game.state.start('scene', true, false, this.player, this.currentLevel);
+                this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
             }, this);
         }
     }
@@ -224,7 +223,7 @@ class Scene extends Phaser.State {
     actionButtonReleased() {
         if (this.end) {
             this.currentLevel.level++;
-            this.game.state.start('scene', true, false, this.player, this.currentLevel);
+            this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
         } else if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }

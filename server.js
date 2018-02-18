@@ -30,6 +30,8 @@ idées pour la gestion des lobby
 
 io.on('connection', function (socket) {
 
+    // ---------------------------- LOBBY STATE ------------------------------------ //
+
     socket.on('init', function () {
         socket.emit('init');
     });
@@ -57,7 +59,9 @@ io.on('connection', function (socket) {
         socket.code = code;
         socket.emit('joinlobby', true);
     });
+    // ----------------------------------------------------------------------------- //
 
+    // ---------------------------- MAINMENU STATE ------------------------------------ //
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
         if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) return;
@@ -67,9 +71,6 @@ io.on('connection', function (socket) {
             id: id,
             selectedHero: false,
             position: 'fleur',
-            levelSelect: null,
-            levelPosition: 0,
-            world: 1
         };
         server.lobbies[socket.code].players[id] = socket.player;
         socket.emit('newplayer', socket.player, server.lobbies[socket.code].players);
@@ -92,23 +93,28 @@ io.on('connection', function (socket) {
         server.lobbies[socket.code].players[socket.player.id].position = position;
         socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
     });
+    // ----------------------------------------------------------------------------- //
 
-    socket.on('updatelevelselect', function (levelPosition, levelSelect, world) {
-        let player = server.lobbies[socket.code].players[socket.player.id];
-        player.levelPosition = levelPosition;
-        player.levelSelect = levelSelect;
-        player.world = world;
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
-        socket.emit('updateplayers', server.lobbies[socket.code].players);
-        if (server.lobbies[socket.code].players[0].levelSelect > 0
-            && server.lobbies[socket.code].players[1].levelSelect > 0
-            && server.lobbies[socket.code].players[0].levelSelect === server.lobbies[socket.code].players[1].levelSelect
-            && server.lobbies[socket.code].players[0].world === server.lobbies[socket.code].players[1].world) {
-            socket.broadcast.to(socket.code).emit('startlevel');
+    socket.on('selectlevel', function (levelData) {
+        server.lobbies[socket.code].players[socket.player.id].levelData = levelData;
+        let player1 = server.lobbies[socket.code].players[0];
+        let player2 = server.lobbies[socket.code].players[1];
+        if (player1.levelData && player2.levelData
+            && player1.levelData.world === player2.levelData.world
+            && player1.levelData.world === player2.levelData.world
+            && player1.levelData.heros != player2.levelData.heros) {
             socket.emit('startlevel');
+            socket.broadcast.to(socket.code).emit('startlevel');
+        } else {
+            socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
         }
     });
 
+    socket.on('unselectlevel', function () {
+        server.lobbies[socket.code].players[socket.player.id].levelData = null;
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+    });
+    // ---------------------------- GAME STATE ------------------------------------ //
     // reset le niveau en cours
     socket.on('reset', function (gameover) {
         gameover = gameover || false;
@@ -186,4 +192,5 @@ io.on('connection', function (socket) {
         server.lobbies[socket.code].levelReady = 0;
         server.lobbies[socket.code].buttonsState = [];
     });
+    // ----------------------------------------------------------------------------- //
 });

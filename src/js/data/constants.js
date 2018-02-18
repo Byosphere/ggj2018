@@ -31,6 +31,8 @@ const GAME_TEXT_NEXT_LEVEL_FONT = 'normal 40px uni0553';
 const GAME_TEXT_NEXT_LEVEL_COLOR = '#FFF';
 const HUGE_FONT = 'normal 120px uni0553';
 const HEAD_FONT = 'normal 50px uni0553';
+const SMALL_FONT = 'normal 20px uni0553';
+const SMALLEST_FONT = 'normal 12px uni0553';
 
 /* POSITIONING & SIZES */
 const MENU_TITLE_HEIGHT = 150;
@@ -42,6 +44,12 @@ const VICTORY_HEIGHT = 800;
 const CREDITS_HEIGHT = 1200;
 const CREDITS_WIDTH = 800;
 const MENU_HEROS_POS_Y = 350;
+const WORLD_POSITIONS = [
+    {},
+    { x: 186, y: 80 },
+    { x: 125, y: 145 },
+    { x: 318, y: 270 },
+];
 
 /* OBJECTS */
 
