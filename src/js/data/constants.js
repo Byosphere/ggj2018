@@ -6,6 +6,14 @@ const CONTROLLER = false;
 const DEFAULT_CURSOR_POSITION = 'fleur';
 const NB_LEVELS = 10;
 const WORLDS = ['laserWorld', 'forestWorld'];
+const UNLOCK_PATTERN = [
+    [],
+    [],
+    [3],
+    [4],
+    [5],
+    [6, 11]
+]
 
 /** Default values */
 const DEFAULT_LANGUAGE = 0;
@@ -31,6 +39,7 @@ const GAME_TEXT_NEXT_LEVEL_FONT = 'normal 40px uni0553';
 const GAME_TEXT_NEXT_LEVEL_COLOR = '#FFF';
 const HUGE_FONT = 'normal 120px uni0553';
 const HEAD_FONT = 'normal 50px uni0553';
+const BIG_FONT = 'normal 80px uni0553';
 const SMALL_FONT = 'normal 20px uni0553';
 const SMALLEST_FONT = 'normal 12px uni0553';
 

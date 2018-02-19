@@ -111,7 +111,7 @@ class Parameters extends Phaser.State {
 			this.game.localStorageManager.save('parameters');
 			if (this.game.parameters.debugMode.value && this.game.parameters.debugLevel.value) {
 				let value = this.game.parameters.debugLevel.value - 1;
-				let level = { level: (value % NB_LEVELS) + 1, world: Math.floor(value / NB_LEVELS) + 1 };
+				let level = { level: getLevelFromLevelNum(value), world: getWorldFromLevelNum(value) };
 				this.state.start('scene', true, false, 0, level, { heros: this.game.parameters.debugHeros.allValues[this.game.parameters.debugHeros.value].value });
 			} else {
 				this.state.start(this.from);

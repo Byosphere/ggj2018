@@ -52,10 +52,13 @@ class LocalStorageManager {
 	}
 
 	saveLevelScore(num, score) {
+		if(!this.game.levels[num - 1]) return;
 		this.game.levels[num - 1].finished = true;
-		if (score > this.game.levels[num - 1].highScore)
+		let newHS = score > this.game.levels[num - 1].highScore;
+		if (newHS)
 			this.game.levels[num - 1].highScore = score;
 		this.save('levels');
+		return newHS;
 	}
 
 	unlockLevel(num) {
