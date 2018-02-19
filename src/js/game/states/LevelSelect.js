@@ -157,14 +157,20 @@ class LevelSelect {
 			}
 			if (level.coli.selected) {
 				level.coli.sprite.tint = 0xFFFFFF;
+				level.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
 			} else {
 				level.coli.sprite.tint = 0x222222;
+				level.coli.sprite.animations.stop();
+				level.coli.sprite.animations.frame = 0;
 			}
 
 			if (level.fleur.selected) {
 				level.fleur.sprite.tint = 0xFFFFFF;
+				level.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
 			} else {
 				level.fleur.sprite.tint = 0x222222;
+				level.fleur.sprite.animations.stop();
+				level.fleur.sprite.animations.frame = 0;
 			}
 		});
 
