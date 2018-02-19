@@ -11,10 +11,10 @@ class MainMenu extends Phaser.State {
         this.game.controlsManager.setCallbackContext(this);
         this.game.serverManager.setCallbackContext(this);
         this.nbPlayers = 0;
-        let coli = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
-        let fleur = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
-        coli.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-        fleur.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+        this.coli = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
+        this.fleur = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
+        this.coli.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+        this.fleur.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
     }
 
     /**
@@ -87,6 +87,10 @@ class MainMenu extends Phaser.State {
         this.game.add.tween(this.waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
         this.codeMessage = this.game.add.text(250, 780, this.game.translate('MENU_TEXT_CODE') + ' : ' + this.lobbyCode, { font: DEFAULT_FONT, fill: '#000' });
         this.codeMessage.alpha = 0.7;
+        this.fleurText = this.game.add.text(this.fleur.x + (this.fleur.width / 2), this.fleur.y + this.fleur.height + 20, this.game.translate('MENU_TEXT_FLEUR'), { font: DEFAULT_FONT, fill: MENU_TEXT_FLEUR_COLOR });
+        this.fleurText.anchor.set(0.5);
+        this.ColiText = this.game.add.text(this.coli.x + (this.coli.width / 2), this.coli.y + this.coli.height + 20, this.game.translate('MENU_TEXT_COLI'), { font: DEFAULT_FONT, fill: MENU_TEXT_COLI_COLOR });
+        this.ColiText.anchor.set(0.5);
     }
 
     /**
