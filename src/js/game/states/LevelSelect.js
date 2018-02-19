@@ -110,7 +110,7 @@ class LevelSelect {
 						finished = this.game.add.sprite(graph.x, graph.centerY, 'completed');
 						finished.anchor.setTo(0.5, 0.5);
 						levelGroup.add(finished);
-						score.text = this.game.translate('BEST_TIME') + ': ' + this.getFormatedTime(savedLevel.highScore) + ' | ' + this.game.translate('COLLECTIBLE') + ': -';
+						score.text = this.game.translate('BEST_TIME') + ': ' + getFormatedTime(savedLevel.highScore) + ' | ' + this.game.translate('COLLECTIBLE') + ': -';
 					}
 				}
 
@@ -347,14 +347,6 @@ class LevelSelect {
 
 	onStartLevel() {
 		this.game.state.start('scene', true, false, this.heroSelected, { level: this.playerPosition + 1, world: this.worldPos });
-	}
-	/**
-     * retourne le temps sous la forme : MMmin SSs
-     */
-	getFormatedTime(time) {
-		let minutes = Math.floor(time / 60);
-		let seconds = time % 60;
-		return minutes + 'min ' + seconds + 's';
 	}
 
 	/**

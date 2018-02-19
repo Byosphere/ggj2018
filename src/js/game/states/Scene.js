@@ -299,29 +299,35 @@ class Scene extends Phaser.State {
     /**
      * Action lorsque le niveau est terminé
      */
+    // onLevelCompleted() {
+    //     this.game.serverManager.getSocket().emit('finishlevel');
+    //     this.game.controlsManager.disableControls([ACTION]);
+    //     this.character.alpha = 0;
+    //     this.exitGroup.children[0].animateSuccess();
+    //     this.hud.stopTime();
+    //     let levelNum = this.currentLevel.level + ((this.currentLevel.world - 1) * 10);
+    //     this.game.localStorageManager.unlockLevel(levelNum + 1);
+    //     this.game.localStorageManager.saveLevelScore(levelNum, this.hud.getTime());
+    //     setTimeout(() => {
+    //         this.hud.hideHud();
+    //         this.game.audioManager.stopCurrentMusic();
+    //         this.game.audioManager.playSound('win');
+    //         this.game.camera.flash();
+    //         this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
+    //         this.endTitle.anchor.setTo(0.5);
+    //         this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
+    //         this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+    //         this.endText.anchor.setTo(0.5);
+    //         this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+    //         this.timerText.anchor.setTo(0.5);
+    //         this.end = true;
+    //     }, 3000);
+    // }
     onLevelCompleted() {
-        this.game.serverManager.getSocket().emit('finishlevel');
-        this.game.controlsManager.disableControls([ACTION]);
-        this.character.alpha = 0;
-        this.exitGroup.children[0].animateSuccess();
         this.hud.stopTime();
-        let levelNum = this.currentLevel.level + ((this.currentLevel.world - 1) * 10);
-        this.game.localStorageManager.unlockLevel(levelNum + 1);
-        this.game.localStorageManager.saveLevelScore(levelNum, this.hud.getTime());
-        setTimeout(() => {
-            this.hud.hideHud();
-            this.game.audioManager.stopCurrentMusic();
-            this.game.audioManager.playSound('win');
-            this.game.camera.flash();
-            this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
-            this.endTitle.anchor.setTo(0.5);
-            this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
-            this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-            this.endText.anchor.setTo(0.5);
-            this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-            this.timerText.anchor.setTo(0.5);
-            this.end = true;
-        }, 3000);
+        this.game.audioManager.stopCurrentMusic();
+        this.game.camera.flash();
+        this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
     }
 
     /**

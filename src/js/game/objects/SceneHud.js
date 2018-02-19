@@ -57,15 +57,6 @@ class SceneHud {
     }
 
     /**
-     * retourne le temps sous la forme : MMmin SSs
-     */
-    getFormatedTime() {
-        let minutes = Math.floor(this.time / 60);
-        let seconds = this.time % 60;
-        return minutes + 'min ' + seconds + 's';
-    }
-
-    /**
      * mets le timer en pause
      */
     pauseTime() {
@@ -188,6 +179,6 @@ class SceneHud {
 
     _timerTick() {
         this.time++;
-        this.timerText.text = ': ' + this.getFormatedTime();
+        this.timerText.text = ': ' + getFormatedTime(this.time);
     }
 }

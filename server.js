@@ -79,7 +79,6 @@ io.on('connection', function (socket) {
     // ----------------------------------------------------------------------------- //
 
     socket.on('selectlevel', function (levelData) {
-        console.log(levelData);
         server.lobbies[socket.code].players[socket.player.id].levelData = levelData;
         let player1 = server.lobbies[socket.code].players[0];
         let player2 = server.lobbies[socket.code].players[1];

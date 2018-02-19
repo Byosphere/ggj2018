@@ -6,6 +6,8 @@ var TEXT_FR = {
     GENERIC_TO_START: 'pour commencer',
     LOADING_TEXT: 'Chargement...',
     GAME_OVER: 'Game Over',
+    YES: 'Oui',
+    NO: 'Non',
     LOBBY_TEXT_CONNECTING: 'Tentative de connexion...',
     LOBBY_TEXT_CONNECTED: 'Connexion établie avec le serveur',
     LOBBY_TEXT_CODE_INSTRUCTIONS: "Donne ce code à ton partenaire de jeu pour qu'il retrouve !",
@@ -61,6 +63,8 @@ var TEXT_FR = {
         'Forêt de Brocolande'
     ],
     LEVEL: 'niveau',
+    LEVEL_COMPLETED: 'Niveau terminé !',
+    LEVELS_UNLOCKED: 'Niveau(x) débloqué(s)',
     PARAMETERS_TITLE: 'Paramètres',
     LANGUAGE: 'LANGUE :',
     MUSIC_VOLUME: 'VOLUME DE LA MUSIQUE :',
@@ -79,5 +83,7 @@ var TEXT_FR = {
     HEROS_SELECT: 'Choisis un personnage...',
     WORLD: 'Monde',
     BEST_TIME: 'Meilleur temps',
-    COLLECTIBLE: 'Collection'
+    TIME: 'Temps',
+    COLLECTIBLE: 'Collection',
+    CONTINUE: 'Continuer ?',
 }
