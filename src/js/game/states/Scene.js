@@ -26,7 +26,6 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.exitActive = false;
-        this.end = false;
         this.hud = new SceneHud(this.game);
     }
 
@@ -221,10 +220,7 @@ class Scene extends Phaser.State {
     }
 
     actionButtonReleased() {
-        if (this.end) {
-            this.currentLevel.level++;
-            this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
-        } else if (this.character.hasItem()) {
+        if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }
     }
@@ -243,8 +239,6 @@ class Scene extends Phaser.State {
 
         if (this.disconnectScreen.isDisconnected()) {
             this.game.state.start('lobby');
-        } else if (this.end) {
-            // todo retour à la selection de niveau
         } else if (this.pauseScreen.isOnPause()) {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
@@ -325,9 +319,14 @@ class Scene extends Phaser.State {
     // }
     onLevelCompleted() {
         this.hud.stopTime();
-        this.game.audioManager.stopCurrentMusic();
+        this.game.controlsManager.disableControls();
+        this.character.alpha = 0;
         this.game.camera.flash();
-        this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
+        this.exitGroup.children[0].animateSuccess();
+        setTimeout(() => {
+            this.game.audioManager.stopCurrentMusic();
+            this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
+        }, 3000);
     }
 
     /**
@@ -343,7 +342,6 @@ class Scene extends Phaser.State {
         this.exitGroup.destroy();
         this.exitActive = false;
         this.game.controlsManager.enableControls();
-        this.end = false;
         this.hud.resetTime();
         this.hud = null;
         this.disconnectScreen.destroy();

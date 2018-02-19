@@ -17,8 +17,7 @@ class EndLevel extends Phaser.State {
 	}
 
 	create() {
-		//this.game.serverManager.getSocket().emit('finishlevel');
-		this.game.localStorageManager.unlockLevel(this.level.num + 1);
+		this.game.serverManager.getSocket().emit('finishlevel');
 		let newHighScore = this.game.localStorageManager.saveLevelScore(this.level.num, this.level.highScore);
 		let title = this.game.add.text(this.game.world.centerX, -100, this.game.translate('LEVEL_COMPLETED'), { font: BIG_FONT, fill: DEFAULT_COLOR });
 		title.anchor.setTo(0.5, 0.5);
@@ -45,7 +44,9 @@ class EndLevel extends Phaser.State {
 			unlock.alpha = 0;
 			this.game.add.tween(unlock).to({ alpha: 1 }, 800, "Quart.easeInOut", true, 1700);
 			UNLOCK_PATTERN[this.level.num].forEach(num => {
-				this.displayLevel(num, getLevelFromLevelNum(num), getWorldFromLevelNum(num));
+				if (this.game.localStorageManager.unlockLevel(num)) {
+					this.displayLevel(num, getLevelFromLevelNum(num), getWorldFromLevelNum(num));
+				}
 			});
 		}
 		this.background = this.game.add.sprite(0, 0, 'background_title');
@@ -116,7 +117,8 @@ class EndLevel extends Phaser.State {
 		if (this.playerPos) {
 			this.game.state.start('levelhub');
 		} else {
-			this.game.state.start('scene', true, false, this.heroSelected, { level: getLevelFromLevelNum(this.nextLevel), world: getWorldFromLevelNum(this.nextLevel) });
+			if (this.game.levels[this.nextLevel - 1])
+				this.game.state.start('scene', true, false, this.heroSelected, { level: getLevelFromLevelNum(this.nextLevel), world: getWorldFromLevelNum(this.nextLevel) });
 		}
 	}
 }

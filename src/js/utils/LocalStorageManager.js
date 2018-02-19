@@ -52,7 +52,7 @@ class LocalStorageManager {
 	}
 
 	saveLevelScore(num, score) {
-		if(!this.game.levels[num - 1]) return;
+		if (!this.game.levels[num - 1]) return;
 		this.game.levels[num - 1].finished = true;
 		let newHS = score < this.game.levels[num - 1].highScore;
 		if (newHS)
@@ -61,10 +61,15 @@ class LocalStorageManager {
 		return newHS;
 	}
 
+	/**
+	 * Permet de débloquer un niveau -> retourne true si ça réussi, false sinon
+	 * @param {number} num : numéro du niveau à débloquer
+	 */
 	unlockLevel(num) {
-		if (this.game.levels[num - 1]) return;
+		if (this.game.levels[num - 1]) return false;
 		this.game.levels[num - 1] = { num: num, finished: false, highScore: null };
 		this.setObject('levels', this.game.levels);
+		return true;
 	}
 
 	/**

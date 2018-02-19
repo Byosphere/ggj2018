@@ -48,15 +48,6 @@ class LevelSelect {
 		this.worldCursor.add(worldCursorText2);
 		this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
 		this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
-		// this.arrowLeft = this.game.add.sprite(this.rightBands.x + 40, 300, 'arrow');
-		// this.arrowLeft.anchor.setTo(0.5,0.5);
-		// let arrowLeftText = this.game.add.text(this.arrowLeft.x - 45, this.arrowLeft.y + 10, 'enter', { font: SMALL_FONT, fill: DEFAULT_COLOR });
-		// arrowLeftText.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 2);
-		// this.arrowLeft.angle = -180;
-		// this.arrowRight= this.game.add.sprite(this.rightBands.x + 24, 500, 'arrow');
-		// this.arrowRight.anchor.setTo(0.5,0.5);
-		// let arrowRightText = this.game.add.text(this.arrowRight.x -10, this.arrowRight.y + 10, 'Esc.', { font: SMALL_FONT, fill: DEFAULT_COLOR });
-		// arrowRightText.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 2);
 	}
 
 	initLevelList() {
@@ -103,7 +94,7 @@ class LevelSelect {
 					finished.anchor.setTo(0.5, 0.5);
 					levelGroup.add(finished);
 					score.text = 'debug mode';
-					
+
 				} else if (savedLevel) {
 					isLocked = false;
 					if (savedLevel.finished) {
@@ -265,6 +256,7 @@ class LevelSelect {
 				break;
 
 			case this.HEROS_SELECT_STATE:
+				if (this.levelList[this.worldPos][this.playerPosition].selected) break;
 				this.state = this.READY_STATE;
 				this.bottomInfo.text = this.game.translate('READY_SELECT');
 				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });

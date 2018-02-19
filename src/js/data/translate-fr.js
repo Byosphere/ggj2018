@@ -86,4 +86,5 @@ var TEXT_FR = {
     TIME: 'Temps',
     COLLECTIBLE: 'Collection',
     CONTINUE: 'Continuer ?',
+    READY_SELECT: 'En attente de l\'autre joueur...'
 }

@@ -8,12 +8,19 @@ const NB_LEVELS = 10;
 const WORLDS = ['laserWorld', 'forestWorld'];
 const UNLOCK_PATTERN = [
     [],
-    [],
+    [4, 12],
     [3],
     [4],
     [5],
-    [6, 11]
-]
+    [6, 11],
+    [7],
+    [8],
+    [9],
+    [10],
+    [],
+    [12],
+    [13]
+];
 
 /** Default values */
 const DEFAULT_LANGUAGE = 0;

@@ -66,7 +66,7 @@ io.on('connection', function (socket) {
     socket.on('newplayer', function () {
         if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) return;
         let id = server.lobbies[socket.code].players[0] ? 1 : 0;
-        socket.player = {id: id};
+        socket.player = { id: id };
         server.lobbies[socket.code].players[id] = socket.player;
         socket.emit('newplayer', server.lobbies[socket.code].players);
         socket.broadcast.to(socket.code).emit('newplayer', server.lobbies[socket.code].players);
@@ -86,6 +86,8 @@ io.on('connection', function (socket) {
             && player1.levelData.world === player2.levelData.world
             && player1.levelData.level === player2.levelData.level
             && player1.levelData.heros != player2.levelData.heros) {
+            player1.levelData = null;
+            player2.levelData = null;
             socket.emit('startlevel');
             socket.broadcast.to(socket.code).emit('startlevel');
         } else {
