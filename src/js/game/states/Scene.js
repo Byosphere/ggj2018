@@ -164,8 +164,8 @@ class Scene extends Phaser.State {
             });
         }
 
-        if (this.debug) {
-            this.game.debug.body(this.layer);
+        if (this.game.parameters.debugMode.value) {
+            this.layer.debug = true;
             this.game.debug.body(this.character);
             this.doorsGroup.forEach(door => {
                 this.game.debug.body(door);

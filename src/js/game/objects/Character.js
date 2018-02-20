@@ -55,19 +55,19 @@ class Character extends Phaser.Sprite {
 		switch (this.facing) {
 			case DOWN:
 				x = this.x;
-				y = this.y + 60;
+				y = this.y + 2;
 				break;
 			case UP:
 				x = this.x;
-				y = this.y - 50;
+				y = this.y - 120;
 				break;
 			case LEFT:
 				x = this.x - 60;
-				y = this.y;
+				y = this.y - this.height;
 				break;
 			case RIGHT:
 				x = this.x + 60;
-				y = this.y;
+				y = this.y - this.height;
 				break;
 		}
 		let rock = new Rock(this.game, { x: x, y: y, invisible: true });
