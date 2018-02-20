@@ -110,7 +110,7 @@ class Scene extends Phaser.State {
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
             if (mapObjects[i].properties.Type == 'character') {
-                this.character = new Character(this.game, mapObjects[i], this.characterName, this.layer);
+                this.character = new Character(this.game, mapObjects[i], this.characterName, this);
                 this.characterGroup.add(this.character);
             }
         }
