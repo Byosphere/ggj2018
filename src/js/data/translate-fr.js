@@ -53,9 +53,13 @@ var TEXT_FR = {
         'Fleuraison du bro Coli',
         'Chou et soupe de brocoli',
         'Parcelles équitables',
+        'Un caillou dans la chaussure',
+        'Apporter sa pierre',
+        'Pierre qui roule',
+        'D\'une pierre deux coups',
+        'Caillou Chou Genou',
         'Rock \'n\' Roll',
-        'Pierre, bouton, porte',
-        'Va et viens de légumes'
+        'On the rocks',
     ],
     WORLD_NAMES: [
         '',
