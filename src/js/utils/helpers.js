@@ -3,10 +3,10 @@ function getWorldFromLevelNum(num) {
 }
 
 function getLevelFromLevelNum(num) {
-	if (num < NB_LEVELS) {
+	if (num <= NB_LEVELS) {
 		return num;
 	} else {
-		return (num % NB_LEVELS) + 1;
+		return (num % NB_LEVELS);
 	}
 }
 

@@ -48,6 +48,8 @@ class EndLevel extends Phaser.State {
 					this.displayLevel(num, getLevelFromLevelNum(num), getWorldFromLevelNum(num));
 				}
 			});
+		} else {
+			this.game.localStorageManager.unlockLevel(this.nextLevel);
 		}
 		this.background = this.game.add.sprite(0, 0, 'background_title');
 		this.displayNext();
