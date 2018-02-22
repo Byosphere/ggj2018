@@ -11,15 +11,21 @@ class LocalStorageManager {
 
 			let data = this.getObject();
 
-			if (data && data.parameters) {
+			if (data && data.parameters && data.levels) {
 				this.game.parameters = this.getObject().parameters;
+				this.game.levels = this.getObject().levels;
+				this.localData['parameters'] = this.game.parameters;
+				this.localData['levels'] = this.game.levels;
 			} else {
 				this.setObject('parameters', this.getDefaultParamData());
+				this.setObject('levels', this.getDefaultLevels());
 				this.game.parameters = this.getDefaultParamData();
+				this.game.levels = this.getDefaultLevels();
 			}
 
 		} else {
 			this.game.parameters = this.getDefaultParamData();
+			this.game.levels = this.getDefaultLevels();
 		}
 	}
 
@@ -34,8 +40,37 @@ class LocalStorageManager {
 		};
 	}
 
+	getDefaultLevels() {
+		return [
+			{ num: 1, finished: false, highScore: null },
+			{ num: 2, finished: false, highScore: null }
+		];
+	}
+
 	save(key) {
 		this.setObject(key, this.game[key]);
+	}
+
+	saveLevelScore(num, score) {
+		if (!this.game.levels[num - 1]) return;
+		this.game.levels[num - 1].finished = true;
+		let newHS = score < this.game.levels[num - 1].highScore;
+		if (newHS || this.game.levels[num - 1].highScore === null)
+			this.game.levels[num - 1].highScore = score;
+
+		this.save('levels');
+		return newHS;
+	}
+
+	/**
+	 * Permet de débloquer un niveau -> retourne true si ça réussi, false sinon
+	 * @param {number} num : numéro du niveau à débloquer
+	 */
+	unlockLevel(num) {
+		if (this.game.levels[num - 1]) return false;
+		this.game.levels[num - 1] = { num: num, finished: false, highScore: null };
+		this.setObject('levels', this.game.levels);
+		return true;
 	}
 
 	/**

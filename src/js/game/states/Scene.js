@@ -2,19 +2,18 @@ class Scene extends Phaser.State {
 
     /**
      * Initialisation de la scene avec l'id du player et le niveau dans lequel il va jouer
-     * @param {int} player
+     * @param {int} heros
      * @param {int} level 
      */
-    init(player, level, debug) {
+    init(heros, level, debug) {
         this.debug = debug || false;
 
         if (this.debug) {
-            this.player = { id: 0, selectedHero: debug.heros, position: debug.heros };
+            this.characterName = debug.heros;
         } else {
-            this.player = player;
+            this.characterName = heros;
         }
         this.currentLevel = level || { level: 1, world: 1 };
-        this.characterName = this.player.selectedHero;
     }
 
     preload() {
@@ -27,7 +26,6 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.exitActive = false;
-        this.end = false;
         this.hud = new SceneHud(this.game);
     }
 
@@ -111,8 +109,8 @@ class Scene extends Phaser.State {
         // Adding map objects
         const mapObjects = this.map.objects['Objects'];
         for (let i = 0; i < mapObjects.length; i++) {
-            if(mapObjects[i].properties.Type == 'character') {
-                this.character = new Character(this.game, mapObjects[i], this.characterName, this.layer);
+            if (mapObjects[i].properties.Type == 'character') {
+                this.character = new Character(this.game, mapObjects[i], this.characterName, this);
                 this.characterGroup.add(this.character);
             }
         }
@@ -149,7 +147,7 @@ class Scene extends Phaser.State {
                 this.rocksGroup.add(new Rock(this.game, obj));
                 break;
             case 'exit':
-                this.exitGroup.add(new Exit(this.game, obj, this.player.id));
+                this.exitGroup.add(new Exit(this.game, obj));
                 break;
             default:
                 console.warn(type);
@@ -166,8 +164,8 @@ class Scene extends Phaser.State {
             });
         }
 
-        if (this.debug) {
-            this.game.debug.body(this.layer);
+        if (this.game.parameters.debugMode.value) {
+            this.layer.debug = true;
             this.game.debug.body(this.character);
             this.doorsGroup.forEach(door => {
                 this.game.debug.body(door);
@@ -210,22 +208,19 @@ class Scene extends Phaser.State {
                 this.gameOverScreen.destroy();
                 this.game.camera.fade('#000000', 200);
                 this.game.camera.onFadeComplete.add(() => {
-                    this.game.state.start('scene', true, false, this.player, this.currentLevel);
+                    this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
                 }, this);
             });
         } else {
             this.game.camera.fade('#000000', 200);
             this.game.camera.onFadeComplete.add(() => {
-                this.game.state.start('scene', true, false, this.player, this.currentLevel);
+                this.game.state.start('scene', true, false, this.characterName, this.currentLevel);
             }, this);
         }
     }
 
     actionButtonReleased() {
-        if (this.end) {
-            this.currentLevel.level++;
-            this.game.state.start('scene', true, false, this.player, this.currentLevel);
-        } else if (this.character.hasItem()) {
+        if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }
     }
@@ -241,14 +236,14 @@ class Scene extends Phaser.State {
     }
 
     cancelButtonReleased() {
-        if (this.pauseScreen.isOnPause()) {
+
+        if (this.disconnectScreen.isDisconnected()) {
+            this.game.state.start('lobby');
+        } else if (this.pauseScreen.isOnPause()) {
             this.game.serverManager.getSocket().emit('reset');
             this.onResetLevel();
         }
 
-        if (this.disconnectScreen.isDisconnected()) {
-            this.game.state.start('lobby');
-        }
     }
 
     leftButtonDown() {
@@ -298,31 +293,39 @@ class Scene extends Phaser.State {
     /**
      * Action lorsque le niveau est terminé
      */
+    // onLevelCompleted() {
+    //     this.game.serverManager.getSocket().emit('finishlevel');
+    //     this.game.controlsManager.disableControls([ACTION]);
+    //     this.character.alpha = 0;
+    //     this.exitGroup.children[0].animateSuccess();
+    //     this.hud.stopTime();
+    //     let levelNum = this.currentLevel.level + ((this.currentLevel.world - 1) * 10);
+    //     this.game.localStorageManager.unlockLevel(levelNum + 1);
+    //     this.game.localStorageManager.saveLevelScore(levelNum, this.hud.getTime());
+    //     setTimeout(() => {
+    //         this.hud.hideHud();
+    //         this.game.audioManager.stopCurrentMusic();
+    //         this.game.audioManager.playSound('win');
+    //         this.game.camera.flash();
+    //         this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
+    //         this.endTitle.anchor.setTo(0.5);
+    //         this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
+    //         this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+    //         this.endText.anchor.setTo(0.5);
+    //         this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
+    //         this.timerText.anchor.setTo(0.5);
+    //         this.end = true;
+    //     }, 3000);
+    // }
     onLevelCompleted() {
-        this.game.serverManager.getSocket().emit('finishlevel');
-        this.game.controlsManager.disableControls([ACTION]);
-        this.character.alpha = 0;
-        this.exitGroup.children[0].animateSuccess();
         this.hud.stopTime();
+        this.game.controlsManager.disableControls();
+        this.character.alpha = 0;
+        this.game.camera.flash();
+        this.exitGroup.children[0].animateSuccess();
         setTimeout(() => {
-            this.hud.hideHud();
             this.game.audioManager.stopCurrentMusic();
-            this.game.audioManager.playSound('win');
-            this.game.camera.flash();
-            if (this.currentLevel.level < NB_LEVELS) {
-                this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'victory');
-                this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add(VICTORY_TITLE.DISPLAY.NAME, VICTORY_TITLE.DISPLAY.FRAMES, 10, false).play();
-                this.endText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 350, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-                this.endText.anchor.setTo(0.5);
-                this.timerText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 300, this.game.translate('END_TIME') + ' ' + this.hud.getFormatedTime(), { font: GAME_TEXT_NEXT_LEVEL_FONT, fill: GAME_TEXT_NEXT_LEVEL_COLOR });
-                this.timerText.anchor.setTo(0.5);
-            } else {
-                this.endTitle = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'felicitations');
-                this.endTitle.anchor.setTo(0.5);
-                this.endTitle.animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, false).play();
-            }
-            this.end = true;
+            this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
         }, 3000);
     }
 
@@ -339,7 +342,6 @@ class Scene extends Phaser.State {
         this.exitGroup.destroy();
         this.exitActive = false;
         this.game.controlsManager.enableControls();
-        this.end = false;
         this.hud.resetTime();
         this.hud = null;
         this.disconnectScreen.destroy();

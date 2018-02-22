@@ -22,6 +22,7 @@ class Lobby extends Phaser.State {
 	create() {
 		this.game.serverManager.setCallbackContext(this);
 		this.game.serverManager.getSocket().emit('init');
+		this.game.controlsManager.enableControls();
 	}
 
 	/**

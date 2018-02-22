@@ -1,9 +1,9 @@
 class Character extends Phaser.Sprite {
 
-	constructor(game, data, characterName, walls) {
+	constructor(game, data, characterName, scene) {
 		super(game, data.x, data.y, characterName, 0);
 		this.game = game;
-		this.walls = walls;
+		this.scene = scene;
 		this.anchor.setTo(0, 1);
 		this.game.physics.arcade.enable(this);
 		if (characterName === FLEUR_HEROS) {
@@ -55,23 +55,23 @@ class Character extends Phaser.Sprite {
 		switch (this.facing) {
 			case DOWN:
 				x = this.x;
-				y = this.y + 60;
+				y = this.y + 2;
 				break;
 			case UP:
 				x = this.x;
-				y = this.y - 50;
+				y = this.y - 120;
 				break;
 			case LEFT:
 				x = this.x - 60;
-				y = this.y;
+				y = this.y - this.height;
 				break;
 			case RIGHT:
 				x = this.x + 60;
-				y = this.y;
+				y = this.y - this.height;
 				break;
 		}
 		let rock = new Rock(this.game, { x: x, y: y, invisible: true });
-		if (rock.isDroppable(this.walls)) {
+		if (rock.isDroppable(this.scene)) {
 			rock.visible = true;
 			group.add(rock);
 			this.carry = null;

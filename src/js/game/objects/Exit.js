@@ -1,6 +1,6 @@
 class Exit extends Phaser.Sprite {
 
-    constructor(game, data, reverse) {
+    constructor(game, data) {
         super(game, data.x, data.y, 'exit', 0);
         this.game = game;
         this.data = data;
@@ -8,11 +8,6 @@ class Exit extends Phaser.Sprite {
         this.animations.add(EXIT_ANIMATIONS.EXIT_ACTIVE.NAME, EXIT_ANIMATIONS.EXIT_ACTIVE.FRAMES, 4, true).play();
         this.game.physics.arcade.enable(this);
         this.body.setSize(64, 64, 64, 64);
-
-        if (reverse) {
-            this.scale.setTo(-1, 1);
-            this.x -= this.width;
-        }
     }
 
     animateSuccess() {

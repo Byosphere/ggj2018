@@ -30,6 +30,8 @@ idées pour la gestion des lobby
 
 io.on('connection', function (socket) {
 
+    // ---------------------------- LOBBY STATE ------------------------------------ //
+
     socket.on('init', function () {
         socket.emit('init');
     });
@@ -57,39 +59,49 @@ io.on('connection', function (socket) {
         socket.code = code;
         socket.emit('joinlobby', true);
     });
+    // ----------------------------------------------------------------------------- //
 
+    // ---------------------------- MAINMENU STATE ------------------------------------ //
     // initialisation d'un nouveau joueur
     socket.on('newplayer', function () {
         if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) return;
         let id = server.lobbies[socket.code].players[0] ? 1 : 0;
-
-        socket.player = {
-            id: id,
-            selectedHero: false,
-            position: 'fleur'
-        };
+        socket.player = { id: id };
         server.lobbies[socket.code].players[id] = socket.player;
-        socket.emit('newplayer', socket.player, server.lobbies[socket.code].players);
-        socket.broadcast.to(socket.code).emit('newplayer', null, server.lobbies[socket.code].players);
-    });
-
-    // selection d'un personnage par un joueur sur l'écran titre
-    socket.on('selecthero', function (selectedHero) {
-        server.lobbies[socket.code].players[socket.player.id].selectedHero = selectedHero;
-        socket.emit('updateplayers', server.lobbies[socket.code].players);
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
-        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[0].selectedHero && server.lobbies[socket.code].players[1] && server.lobbies[socket.code].players[1].selectedHero) {
+        socket.emit('newplayer', server.lobbies[socket.code].players);
+        socket.broadcast.to(socket.code).emit('newplayer', server.lobbies[socket.code].players);
+        if (server.lobbies[socket.code].players[0] && server.lobbies[socket.code].players[1]) {
             socket.emit('startgame');
             socket.broadcast.to(socket.code).emit('startgame');
         }
     });
 
-    // mets à jour la position du curseur d'un joueur sur l'écran titre
-    socket.on('updateposition', function (position) {
-        server.lobbies[socket.code].players[socket.player.id].position = position;
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+    // ----------------------------------------------------------------------------- //
+
+    socket.on('selectlevel', function (levelData) {
+        server.lobbies[socket.code].players[socket.player.id].levelData = levelData;
+        let player1 = server.lobbies[socket.code].players[0];
+        let player2 = server.lobbies[socket.code].players[1];
+        if (player1.levelData && player2.levelData
+            && player1.levelData.world === player2.levelData.world
+            && player1.levelData.level === player2.levelData.level
+            && player1.levelData.heros != player2.levelData.heros) {
+            player1.levelData = null;
+            player2.levelData = null;
+            socket.emit('startlevel');
+            socket.broadcast.to(socket.code).emit('startlevel');
+        } else {
+            socket.emit('updateplayers', server.lobbies[socket.code].players);
+            socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+        }
     });
 
+    socket.on('unselectlevel', function () {
+        server.lobbies[socket.code].players[socket.player.id].levelData = null;
+        socket.emit('updateplayers', server.lobbies[socket.code].players);
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+    });
+    // ---------------------------- GAME STATE ------------------------------------ //
     // reset le niveau en cours
     socket.on('reset', function (gameover) {
         gameover = gameover || false;
@@ -163,7 +175,11 @@ io.on('connection', function (socket) {
     });
 
     socket.on('finishlevel', function () {
-        server.lobbies[socket.code].exitCount = 0;
-        server.lobbies[socket.code].levelReady = 0;
+        if (server.lobbies[socket.code].levelReady === 2) {
+            server.lobbies[socket.code].exitCount = 0;
+            server.lobbies[socket.code].levelReady = 0;
+            server.lobbies[socket.code].buttonsState = [];
+        }
     });
+    // ----------------------------------------------------------------------------- //
 });

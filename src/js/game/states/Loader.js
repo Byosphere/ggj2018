@@ -31,6 +31,12 @@ class Loader extends Phaser.State {
     loadImages() {
         //simple images
         this.game.load.image('decor', BASE_URL + 'tilemaps/tiles/decor.png');
+        this.game.load.image('hudSelect', BASE_URL + 'sprites/levelSelect/hud_select.png');
+        this.game.load.image('levelBack', BASE_URL + 'sprites/levelSelect/level_back.png');
+        this.game.load.image('rightBands', BASE_URL + 'sprites/levelSelect/right_bands.png');
+        this.game.load.image('completed', BASE_URL + 'sprites/levelSelect/completed.png');
+        this.game.load.image('worldMap', BASE_URL + 'sprites/levelSelect/world_map.png');
+        this.game.load.image('worldCursor', BASE_URL + 'sprites/levelSelect/world_cursor.png');
         // for (let w = 0; w < WORLDS.length; w++) {
         //     this.game.load.image(WORLDS[w], BASE_URL + 'tilemaps/tiles/'+WORLDS+'.png');
         // }
