@@ -227,11 +227,8 @@ class Scene extends Phaser.State {
 
     startButtonReleased() {
         if (this.pauseScreen.isOnPause()) {
-            this.pauseScreen.hide();
-            this.hud.resumeTime();
-        } else {
-            this.pauseScreen.display();
-            this.hud.pauseTime();
+            this.game.serverManager.getSocket().emit('reset');
+            this.onResetLevel();
         }
     }
 
@@ -240,8 +237,11 @@ class Scene extends Phaser.State {
         if (this.disconnectScreen.isDisconnected()) {
             this.game.state.start('lobby');
         } else if (this.pauseScreen.isOnPause()) {
-            this.game.serverManager.getSocket().emit('reset');
-            this.onResetLevel();
+            this.pauseScreen.hide();
+            this.hud.resumeTime();
+        } else {
+            this.pauseScreen.display();
+            this.hud.pauseTime();
         }
 
     }

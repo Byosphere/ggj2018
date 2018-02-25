@@ -110,7 +110,8 @@ class SceneHud {
      */
     resetTime() {
         this.stopTime();
-        this.timerText.destroy();
+        if (this.timerText)
+            this.timerText.destroy();
         this.time = 0;
     }
 

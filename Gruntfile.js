@@ -27,7 +27,8 @@ module.exports = function (grunt) {
         'src/js/game/objects/PauseScreen.js',
         'src/js/game/objects/DisconnectScreen.js',
         'src/js/game/objects/SceneHud.js',
-        'src/js/game/objects/GameOverScreen.js'
+        'src/js/game/objects/GameOverScreen.js',
+        'src/js/game/objects/TextMessage.js'
     ];
 
     var jsSourcesDev = ['src/js/utils/storage-dev.js'];
