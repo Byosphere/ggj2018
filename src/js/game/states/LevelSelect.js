@@ -8,7 +8,7 @@ class LevelSelect {
 	}
 
 	preload() {
-
+		this.game.stage.backgroundColor = MENU_BACKGROUND_COLOR;
 		this.otherPlayer = null;
 		this.levelSelected = 0;
 		this.heroSelected = COLI_HEROS;
@@ -18,49 +18,76 @@ class LevelSelect {
 		this.playerPosition = 0;
 		this.game.controlsManager.setCallbackContext(this);
 		this.game.serverManager.setCallbackContext(this);
-		this.initDisplay();
+		this.game.controlsManager.disableControls();
 		this.initLevelList();
-		this.disconnectScreen = new DisconnectScreen(this.game);
 	}
 
-	initDisplay() {
-		this.game.stage.backgroundColor = MENU_BACKGROUND_COLOR;
-		this.background = this.game.add.sprite(0, 0, 'background_title');
-		this.background.alpha = 0.2;
-		let darkBack = this.game.add.graphics(0, 0);
-		darkBack.beginFill(0xFFFFFF, 0.1);
-		darkBack.drawRect(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, GAME_HEIGHT);
-		darkBack.endFill();
-		this.rightBands = this.game.add.sprite(this.game.world.centerX - 64, 0, 'rightBands');
-		this.title = this.game.add.text(this.rightBands.centerX + 32, -4, this.game.translate('WORLD_NAMES', this.worldPos), { font: HEAD_FONT, fill: DEFAULT_COLOR });
-		this.title.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 2);
-		this.title.anchor.setTo(0.5, 0);
-		let worldmap = this.game.add.sprite(0, 0, 'worldMap');
-		this.bottomInfo = this.game.add.text(this.rightBands.x + 80, this.game.world.height - 48, this.game.translate('WORLD_SELECT'), { font: SMALL_FONT, fill: DEFAULT_COLOR });
-		this.bottomInfo.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 2);
-		this.bottomInfo.alpha = 0.6;
-		let worldCursor = this.game.add.sprite(0, 0, 'worldCursor');
-		let worldCursorText = this.game.add.text(worldCursor.x + 60, worldCursor.y - 20, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
-		let worldCursorText2 = this.game.add.text(worldCursor.x + 74, worldCursor.y + 6, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
-		this.worldCursor = this.game.add.group();
-		this.worldCursor.add(worldCursor);
-		this.worldCursor.add(worldCursorText);
-		this.worldCursor.add(worldCursorText2);
-		this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
-		this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
+	displayBackground() {
+
+		return new Promise((resolve) => {
+			this.backgroundTopCorner1 = this.game.add.sprite(-200, -200, 'background_top_corner');
+			this.backgroundTopCorner1.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.game.add.tween(this.backgroundTopCorner1).to({ x: 0, y: 0 }, 500, 'Quart.easeInOut', true, 0);
+
+			this.backgroundTopMiddle = this.game.add.sprite(300, -200, 'background_top_middle');
+			this.backgroundTopMiddle.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.game.add.tween(this.backgroundTopMiddle).to({ y: 0 }, 500, 'Quart.easeInOut', true, 0);
+
+			this.backgroundTopMiddle2 = this.game.add.sprite(800, -200, 'background_top_middle2');
+			this.backgroundTopMiddle2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.game.add.tween(this.backgroundTopMiddle2).to({ y: 0 }, 500, 'Quart.easeInOut', true, 0);
+
+			this.backgroundTopCorner2 = this.game.add.sprite(this.game.world.width + 200, -200, 'background_top_corner');
+			this.backgroundTopCorner2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.backgroundTopCorner2.scale.setTo(-1, 1);
+			this.game.add.tween(this.backgroundTopCorner2).to({ x: this.game.world.width + 60, y: -50 }, 500, 'Quart.easeInOut', true, 0);
+
+			this.backgroundbotCorner1 = this.game.add.sprite(-100, this.game.world.height, 'background_bot_corner');
+			this.backgroundbotCorner1.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.game.add.tween(this.backgroundbotCorner1).to({ x: -5, y: this.game.world.height - 220 }, 500, 'Quart.easeInOut', true, 500);
+
+			this.backgroundbotCorner2 = this.game.add.sprite(this.game.world.width, this.game.world.height, 'background_bot_corner2');
+			this.backgroundbotCorner2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
+			this.game.add.tween(this.backgroundbotCorner2).to({ x: this.game.world.width - 122, y: this.game.world.height - 296 }, 500, 'Quart.easeInOut', true, 500);
+
+			let worldmap = this.game.add.sprite(20, 30, 'worldMap');
+			worldmap.alpha = 0;
+			this.game.add.tween(worldmap).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
+
+			let worldCursor = this.game.add.sprite(0, 0, 'worldCursor');
+			let worldCursorText = this.game.add.text(worldCursor.x + 60, worldCursor.y - 20, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+			let worldCursorText2 = this.game.add.text(worldCursor.x + 74, worldCursor.y + 6, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+			this.worldCursor = this.game.add.group();
+			this.worldCursor.alpha = 0;
+			this.worldCursor.add(worldCursor);
+			this.worldCursor.add(worldCursorText);
+			this.worldCursor.add(worldCursorText2);
+			this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
+			this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
+
+			let lastTween = this.game.add.tween(this.levelListGroup).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
+			this.infoText = new TextMessage(this.game);
+			this.disconnectScreen = new DisconnectScreen(this.game);
+			lastTween.onComplete.add(() => {
+				resolve(true);
+			}, this);
+		});
 	}
 
 	initLevelList() {
 		let index = 1;
 		let posY2 = 50;
+		this.levelListGroup = this.game.add.group();
+		let rightBands = this.game.add.sprite(0, 0, 'rightBands');
+		this.levelListGroup.add(rightBands);
 
 		for (let w = 1; w <= WORLDS.length; w++) {
 			this.levelList[w] = [];
-			let posY = 100;
+			let posY = 80;
 
 			for (let i = 0; i < NB_LEVELS; i++) {
 
-				let graph = this.game.add.sprite(this.rightBands.x + 120, posY, 'levelBack');
+				let graph = this.game.add.sprite(rightBands.x + 94, posY, 'levelBack');
 				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, this.game.translate('LEVEL_NAMES', index), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelNum = this.game.add.text(graph.x + 25, graph.centerY, w + '-' + (i + 1), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelHud = this.game.add.sprite(graph.x + graph.width - 11, graph.y, 'hudSelect');
@@ -120,12 +147,20 @@ class LevelSelect {
 				});
 				index++;
 				posY += 70;
+				this.levelListGroup.add(levelGroup);
 			}
 		}
+		this.levelListGroup.x = this.game.world.centerX - 64;
+		this.levelListGroup.alpha = 0;
 	}
 
 	create() {
-		this.displayLevels();
+		this.displayBackground().then(() => {
+			this.displayLevels();
+			this.infoText.show(null, this.game.translate('WORLD_SELECT'));
+			this.game.controlsManager.enableControls();
+		});
+
 	}
 
 	displayLevels() {
@@ -176,7 +211,7 @@ class LevelSelect {
 
 		this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
 		this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
-		this.worldCursor.children[1].text = this.game.translate('WORLD') + ' ' + this.worldPos;
+		this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
 		this.worldCursor.children[2].text = finishedLevels + '/10';
 
 		if (this.state === this.WORLD_SELECT_STATE) {
@@ -184,8 +219,6 @@ class LevelSelect {
 		} else {
 			this.worldCursor.alpha = 0.5;
 		}
-
-		this.title.text = this.game.translate('WORLD_NAMES', this.worldPos);
 		if (this.state === this.HEROS_SELECT_STATE) {
 			this.levelList[this.worldPos][this.playerPosition][this.heroSelected].sprite.tint = 0xffffff;
 		}
@@ -210,6 +243,7 @@ class LevelSelect {
 				if (this.worldPos < WORLDS.length) {
 					this.worldPos++;
 					this.displayLevels();
+					this.game.audioManager.playSound('cursor');
 				}
 				break;
 
@@ -217,6 +251,7 @@ class LevelSelect {
 				if (this.playerPosition < NB_LEVELS - 1) {
 					this.playerPosition++;
 					this.displayLevels();
+					this.game.audioManager.playSound('cursor');
 				}
 				break;
 		}
@@ -229,6 +264,7 @@ class LevelSelect {
 				if (this.worldPos > 1) {
 					this.worldPos--;
 					this.displayLevels();
+					this.game.audioManager.playSound('cursor');
 				}
 				break;
 
@@ -236,6 +272,7 @@ class LevelSelect {
 				if (this.playerPosition > 0) {
 					this.playerPosition--;
 					this.displayLevels();
+					this.game.audioManager.playSound('cursor');
 				}
 				break;
 		}
@@ -246,7 +283,8 @@ class LevelSelect {
 
 			case this.WORLD_SELECT_STATE:
 				this.state = this.LEVEL_SELECT_STATE;
-				this.bottomInfo.text = this.game.translate('LEVEL_SELECT');
+				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
+				this.game.audioManager.playSound('bip');
 				this.displayLevels();
 				break;
 
@@ -256,7 +294,8 @@ class LevelSelect {
 					if (this.levelList[this.worldPos][this.playerPosition].coli.selected) {
 						this.heroSelected = FLEUR_HEROS;
 					}
-					this.bottomInfo.text = this.game.translate('HEROS_SELECT');
+					this.infoText.show(null, this.game.translate('HEROS_SELECT'));
+					this.game.audioManager.playSound('bip');
 					this.displayLevels();
 				}
 				break;
@@ -264,9 +303,10 @@ class LevelSelect {
 			case this.HEROS_SELECT_STATE:
 				if (this.levelList[this.worldPos][this.playerPosition].selected) break;
 				this.state = this.READY_STATE;
-				this.bottomInfo.text = this.game.translate('READY_SELECT');
+				this.infoText.show(null, this.game.translate('READY_SELECT'));
 				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
 				this.game.controlsManager.disableControls();
+				this.game.audioManager.playSound('bip');
 				break;
 		}
 	}
@@ -294,19 +334,19 @@ class LevelSelect {
 
 			case this.LEVEL_SELECT_STATE:
 				this.state = this.WORLD_SELECT_STATE;
-				this.bottomInfo.text = this.game.translate('WORLD_SELECT');
+				this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 				this.playerPosition = 0;
 				this.displayLevels();
 				break;
 
 			case this.HEROS_SELECT_STATE:
 				this.state = this.LEVEL_SELECT_STATE;
-				this.bottomInfo.text = this.game.translate('LEVEL_SELECT');
+				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
 				this.displayLevels();
 				break;
 			case this.READY_STATE:
 				this.state = this.HEROS_SELECT_STATE;
-				this.bottomInfo.text = this.game.translate('HEROS_SELECT');
+				this.infoText.show(null, this.game.translate('HEROS_SELECT'));
 				this.game.serverManager.getSocket().emit('unselectlevel');
 				break;
 		}

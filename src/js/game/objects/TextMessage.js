@@ -1,38 +1,43 @@
-let currentTextGroup = null;
 /** 
  * Affiche un message
 */
 class TextMessage {
 
-    constructor(game, displayTime, line1, line2) {
+    constructor(game) {
         this.game = game;
-        this.displayTime = displayTime;
+        this.currentTextGroup = null;
         this.textGroup = game.add.group();
         this.textGroup.x = game.world.width / 4 - this.textGroup.width / 2;
         this.textGroup.y = game.world.height;
         let background = game.add.sprite(0, 20, 'tbMedium');
+        background.alpha = 0.9;
         this.textGroup.add(background);
         let info = game.add.sprite(background.width - 120, 0, 'info');
-        let displayText1 = game.add.text(20, 40, line1, { font: SMALL_FONT, fill: DEFAULT_COLOR });
-        this.textGroup.add(displayText1);
-        if (line2) {
-            let displayText2 = game.add.text(20, displayText1.y + displayText1.height, line2, { font: SMALL_FONT, fill: DEFAULT_COLOR });
-            this.textGroup.add(displayText2);
-        }
+        this.displayText1 = game.add.text(30, 40, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+        this.textGroup.add(this.displayText1);
+        this.displayText2 = game.add.text(30, this.displayText1.y + this.displayText1.height, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+        this.textGroup.add(this.displayText2);
         this.textGroup.add(info);
     }
 
-    show() {
-        if (currentTextGroup) {
-            currentTextGroup.hide();
-            setTimeout(() => {
+    show(displayTime, line1, line2) {
+
+        if (this.currentTextGroup) {
+            this.currentTextGroup.hide().then(() => {
+                this.displayText1.text = line1;
+                this.displayText2.text = line2 || '';
                 this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
-                currentTextGroup = this;
-            }, 1000);
+                this.currentTextGroup = this;
+            });
+
+        } else {
+            this.displayText1.text = line1;
+            this.displayText2.text = line2 || '';
+            this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
+            this.currentTextGroup = this;
         }
-        this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
-        currentTextGroup = this;
-        if (this.displayTime) {
+
+        if (displayTime) {
             setTimeout(() => {
                 this.hide();
             }, this.displayTime);
@@ -40,7 +45,12 @@ class TextMessage {
     }
 
     hide() {
-        this.game.add.tween(this.textGroup).to({ y: this.game.world.height }, 1000, "Linear").start();
-        currentTextGroup = null;
+        return new Promise((resolve, reject) => {
+            let tween = this.game.add.tween(this.textGroup).to({ y: this.game.world.height }, 300, "Linear").start();
+            tween.onComplete.add(() => {
+                this.currentTextGroup = null;
+                resolve(true);
+            }, this);
+        });
     }
 }

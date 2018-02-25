@@ -39,6 +39,7 @@ class Loader extends Phaser.State {
         this.game.load.image('worldCursor', BASE_URL + 'sprites/levelSelect/world_cursor.png');
         this.game.load.image('tbMedium', BASE_URL + 'sprites/textMessage/background_medium.png');
         this.game.load.image('info', BASE_URL + 'sprites/textMessage/info.png');
+        this.game.load.image('cursor', BASE_URL + 'sprites/mainMenu/cursor.png');
         // for (let w = 0; w < WORLDS.length; w++) {
         //     this.game.load.image(WORLDS[w], BASE_URL + 'tilemaps/tiles/'+WORLDS+'.png');
         // }
@@ -59,6 +60,11 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('victory', BASE_URL + 'sprites/vousavezgagne.png', VICTORY_WIDTH, VICTORY_HEIGHT);
         this.game.load.spritesheet('exit_perso', BASE_URL + 'sprites/exit_perso.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         this.game.load.spritesheet('felicitations', BASE_URL + 'sprites/felicitations.png', CREDITS_WIDTH, CREDITS_HEIGHT);
+        this.game.load.spritesheet('background_top_corner', BASE_URL + 'sprites/mainMenu/background_top_corner.png', 192, 192);
+        this.game.load.spritesheet('background_bot_corner', BASE_URL + 'sprites/mainMenu/background_bot_corner.png', 1064, 272);
+        this.game.load.spritesheet('background_top_middle', BASE_URL + 'sprites/mainMenu/background_top_middle.png', 416, 96);
+        this.game.load.spritesheet('background_top_middle2', BASE_URL + 'sprites/mainMenu/background_top_middle2.png', 212, 64);
+        this.game.load.spritesheet('background_bot_corner2', BASE_URL + 'sprites/mainMenu/background_bot_corner2.png', 132, 296);
     }
 
     loadTilemaps() {
@@ -77,9 +83,11 @@ class Loader extends Phaser.State {
         this.game.load.audio('main_menu', BASE_URL + 'sound/loader.wav');
         this.game.load.audio('game', BASE_URL + 'sound/niveau.wav');
         this.game.load.audio('win', BASE_URL + 'sound/win.wav');
+        this.game.load.audio('cursor', BASE_URL + 'sound/curseur.mp3');
+        this.game.load.audio('bip', BASE_URL + 'sound/bip.ogg');
     }
 
     create() {
-        this.game.state.start('lobby');
+        this.game.state.start('menu');
     }
 }

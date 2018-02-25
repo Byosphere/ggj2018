@@ -7,7 +7,6 @@ class Game extends Phaser.Game {
         this.state.add('boot', Booter);
         this.state.add('loader', Loader);
         this.state.add('param', Parameters);
-        this.state.add('lobby', Lobby);
         this.state.add('menu', MainMenu);
         this.state.add('levelhub', LevelSelect);
         this.state.add('endlevel', EndLevel);

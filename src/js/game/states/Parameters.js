@@ -45,6 +45,7 @@ class Parameters extends Phaser.State {
 	upButtonReleased() {
 		if (this.index > 0) {
 			this.index--;
+			this.game.audioManager.playSound('cursor');
 		}
 		this.parametersTexts[this.index + 1].alpha = 0.5;
 		this.parametersTexts[this.index].alpha = 1;
@@ -53,6 +54,7 @@ class Parameters extends Phaser.State {
 	downButtonReleased() {
 		if (this.index < this.parametersTexts.length - 1) {
 			this.index++;
+			this.game.audioManager.playSound('cursor');
 		}
 		this.parametersTexts[this.index - 1].alpha = 0.5;
 		this.parametersTexts[this.index].alpha = 1;
@@ -100,6 +102,7 @@ class Parameters extends Phaser.State {
 
 	actionButtonReleased() {
 		// si on est sur valider
+		this.game.audioManager.playSound('bip');
 		if (this.index === this.parametersTexts.length - 1) {
 			for (let key in this.game.parameters) {
 				let param = this.game.parameters[key];

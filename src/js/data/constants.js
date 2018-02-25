@@ -29,8 +29,8 @@ const UNLOCK_PATTERN = [
 /** Default values */
 const DEFAULT_LANGUAGE = 0;
 const DEFAULT_DEBUG_MODE = 0;
-const DEFAULT_SOUND_VOLUME = 10;
-const DEFAULT_MUSIC_VOLUME = 10;
+const DEFAULT_SOUND_VOLUME = 5;
+const DEFAULT_MUSIC_VOLUME = 5;
 const DEFAULT_MUSIC_FADING = 1000;
 
 /* COLORS & FONTS */
@@ -55,7 +55,7 @@ const SMALL_FONT = 'normal 20px uni0553';
 const SMALLEST_FONT = 'normal 12px uni0553';
 
 /* POSITIONING & SIZES */
-const MENU_TITLE_HEIGHT = 150;
+const MENU_TITLE_HEIGHT = 120;
 const BULLE_SKEW = 50;
 const HEAD_TITLE_WIDTH = 444;
 const HEAD_TITLE_HEIGHT = 276;
@@ -66,9 +66,9 @@ const CREDITS_WIDTH = 800;
 const MENU_HEROS_POS_Y = 350;
 const WORLD_POSITIONS = [
     {},
-    { x: 186, y: 80 },
-    { x: 125, y: 145 },
-    { x: 318, y: 270 },
+    { x: 206, y: 110 },
+    { x: 145, y: 175 },
+    { x: 328, y: 300 },
 ];
 
 /* OBJECTS */
