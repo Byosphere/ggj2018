@@ -245,11 +245,15 @@ class MainMenu extends Phaser.State {
                         break;
                     case 2:
                         this.game.audioManager.playSound('bip');
-                        this.game.state.start('param', true, false, 'menu');
+                        this.menuList.forEach(el => {
+                            el.alpha = 0;
+                        });
+                        this.hideBackground().then(() => {
+                            this.game.state.start('param', true, false, 'menu');
+                        });
                         break;
                     case 3:
-                        this.game.audioManager.playSound('bip');
-                        window.location = './instructions';
+                        window.open('./instructions', '_blank');
                         break;
                 }
                 break;
