@@ -103,7 +103,3 @@ const ORANGE = 'orange';
 const GREEN = 'green';
 const RED = 'red';
 const WHITE = 'white';
-
-/* DEBUG */
-const DEBUG_LEVEL = 5;
-const DEBUG_HEROS = COLI_HEROS;

@@ -142,7 +142,7 @@ class MainMenu extends Phaser.State {
         waitingText.anchor.set(0.5);
         waitingText.alpha = 0.7;
         this.game.add.tween(waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
-        let codeMessage = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 180, this.game.translate('MENU_TEXT_CODE') + ' : ' + code, { font: HEAD_FONT, fill: DEFAULT_COLOR });
+        let codeMessage = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 130, this.game.translate('MENU_TEXT_CODE') + ' : ' + code, { font: HEAD_FONT, fill: DEFAULT_COLOR });
         codeMessage.anchor.setTo(0.5);
         this.newLobbyGroup.add(waitingText);
         this.newLobbyGroup.add(codeMessage);

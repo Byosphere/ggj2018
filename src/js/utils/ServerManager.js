@@ -63,6 +63,16 @@ class ServerManager {
                 this.callbackContext.onCloseDoor(color);
         });
 
+        this.socket.on('inexit', (player) => {
+            if (this.callbackContext && this.callbackContext.onInExit)
+                this.callbackContext.onInExit(player);
+        });
+
+        this.socket.on('outexit', (player) => {
+            if (this.callbackContext && this.callbackContext.onOutExit)
+                this.callbackContext.onOutExit(player);
+        });
+
         this.socket.on('reset', (gameover) => {
             if (this.callbackContext && this.callbackContext.onResetLevel)
                 this.callbackContext.onResetLevel(gameover);

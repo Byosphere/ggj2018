@@ -21,7 +21,7 @@ var TEXT_FR = {
     TO_JOIN_LOBBY: 'pour valider',
     LOBBY_TEXT_CREATE: 'Créer un salon',
     LOBBY_TEXT_JOIN: 'Rejoindre un salon',
-    MENU_TEXT_CODE: 'Code du salon',
+    MENU_TEXT_CODE: 'Code',
     MENU_TEXT_WAITING: 'En attente des joueurs',
     MENU_TEXT_FLEUR: 'L\'est trop chou, Fleur !',
     MENU_TEXT_COLI: 'L\'est son bro, Coli.',
@@ -97,5 +97,7 @@ var TEXT_FR = {
     TIME: 'Temps',
     COLLECTIBLE: 'Collection',
     CONTINUE: 'Continuer ?',
-    READY_SELECT: 'En attente de l\'autre joueur...'
+    READY_SELECT: 'En attente de l\'autre joueur...',
+    EXIT_FLEUR: 'Chou Fleur est arrivée à la sortie !',
+    EXIT_COLI: 'Ton bro Coli est arrivé à la sortie !'
 }

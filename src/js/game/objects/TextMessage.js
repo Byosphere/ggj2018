@@ -20,10 +20,12 @@ class TextMessage {
         this.textGroup.add(info);
     }
 
-    show(displayTime, line1, line2) {
+    show(displayTime, line1, line2, sound) {
         return new Promise((resolve) => {
             if (this.currentTextGroup) {
                 this.currentTextGroup.hide().then(() => {
+                    if (sound)
+                        this.game.audioManager.playSound('pop');
                     this.displayText1.text = line1;
                     this.displayText2.text = line2 || '';
                     this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
@@ -31,6 +33,8 @@ class TextMessage {
                 });
 
             } else {
+                if (sound)
+                    this.game.audioManager.playSound('pop');
                 this.displayText1.text = line1;
                 this.displayText2.text = line2 || '';
                 this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
@@ -55,5 +59,9 @@ class TextMessage {
                 resolve(true);
             }, this);
         });
+    }
+
+    isShowing() {
+        return this.currentTextGroup;
     }
 }

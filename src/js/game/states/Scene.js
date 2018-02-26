@@ -26,7 +26,9 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.exitActive = false;
+        this.infoText = new TextMessage(this.game);
         this.hud = new SceneHud(this.game);
+        this.exitMessage = false;
     }
 
     /**
@@ -43,9 +45,42 @@ class Scene extends Phaser.State {
     onStartLevel() {
         this.loadGroup.destroy();
         this.hud.start(this.currentLevel, () => {
+            this.displayMessage(this.currentLevel);
             this.game.controlsManager.enableControls();
             this.game.audioManager.playMusic('game');
         });
+    }
+
+    displayMessage(level) {
+
+        if (level.level === 1 && level.world === 1) {
+            this.infoText.show(8000, 'Bienvenue dans le monde de Chou Fleur et Bro Coli !', 'Déplace toi avec les flèches de ton clavier.').then(() => {
+                this.infoText.show(8000, 'Aide ton partenaire à ouvrir les portes qui lui', 'permettront de t\'aider à progresser jusqu\'à la sortie');
+            });
+        }
+
+        if (level.level === 1 && level.world === 2) {
+            this.infoText.show(8000, 'Il se pourrait que tu ai besoin que quelqu\'un reste sur', 'cet interrupteur. Cette pierre devrait faire l\'affaire.');
+        }
+    }
+
+    onInExit(player) {
+        if (!this.infoText.isShowing() && !this.exitMessage) {
+            this.exitMessage = true;
+            if (this.characterName === COLI_HEROS) {
+                this.infoText.show(null, this.game.translate('EXIT_FLEUR'), '', true);
+            } else {
+                this.infoText.show(null, this.game.translate('EXIT_COLI'), '', true);
+            }
+        }
+    }
+
+    onOutExit(player) {
+        if (this.infoText.isShowing() && this.exitMessage) {
+            this.infoText.hide().then(() => {
+                this.exitMessage = false;
+            });
+        }
     }
 
     /**
@@ -204,6 +239,7 @@ class Scene extends Phaser.State {
     onResetLevel(gameover) {
         if (gameover) {
             this.gameOverScreen = new GameOverScreen(this.game);
+            this.character.resetPosition();
             this.gameOverScreen.display(() => {
                 this.gameOverScreen.destroy();
                 this.game.camera.fade('#000000', 200);
@@ -235,7 +271,7 @@ class Scene extends Phaser.State {
     cancelButtonReleased() {
 
         if (this.disconnectScreen.isDisconnected()) {
-            this.game.state.start('lobby');
+            this.game.state.start('menu');
         } else if (this.pauseScreen.isOnPause()) {
             this.pauseScreen.hide();
             this.hud.resumeTime();
@@ -318,6 +354,7 @@ class Scene extends Phaser.State {
     //     }, 3000);
     // }
     onLevelCompleted() {
+        this.infoText.hide();
         this.hud.stopTime();
         this.game.controlsManager.disableControls();
         this.character.alpha = 0;

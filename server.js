@@ -168,13 +168,17 @@ io.on('connection', function (socket) {
         if (server.lobbies[socket.code].exitCount === 2) {
             socket.emit('levelcompleted');
             socket.broadcast.to(socket.code).emit('levelcompleted');
+        } else {
+            socket.broadcast.to(socket.code).emit('inexit', socket.player);
         }
     });
 
     // player out of exit spot
     socket.on('outexit', function () {
-        if (server.lobbies[socket.code].exitCount > 0)
+        if (server.lobbies[socket.code].exitCount > 0) {
             server.lobbies[socket.code].exitCount--;
+            socket.broadcast.to(socket.code).emit('outexit', socket.player);
+        } 
     });
 
     socket.on('finishlevel', function () {
