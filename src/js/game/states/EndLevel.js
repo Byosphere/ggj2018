@@ -97,6 +97,7 @@ class EndLevel extends Phaser.State {
 
 	leftButtonReleased() {
 		if (this.playerPos === 1) {
+			this.game.audioManager.playSound('cursor');
 			this.playerPos = 0;
 			this.yes.alpha = 1;
 			this.yes.text = '< ' + this.game.translate('YES') + ' >';
@@ -107,6 +108,7 @@ class EndLevel extends Phaser.State {
 
 	rightButtonReleased() {
 		if (this.playerPos === 0) {
+			this.game.audioManager.playSound('cursor');
 			this.playerPos = 1;
 			this.yes.alpha = 0.3;
 			this.yes.text = '  ' + this.game.translate('YES') + '  ';
@@ -116,6 +118,7 @@ class EndLevel extends Phaser.State {
 	}
 
 	actionButtonReleased() {
+		this.game.audioManager.playSound('bip');
 		if (this.playerPos) {
 			this.game.state.start('levelhub');
 		} else {

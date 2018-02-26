@@ -114,6 +114,7 @@ class MainMenu extends Phaser.State {
 
     create() {
         this.displayBackground();
+        this.game.controlsManager.enableControls();
         this.game.audioManager.playMusic('main_menu');
         this.infoText = new TextMessage(this.game);
         setTimeout(() => {
@@ -151,7 +152,6 @@ class MainMenu extends Phaser.State {
      * fonction lançant la partie (scene)
      */
     onStartGame() {
-        console.log('startgame');
         this.game.audioManager.stopCurrentMusic(1000);
         this.hideBackground().then(() => {
             this.game.state.start('levelhub');
@@ -250,6 +250,7 @@ class MainMenu extends Phaser.State {
     cancelButtonReleased() {
         switch (this.state) {
             case this.MENU_JOIN_LOBBY:
+                this.game.audioManager.playSound('back');
                 this.backFromJoinLobby();
                 break;
         }

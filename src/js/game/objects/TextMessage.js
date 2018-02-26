@@ -21,27 +21,30 @@ class TextMessage {
     }
 
     show(displayTime, line1, line2) {
+        return new Promise((resolve) => {
+            if (this.currentTextGroup) {
+                this.currentTextGroup.hide().then(() => {
+                    this.displayText1.text = line1;
+                    this.displayText2.text = line2 || '';
+                    this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
+                    this.currentTextGroup = this;
+                });
 
-        if (this.currentTextGroup) {
-            this.currentTextGroup.hide().then(() => {
+            } else {
                 this.displayText1.text = line1;
                 this.displayText2.text = line2 || '';
                 this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
                 this.currentTextGroup = this;
-            });
+            }
 
-        } else {
-            this.displayText1.text = line1;
-            this.displayText2.text = line2 || '';
-            this.game.add.tween(this.textGroup).to({ y: this.game.world.height - this.textGroup.height }, 1000, "Elastic.easeOut").start();
-            this.currentTextGroup = this;
-        }
-
-        if (displayTime) {
-            setTimeout(() => {
-                this.hide();
-            }, this.displayTime);
-        }
+            if (displayTime) {
+                setTimeout(() => {
+                    this.hide().then(() => {
+                        resolve(true);
+                    });
+                }, displayTime);
+            }
+        });
     }
 
     hide() {

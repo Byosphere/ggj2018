@@ -336,22 +336,25 @@ class LevelSelect {
 				this.state = this.WORLD_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 				this.playerPosition = 0;
+				this.game.audioManager.playSound('back');
 				this.displayLevels();
 				break;
 
 			case this.HEROS_SELECT_STATE:
 				this.state = this.LEVEL_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
+				this.game.audioManager.playSound('back');
 				this.displayLevels();
 				break;
 			case this.READY_STATE:
 				this.state = this.HEROS_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('HEROS_SELECT'));
+				this.game.audioManager.playSound('back');
 				this.game.serverManager.getSocket().emit('unselectlevel');
 				break;
 		}
 		if (this.disconnectScreen.isDisconnected()) {
-			this.game.state.start('lobby');
+			this.game.state.start('menu');
 		}
 	}
 

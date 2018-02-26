@@ -1,7 +1,7 @@
 class Parameters extends Phaser.State {
 
 	init(from) {
-		this.from = from || 'lobby';
+		this.from = from || 'menu';
 		this.debug = DEBUG_VISIBLE;
 	}
 
@@ -97,6 +97,7 @@ class Parameters extends Phaser.State {
 	}
 
 	cancelButtonReleased() {
+		this.game.audioManager.playSound('back');
 		this.state.start(this.from);
 	}
 
