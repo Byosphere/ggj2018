@@ -7,7 +7,7 @@ class Character extends Phaser.Sprite {
 		this.anchor.setTo(0, 1);
 		this.game.physics.arcade.enable(this);
 		if (characterName === FLEUR_HEROS) {
-			this.body.setSize(64, 55, 0, 9);
+			this.body.setSize(64, 64, 0, 0);
 		} else {
 			//this.body.setSize(48, 55, 8, 9);
 			this.body.setSize(64, 60, 0, 2);
@@ -70,7 +70,7 @@ class Character extends Phaser.Sprite {
 				y = this.y - this.height;
 				break;
 		}
-		let rock = new Rock(this.game, { x: x, y: y, invisible: true });
+		let rock = new Rock(this.game, { x: x, y: y + 64, invisible: true }); // hack anchor + 64
 		if (rock.isDroppable(this.scene)) {
 			rock.visible = true;
 			group.add(rock);
@@ -93,6 +93,8 @@ class Character extends Phaser.Sprite {
 	resetPosition() {
 		this.x = this.previousX;
 		this.y = this.previousY;
+		this.body.velocity.x = 0;
+		this.body.velocity.y = 0;
 		let blink = true;
 		this.game.audioManager.playSound('reset');
 		this.blinkInterval = setInterval(() => {
