@@ -23,7 +23,6 @@ class MainMenu extends Phaser.State {
             blockInput: true
         });
         this.input.visible = false;
-        this.newLobbyGroup = this.game.add.group();
         this.joinLobbyGroup = this.game.add.group();
     }
 
@@ -70,7 +69,8 @@ class MainMenu extends Phaser.State {
     hideBackground() {
         return new Promise((resolve) => {
             this.infoText.hide();
-            this.newLobbyGroup.alpha = 0;
+            if (this.newLobbyGroup)
+                this.newLobbyGroup.alpha = 0;
             this.joinLobbyGroup.alpha = 0;
             this.coli.alpha = 0;
             this.fleur.alpha = 0;
@@ -135,7 +135,7 @@ class MainMenu extends Phaser.State {
         this.state = this.MENU_CREATE_LOBBY;
         this.infoText.show(null, this.game.translate('LOBBY_TEXT_CODE_INSTRUCTIONS_1'), this.game.translate('LOBBY_TEXT_CODE_INSTRUCTIONS_2'));
         this.menuList.forEach(el => {
-            el.destroy();
+            el.alpha = 0;
         });
         let waitingText = this.game.add.text(this.game.world.centerX, 0, this.game.translate('MENU_TEXT_WAITING') + '... (' + this.nbPlayers + '/2)', { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         waitingText.y = this.game.world.centerY + waitingText.height;
@@ -144,6 +144,7 @@ class MainMenu extends Phaser.State {
         this.game.add.tween(waitingText).to({ alpha: 0 }, 3000, "Quart.easeInOut", true, 0, true, true).loop();
         let codeMessage = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 130, this.game.translate('MENU_TEXT_CODE') + ' : ' + code, { font: HEAD_FONT, fill: DEFAULT_COLOR });
         codeMessage.anchor.setTo(0.5);
+        this.newLobbyGroup = this.game.add.group();
         this.newLobbyGroup.add(waitingText);
         this.newLobbyGroup.add(codeMessage);
     }
@@ -176,6 +177,19 @@ class MainMenu extends Phaser.State {
         });
         this.input.visible = false;
         this.validateText.destroy();
+    }
+
+    backFromCreateLobby() {
+        this.state = this.MENU_GENERAL_STATE;
+        this.infoText.show(null, this.game.translate('LOBBY_TEXT_CONNECTED'), this.game.translate('LOBBY_TEXT_INSTRUCTIONS'));
+        this.menuList.forEach((el, i) => {
+            if (i === this.playerIndex)
+                el.alpha = 1;
+            else
+                el.alpha = 0.3;
+        });
+        this.newLobbyGroup.destroy();
+        this.game.serverManager.getSocket().emit('disconnect');
     }
 
     displayJoinLobby() {
@@ -252,6 +266,10 @@ class MainMenu extends Phaser.State {
             case this.MENU_JOIN_LOBBY:
                 this.game.audioManager.playSound('back');
                 this.backFromJoinLobby();
+                break;
+            case this.MENU_CREATE_LOBBY:
+                this.game.audioManager.playSound('back');
+                this.backFromCreateLobby();
                 break;
         }
     }

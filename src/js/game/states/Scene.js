@@ -26,7 +26,7 @@ class Scene extends Phaser.State {
         this.exitGroup = null;
         this.rocksGroup = null;
         this.exitActive = false;
-        this.infoText = new TextMessage(this.game);
+        this.infoText = null;
         this.hud = new SceneHud(this.game);
         this.exitMessage = false;
     }
@@ -162,6 +162,7 @@ class Scene extends Phaser.State {
 
         this.pauseScreen = new PauseScreen(this.game);
         this.disconnectScreen = new DisconnectScreen(this.game);
+        this.infoText = new TextMessage(this.game);
         this.game.serverManager.getSocket().emit('levelready', this.debug);
     }
 
