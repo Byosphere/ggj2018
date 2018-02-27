@@ -39,6 +39,10 @@ class Scene extends Phaser.State {
         this.generateLevel(this.currentLevel);
     }
 
+    onBackToMenu() {
+        this.game.state.start('levelhub');
+    }
+
     /**
      * Lance le niveau
      */

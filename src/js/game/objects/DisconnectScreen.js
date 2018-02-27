@@ -26,7 +26,7 @@ class DisconnectScreen {
         this.disconnectGroup.visible = true;
         this.disconnected = true;
         this.game.controlsManager.disableControls([CANCEL]);
-        this.game.audioManager.getCurrentMusic().stop();
+        this.game.audioManager.stopCurrentMusic();
     }
     isDisconnected() {
         return this.disconnected;

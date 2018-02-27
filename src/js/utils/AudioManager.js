@@ -53,14 +53,15 @@ class AudioManager {
     }
 
     stop() {
-        if (this.isMusicPlaying) {
+        if (this.isMusicPlaying && this.currentMusic) {
             this.currentMusic.stop();
             this.currentMusic = null;
+            this.isMusicPlaying = false;
         }
         if (this.isSoundPlaying) {
             for (let i = 0; i < this.currentSounds.length; i++) {
                 this.currentSounds[i].stop();
-            }   
+            }
         }
     }
 

@@ -14,6 +14,7 @@ class EndLevel extends Phaser.State {
 		this.game.controlsManager.disableControls();
 		this.playerPos = 0;
 		this.nextLevel = this.level.num + 1;
+		this.continue = true;
 	}
 
 	create() {
@@ -52,6 +53,7 @@ class EndLevel extends Phaser.State {
 			this.game.localStorageManager.unlockLevel(this.nextLevel);
 		}
 		this.background = this.game.add.sprite(0, 0, 'background_title');
+		this.disconnectScreen = new DisconnectScreen(this.game);
 		this.displayNext();
 	}
 
@@ -117,12 +119,25 @@ class EndLevel extends Phaser.State {
 		}
 	}
 
+	/**
+     * Si un joueur se déconnecte
+     */
+    onDisconnect() {
+        this.disconnectScreen.display();
+    }
+
+	onBackToMenu() {
+		this.continue = false;
+		this.yes.tint = '#000000';
+	}
+
 	actionButtonReleased() {
 		this.game.audioManager.playSound('bip');
 		if (this.playerPos) {
+			this.game.serverManager.getSocket().emit('backmenu');
 			this.game.state.start('levelhub');
 		} else {
-			if (this.game.levels[this.nextLevel - 1])
+			if (this.game.levels[this.nextLevel - 1] && this.continue)
 				this.game.state.start('scene', true, false, this.heroSelected, { level: getLevelFromLevelNum(this.nextLevel), world: getWorldFromLevelNum(this.nextLevel) });
 		}
 	}

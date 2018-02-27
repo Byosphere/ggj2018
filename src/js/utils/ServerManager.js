@@ -87,6 +87,11 @@ class ServerManager {
             if (this.callbackContext && this.callbackContext.onStartLevel)
                 this.callbackContext.onStartLevel();
         });
+
+        this.socket.on('backmenu', () => {
+            if (this.callbackContext && this.callbackContext.onBackToMenu)
+                this.callbackContext.onBackToMenu();
+        });
     }
 
     getSocket() {

@@ -140,6 +140,13 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('backmenu', function () {
+        server.lobbies[socket.code].exitCount = 0;
+        server.lobbies[socket.code].levelReady = 0;
+        server.lobbies[socket.code].buttonsState = [];
+        socket.broadcast.to(socket.code).emit('backmenu');
+    });
+
     // Interrupteur actif 
     socket.on('pressbutton', function (color) {
         if (server.lobbies[socket.code].buttonsState[color]) {
@@ -178,7 +185,7 @@ io.on('connection', function (socket) {
         if (server.lobbies[socket.code].exitCount > 0) {
             server.lobbies[socket.code].exitCount--;
             socket.broadcast.to(socket.code).emit('outexit', socket.player);
-        } 
+        }
     });
 
     socket.on('finishlevel', function () {
