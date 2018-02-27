@@ -1,3 +1,6 @@
+/** 
+ * Classe de bouton, élément d'interaction des niveaux
+*/
 class Button extends Phaser.Sprite {
 
     constructor(game, data, char, rocks) {
@@ -14,6 +17,10 @@ class Button extends Phaser.Sprite {
         this.herosTrigger = false;
     }
 
+    /**
+     * Défini la couleur du bouton
+     * @param {string} color 
+     */
     setColor(color) {
         switch (color) {
             case ORANGE: this.frame = BUTTON_ANIMATIONS.ORANGE_BUTTON.FRAMES;
@@ -27,6 +34,9 @@ class Button extends Phaser.Sprite {
         }
     }
 
+    /** 
+     * Appui sur le bouton
+    */
     toggleOn() {
         if (!this.activated) {
             this.frame++;
@@ -35,6 +45,9 @@ class Button extends Phaser.Sprite {
         }
     }
 
+    /** 
+     * bouton non pressé
+    */
     toggleOff() {
         if (this.activated) {
             this.frame--;
@@ -43,12 +56,15 @@ class Button extends Phaser.Sprite {
         }
     }
 
+    /**
+     * Vérifie si le bouton est appuyé ou non
+     */
     update() {
 
         this.herosTrigger = this.game.physics.arcade.overlap(this.character, this, this.toggleOn, null, this);
         this.rockTrigger = this.game.physics.arcade.overlap(this.rocksGroup, this, this.toggleOn, null, this);
 
-        if(!this.herosTrigger && !this.rockTrigger && this.activated) {
+        if (!this.herosTrigger && !this.rockTrigger && this.activated) {
             this.toggleOff();
         }
     }

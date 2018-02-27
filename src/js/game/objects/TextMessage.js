@@ -20,6 +20,15 @@ class TextMessage {
         this.textGroup.add(info);
     }
 
+    /**
+     * Affiche une popin en bas de l'écran avec le text passé en paramètre
+     * displaytime est infini si null, si sound est true, un son est joué lors de l'affichage de la popin
+     * Retourne une promesse quand la popin disparait après displaytime
+     * @param {number} displayTime 
+     * @param {string} line1 
+     * @param {string} line2 
+     * @param {boolean} sound 
+     */
     show(displayTime, line1, line2, sound) {
         return new Promise((resolve) => {
             if (this.currentTextGroup) {
@@ -51,6 +60,9 @@ class TextMessage {
         });
     }
 
+    /**
+     * masque la popin affichée. Retourne une promesse lorsque la popin a fini de disparaitre
+     */
     hide() {
         return new Promise((resolve, reject) => {
             let tween = this.game.add.tween(this.textGroup).to({ y: this.game.world.height }, 300, "Linear").start();
@@ -61,6 +73,9 @@ class TextMessage {
         });
     }
 
+    /**
+     * Si une popin est actuellement affichée, retourne la popin, sinon null
+     */
     isShowing() {
         return this.currentTextGroup;
     }

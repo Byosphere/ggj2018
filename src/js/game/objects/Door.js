@@ -1,3 +1,6 @@
+/**
+ * Classe de l'objet porte
+ */
 class Door extends Phaser.Sprite {
 
     constructor(game, data) {
@@ -22,6 +25,9 @@ class Door extends Phaser.Sprite {
         this.setColor(this.colorParam);
     }
 
+    /**
+     * Déclenche l'ouverture de la porte
+     */
     openDoor() {
         if (this.body.enable) {
             this.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
@@ -43,6 +49,9 @@ class Door extends Phaser.Sprite {
         }
     }
 
+    /**
+     * Déclenche la fermeture de la porte
+     */
     closeDoor() {
         if (!this.body.enable) {
             this.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
@@ -64,6 +73,10 @@ class Door extends Phaser.Sprite {
         }
     }
 
+    /**
+     * Défini la couleur de la porte
+     * @param {string} color 
+     */
     setColor(color) {
         switch (color) {
             case GREEN:

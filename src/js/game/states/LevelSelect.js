@@ -22,6 +22,9 @@ class LevelSelect {
 		this.initLevelList();
 	}
 
+	/**
+	 * Animation d'affichge du background, resoud une promesse lorsque l'animation est terminée.
+	 */
 	displayBackground() {
 
 		return new Promise((resolve) => {
@@ -74,6 +77,9 @@ class LevelSelect {
 		});
 	}
 
+	/** 
+	 * initialise la création de la liste des niveaux
+	*/
 	initLevelList() {
 		let index = 1;
 		let posY2 = 50;
@@ -163,6 +169,9 @@ class LevelSelect {
 
 	}
 
+	/**
+	 * Mets à jour l'affichage
+	 */
 	displayLevels() {
 		this.showOnly(this.worldPos);
 		let finishedLevels = 0;
@@ -224,6 +233,10 @@ class LevelSelect {
 		}
 	}
 
+	/**
+	 * Filtre les niveaux à afficher en fonction du monde sélectionné
+	 * @param {number} world 
+	 */
 	showOnly(world) {
 		this.levelList.forEach(w => {
 			w.forEach(l => {
@@ -395,9 +408,5 @@ class LevelSelect {
      */
 	onDisconnect() {
 		this.disconnectScreen.display();
-	}
-
-	shutdown() {
-
 	}
 }

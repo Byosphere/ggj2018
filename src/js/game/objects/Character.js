@@ -1,3 +1,6 @@
+/** 
+ * Classe du personnage controllé par le joueur
+*/
 class Character extends Phaser.Sprite {
 
 	constructor(game, data, characterName, scene) {
@@ -9,7 +12,6 @@ class Character extends Phaser.Sprite {
 		if (characterName === FLEUR_HEROS) {
 			this.body.setSize(64, 64, 0, 0);
 		} else {
-			//this.body.setSize(48, 55, 8, 9);
 			this.body.setSize(64, 60, 0, 2);
 		}
 		this.initAnimations();
@@ -19,10 +21,16 @@ class Character extends Phaser.Sprite {
 		this.facing = null;
 	}
 
+	/**
+	 * Affiche le personnage sur la scene
+	 */
 	addToGame() {
 		this.game.add(this);
 	}
 
+	/**
+	 * Initialisation des animations possibles du personnage
+	 */
 	initAnimations() {
 		this.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
 		this.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
@@ -31,14 +39,14 @@ class Character extends Phaser.Sprite {
 	}
 
 	/**
-	 * 
+	 * Si le joueur porte un objet retourne true
 	 */
 	hasItem() {
 		return this.carry;
 	}
 
 	/**
-	 * 
+	 * Donne au personnage un objet qu'il transporte
 	 * @param {Sprite} item
 	 */
 	catchItem(item) {
@@ -47,7 +55,8 @@ class Character extends Phaser.Sprite {
 	}
 
 	/**
-	 * Pose l'objet
+	 * Dépose l'objet
+	 * @param {Object} group 
 	 */
 	dropItem(group) {
 		if (!this.carry) return;
@@ -90,6 +99,9 @@ class Character extends Phaser.Sprite {
 		}
 	}
 
+	/**
+	 * Réinitialise la position du personnage au début du niveau
+	 */
 	resetPosition() {
 		this.x = this.previousX;
 		this.y = this.previousY;
@@ -107,6 +119,9 @@ class Character extends Phaser.Sprite {
 		}, 2000);
 	}
 
+	/**
+	 * Déplacement vers la gauche
+	 */
 	moveLeft() {
 		this.facing = LEFT;
 		if (this.carry) {
@@ -118,6 +133,9 @@ class Character extends Phaser.Sprite {
 		}
 	}
 
+	/**
+	 * Déplacement vers la droite
+	 */
 	moveRight() {
 		this.facing = RIGHT;
 		if (this.carry) {
@@ -130,6 +148,9 @@ class Character extends Phaser.Sprite {
 		this.scale.setTo(1, 1);
 	}
 
+	/**
+	 * Déplacement vers le haut
+	 */
 	moveUp() {
 		this.facing = UP;
 		if (this.carry) {
@@ -142,6 +163,9 @@ class Character extends Phaser.Sprite {
 		this.scale.setTo(1, 1);
 	}
 
+	/**
+	 * Déplacement vers le bas
+	 */
 	moveDown() {
 		this.facing = DOWN;
 		if (this.carry) {
@@ -154,6 +178,9 @@ class Character extends Phaser.Sprite {
 		this.scale.setTo(1, 1);
 	}
 
+	/**
+	 * Arrêt vers la gauche
+	 */
 	stopLeft() {
 		this.body.velocity.x = 0;
 		this.animations.stop();
@@ -164,6 +191,9 @@ class Character extends Phaser.Sprite {
 			this.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
 	}
 
+	/**
+	 * Arrêt vers la droite
+	 */
 	stopRight() {
 		this.body.velocity.x = 0;
 		this.animations.stop();
@@ -174,6 +204,9 @@ class Character extends Phaser.Sprite {
 			this.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
 	}
 
+	/**
+	 * Arrêt vers le haut
+	 */
 	stopUp() {
 		this.body.velocity.y = 0;
 		this.animations.stop();
@@ -184,6 +217,9 @@ class Character extends Phaser.Sprite {
 			this.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
 	}
 
+	/**
+	 * Arrêt vers le bas
+	 */
 	stopDown() {
 		this.body.velocity.y = 0;
 		this.animations.stop();

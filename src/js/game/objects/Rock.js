@@ -1,3 +1,6 @@
+/**
+ * Objet pierre de la scene
+ */
 class Rock extends Phaser.Sprite {
 
     constructor(game, data) {
@@ -9,6 +12,10 @@ class Rock extends Phaser.Sprite {
         this.visible = !data.invisible;
     }
 
+    /**
+     * Vérifie si la pierre peut être déposée à l'endroit voulu
+     * @param {Object} scene 
+     */
     isDroppable(scene) {
         let blockingTiles = [];
         let droppable = true;
