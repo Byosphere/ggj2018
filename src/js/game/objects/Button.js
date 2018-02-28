@@ -39,6 +39,7 @@ class Button extends Phaser.Sprite {
     */
     toggleOn() {
         if (!this.activated) {
+            this.game.audioManager.playSound('button');
             this.frame++;
             this.activated = true;
             this.game.serverManager.getSocket().emit('pressbutton', this.colorParam);
@@ -50,6 +51,7 @@ class Button extends Phaser.Sprite {
     */
     toggleOff() {
         if (this.activated) {
+            this.game.audioManager.playSound('button');
             this.frame--;
             this.activated = false;
             this.game.serverManager.getSocket().emit('releasebutton', this.colorParam);

@@ -137,7 +137,7 @@ class MainMenu extends Phaser.State {
         this.menuList.forEach(el => {
             el.alpha = 0;
         });
-        let waitingText = this.game.add.text(this.game.world.centerX, 0, this.game.translate('MENU_TEXT_WAITING') + '... (' + this.nbPlayers + '/2)', { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        let waitingText = this.game.add.text(this.game.world.centerX, 0, this.game.translate('MENU_TEXT_WAITING') + '...', { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         waitingText.y = this.game.world.centerY + waitingText.height;
         waitingText.anchor.set(0.5);
         waitingText.alpha = 0.7;
@@ -248,6 +248,7 @@ class MainMenu extends Phaser.State {
                         this.menuList.forEach(el => {
                             el.alpha = 0;
                         });
+                        this.game.controlsManager.disableControls();
                         this.hideBackground().then(() => {
                             this.game.state.start('param', true, false, 'menu');
                         });

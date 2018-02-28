@@ -87,6 +87,8 @@ class Loader extends Phaser.State {
         this.game.load.audio('bip', BASE_URL + 'sound/bip.ogg');
         this.game.load.audio('back', BASE_URL + 'sound/back.wav');
         this.game.load.audio('pop', BASE_URL + 'sound/pop.wav');
+        this.game.load.audio('door_laser', BASE_URL + 'sound/door_laser.wav');
+        this.game.load.audio('button', BASE_URL + 'sound/button.wav');
     }
 
     create() {

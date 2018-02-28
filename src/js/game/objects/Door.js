@@ -30,6 +30,7 @@ class Door extends Phaser.Sprite {
      */
     openDoor() {
         if (this.body.enable) {
+            this.game.audioManager.playSound('door_laser');
             this.animations.play(DOOR_ANIMATIONS.OPEN.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {
@@ -54,6 +55,7 @@ class Door extends Phaser.Sprite {
      */
     closeDoor() {
         if (!this.body.enable) {
+            this.game.audioManager.playSound('door_laser');
             this.animations.play(DOOR_ANIMATIONS.CLOSE.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {

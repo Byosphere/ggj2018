@@ -40,6 +40,7 @@ class Parameters extends Phaser.State {
 
 	create() {
 		this.parametersTexts[this.index].alpha = 1;
+		this.game.controlsManager.enableControls();
 	}
 
 	upButtonReleased() {
