@@ -15,6 +15,7 @@ class LevelSelect {
 		this.worldPos = 1;
 		this.state = this.WORLD_SELECT_STATE;
 		this.levelList = [];
+		this.finishedLevels = 0;
 		this.playerPosition = 0;
 		this.game.controlsManager.setCallbackContext(this);
 		this.game.serverManager.setCallbackContext(this);
@@ -67,8 +68,7 @@ class LevelSelect {
 			this.worldCursor.add(worldCursorText2);
 			this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
 			this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
-
-			let lastTween = this.game.add.tween(this.levelListGroup).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
+			let lastTween = this.game.add.tween(this.rightBands).to({ x: this.game.world.centerX - 64 }, 500, 'Quart.easeInOut', true, 1000);
 			this.infoText = new TextMessage(this.game);
 			this.disconnectScreen = new DisconnectScreen(this.game);
 			lastTween.onComplete.add(() => {
@@ -83,9 +83,8 @@ class LevelSelect {
 	initLevelList() {
 		let index = 1;
 		let posY2 = 50;
+		this.rightBands = this.game.add.sprite(this.game.world.width, 0, 'rightBands');
 		this.levelListGroup = this.game.add.group();
-		let rightBands = this.game.add.sprite(0, 0, 'rightBands');
-		this.levelListGroup.add(rightBands);
 
 		for (let w = 1; w <= WORLDS.length; w++) {
 			this.levelList[w] = [];
@@ -93,7 +92,7 @@ class LevelSelect {
 
 			for (let i = 0; i < NB_LEVELS; i++) {
 
-				let graph = this.game.add.sprite(rightBands.x + 94, posY, 'levelBack');
+				let graph = this.game.add.sprite(94, posY, 'levelBack');
 				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, this.game.translate('LEVEL_NAMES', index), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelNum = this.game.add.text(graph.x + 25, graph.centerY, w + '-' + (i + 1), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelHud = this.game.add.sprite(graph.x + graph.width - 11, graph.y, 'hudSelect');
@@ -135,6 +134,7 @@ class LevelSelect {
 						finished.anchor.setTo(0.5, 0.5);
 						levelGroup.add(finished);
 						score.text = this.game.translate('BEST_TIME') + ': ' + getFormatedTime(savedLevel.highScore) + ' | ' + this.game.translate('COLLECTIBLE') + ': -';
+						this.finishedLevels++;
 					}
 				}
 
@@ -157,7 +157,7 @@ class LevelSelect {
 			}
 		}
 		this.levelListGroup.x = this.game.world.centerX - 64;
-		this.levelListGroup.alpha = 0;
+		this.setLockedWorlds();
 	}
 
 	create() {
@@ -167,6 +167,10 @@ class LevelSelect {
 			this.game.controlsManager.enableControls();
 		});
 
+	}
+
+	setLockedWorlds() {
+		//TODO
 	}
 
 	/**
