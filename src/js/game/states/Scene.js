@@ -261,17 +261,20 @@ class Scene extends Phaser.State {
     }
 
     actionButtonReleased() {
-        if (this.character.hasItem()) {
+
+        if (this.pauseScreen.isOnPause()) {
+            this.pauseScreen.action(this);
+        } else if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }
     }
 
-    startButtonReleased() {
-        if (this.pauseScreen.isOnPause()) {
-            this.game.serverManager.getSocket().emit('reset');
-            this.onResetLevel();
-        }
-    }
+    // startButtonReleased() {
+    //     if (this.pauseScreen.isOnPause()) {
+    //         this.game.serverManager.getSocket().emit('reset');
+    //         this.onResetLevel();
+    //     }
+    // }
 
     cancelButtonReleased() {
 
@@ -279,31 +282,39 @@ class Scene extends Phaser.State {
             this.game.state.start('menu');
         } else if (this.pauseScreen.isOnPause()) {
             this.pauseScreen.hide();
+            this.hud.showHud();
             this.hud.resumeTime();
         } else {
+            this.game.audioManager.playSound('back');
             this.pauseScreen.display();
+            this.hud.hideHud();
             this.hud.pauseTime();
         }
 
     }
 
     leftButtonDown() {
+        if(this.pauseScreen.isOnPause()) return;
         this.character.moveLeft();
     }
 
     rightButtonDown() {
+        if(this.pauseScreen.isOnPause()) return;
         this.character.moveRight();
     }
 
     upButtonDown() {
+        if(this.pauseScreen.isOnPause()) return;
         this.character.moveUp();
     }
 
     downButtonDown() {
+        if(this.pauseScreen.isOnPause()) return;
         this.character.moveDown();
     }
 
     leftButtonReleased() {
+        if(this.pauseScreen.isOnPause()) return;
         this.character.stopLeft();
     }
 
@@ -312,11 +323,19 @@ class Scene extends Phaser.State {
     }
 
     downButtonReleased() {
-        this.character.stopDown();
+        if (this.pauseScreen.isOnPause()) {
+            this.pauseScreen.moveDown();
+        } else {
+            this.character.stopDown();
+        }
     }
 
     upButtonReleased() {
-        this.character.stopUp();
+        if (this.pauseScreen.isOnPause()) {
+            this.pauseScreen.moveUp();
+        } else {
+            this.character.stopUp();
+        }
     }
 
     /**
