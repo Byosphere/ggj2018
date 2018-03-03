@@ -57,15 +57,28 @@ class Scene extends Phaser.State {
 
     displayMessage(level) {
 
-        if (level.level === 1 && level.world === 1) {
-            this.infoText.show(8000, 'Bienvenue dans le monde de Chou Fleur et Bro Coli !', 'Déplace toi avec les flèches de ton clavier.').then(() => {
-                this.infoText.show(8000, 'Aide ton partenaire à ouvrir les portes qui lui', 'permettront de t\'aider à progresser jusqu\'à la sortie');
+        let texts = null;
+        if (WORLDS_DATA[level.world - 1] && WORLDS_DATA[level.world - 1].story_texts) {
+            let storyTexts = WORLDS_DATA[level.world - 1].story_texts;
+            storyTexts.forEach(levelText => {
+                if (levelText.level = level.level) {
+                    texts = levelText.text;
+                }
             });
         }
+        if (texts)
+            this.showText(texts);
+    }
 
-        if (level.level === 1 && level.world === 2) {
-            this.infoText.show(8000, 'Il se pourrait que tu ai besoin que quelqu\'un reste sur', 'cet interrupteur. Cette pierre devrait faire l\'affaire.');
-        }
+    showText(texts, index) {
+        let i = index || 0;
+
+        this.infoText.show(8000, this.game.translate(texts[i]), this.game.translate(texts[i + 1])).then(() => {
+            i += 2;
+            if (texts[i]) {
+                this.showText(texts, i);
+            }
+        });
     }
 
     onInExit(player) {
@@ -133,7 +146,7 @@ class Scene extends Phaser.State {
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();
 
-        this.map.setCollisionBetween(16, 50, true, 'Walls');
+        this.map.setCollisionBetween(16, 51, true, 'Walls');
 
         // Groups
         this.exitGroup = this.game.add.group();
