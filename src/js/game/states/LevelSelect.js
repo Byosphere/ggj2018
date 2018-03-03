@@ -17,6 +17,8 @@ class LevelSelect {
 		this.levelList = [];
 		this.finishedLevels = 0;
 		this.playerPosition = 0;
+		this.lockedWorld = 0;
+		this.animCursor = false;
 		this.game.controlsManager.setCallbackContext(this);
 		this.game.serverManager.setCallbackContext(this);
 		this.game.controlsManager.disableControls();
@@ -66,8 +68,23 @@ class LevelSelect {
 			this.worldCursor.add(worldCursor);
 			this.worldCursor.add(worldCursorText);
 			this.worldCursor.add(worldCursorText2);
-			this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
-			this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
+			this.worldCursor.x = WORLDS_DATA[this.worldPos - 1].world_position.x;
+			this.worldCursor.y = WORLDS_DATA[this.worldPos - 1].world_position.y;
+
+			if (this.lockedWorld) {
+				this.lock = this.game.add.sprite(this.lockedWorld.world_position.x, this.lockedWorld.world_position.y - 15, 'lock');
+				this.lock.alpha = 0;
+				this.lockText = this.game.add.text(this.lock.x + 60, this.lock.y + 20, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+				if (this.lockedWorld.to_unlock > 0) {
+					this.lockText.text = this.finishedLevels + '/' + this.lockedWorld.to_unlock;
+				} else {
+					this.lockText.text = 'coming soon...';
+				}
+				this.lockText.alpha = 0;
+				this.game.add.tween(this.lock).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
+				this.game.add.tween(this.lockText).to({ alpha: 0.7 }, 500, 'Quart.easeInOut', true, 1000);
+			}
+
 			let lastTween = this.game.add.tween(this.rightBands).to({ x: this.game.world.centerX - 64 }, 500, 'Quart.easeInOut', true, 1000);
 			this.infoText = new TextMessage(this.game);
 			this.disconnectScreen = new DisconnectScreen(this.game);
@@ -157,7 +174,7 @@ class LevelSelect {
 			}
 		}
 		this.levelListGroup.x = this.game.world.centerX - 64;
-		this.setLockedWorlds();
+		this.setLockedWorld();
 	}
 
 	create() {
@@ -169,8 +186,16 @@ class LevelSelect {
 
 	}
 
-	setLockedWorlds() {
-		//TODO
+	setLockedWorld() {
+		WORLDS_DATA.some(world => {
+			if (this.finishedLevels < world.to_unlock) {
+				this.lockedWorld = world;
+				return true;
+			} else if (world.to_unlock === -1) {
+				this.lockedWorld = world;
+				return true;
+			}
+		});
 	}
 
 	/**
@@ -179,51 +204,55 @@ class LevelSelect {
 	displayLevels() {
 		this.showOnly(this.worldPos);
 		let finishedLevels = 0;
-		this.levelList[this.worldPos].forEach(level => {
-			if (level.locked) {
-				level.text.text = "????????";
-			}
-			if (level.finished) {
-				finishedLevels++;
-			}
+		if (this.levelList[this.worldPos]) {
+			this.levelList[this.worldPos].forEach(level => {
+				if (level.locked) {
+					level.text.text = "????????";
+				}
+				if (level.finished) {
+					finishedLevels++;
+				}
 
-			if (this.state === this.LEVEL_SELECT_STATE) {
-				let tween1 = null;
-				if (this.playerPosition === level.levelNum) {
-					tween1 = this.game.add.tween(level.levelGroup).to({ x: 30 }, 500, "Quart.easeOut").start();
-					level.text.alpha = 1;
-					level.score.alpha = 0.7;
-				} else {
-					tween1 = this.game.add.tween(level.levelGroup).to({ x: 0 }, 500, "Quart.easeOut").start();
+				if (this.state === this.LEVEL_SELECT_STATE) {
+					let tween1 = null;
+					if (this.playerPosition === level.levelNum) {
+						tween1 = this.game.add.tween(level.levelGroup).to({ x: 30 }, 500, "Quart.easeOut").start();
+						level.text.alpha = 1;
+						level.score.alpha = 0.7;
+					} else {
+						tween1 = this.game.add.tween(level.levelGroup).to({ x: 0 }, 500, "Quart.easeOut").start();
+						level.text.alpha = 0.2;
+						level.score.alpha = 0.2;
+					}
+				} else if (this.state === this.WORLD_SELECT_STATE) {
+					level.levelGroup.x = 0;
 					level.text.alpha = 0.2;
 					level.score.alpha = 0.2;
 				}
-			} else if (this.state === this.WORLD_SELECT_STATE) {
-				level.levelGroup.x = 0;
-				level.text.alpha = 0.2;
-				level.score.alpha = 0.2;
-			}
-			if (level.coli.selected) {
-				level.coli.sprite.tint = 0xFFFFFF;
-				level.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-			} else {
-				level.coli.sprite.tint = 0x222222;
-				level.coli.sprite.animations.stop();
-				level.coli.sprite.animations.frame = 0;
-			}
+				if (level.coli.selected) {
+					level.coli.sprite.tint = 0xFFFFFF;
+					level.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				} else {
+					level.coli.sprite.tint = 0x222222;
+					level.coli.sprite.animations.stop();
+					level.coli.sprite.animations.frame = 0;
+				}
 
-			if (level.fleur.selected) {
-				level.fleur.sprite.tint = 0xFFFFFF;
-				level.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-			} else {
-				level.fleur.sprite.tint = 0x222222;
-				level.fleur.sprite.animations.stop();
-				level.fleur.sprite.animations.frame = 0;
-			}
-		});
-
-		this.worldCursor.x = WORLD_POSITIONS[this.worldPos].x;
-		this.worldCursor.y = WORLD_POSITIONS[this.worldPos].y;
+				if (level.fleur.selected) {
+					level.fleur.sprite.tint = 0xFFFFFF;
+					level.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				} else {
+					level.fleur.sprite.tint = 0x222222;
+					level.fleur.sprite.animations.stop();
+					level.fleur.sprite.animations.frame = 0;
+				}
+			});
+		}
+		this.animCursor = true;
+		let cursor = this.game.add.tween(this.worldCursor).to({ x: WORLDS_DATA[this.worldPos - 1].world_position.x, y: WORLDS_DATA[this.worldPos - 1].world_position.y }, 200, 'Circ.easeInOut', true, 0);
+		cursor.onComplete.add(() => {
+			this.animCursor = false;
+		}, this);
 		this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
 		this.worldCursor.children[2].text = finishedLevels + '/10';
 
@@ -257,7 +286,7 @@ class LevelSelect {
 		switch (this.state) {
 
 			case this.WORLD_SELECT_STATE:
-				if (this.worldPos < WORLDS.length) {
+				if (this.worldPos < this.lockedWorld.id - 1 && !this.animCursor) {
 					this.worldPos++;
 					this.displayLevels();
 					this.game.audioManager.playSound('cursor');
@@ -278,7 +307,7 @@ class LevelSelect {
 		switch (this.state) {
 
 			case this.WORLD_SELECT_STATE:
-				if (this.worldPos > 1) {
+				if (this.worldPos > 1 && !this.animCursor) {
 					this.worldPos--;
 					this.displayLevels();
 					this.game.audioManager.playSound('cursor');
