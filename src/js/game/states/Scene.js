@@ -289,6 +289,7 @@ class Scene extends Phaser.State {
             this.pauseScreen.display();
             this.hud.hideHud();
             this.hud.pauseTime();
+            this.character.stop();
         }
 
     }

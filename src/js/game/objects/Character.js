@@ -119,6 +119,19 @@ class Character extends Phaser.Sprite {
 		}, 2000);
 	}
 
+	stop() {
+		switch (this.facing) {
+			case DOWN: this.stopDown();
+				break;
+			case UP: this.stopUp();
+				break;
+			case LEFT: this.stopLeft();
+				break;
+			case RIGHT: this.stopRight();
+				break;
+		}
+	}
+
 	/**
 	 * Déplacement vers la gauche
 	 */
