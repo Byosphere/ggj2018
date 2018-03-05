@@ -37,14 +37,16 @@ class EndLevel extends Phaser.State {
 			this.game.add.tween(star).to({ x: time.x + time.width + 30 }, 1000, "Quart.easeInOut", true, this.delay);
 			this.delay += 1000;
 		}
-		if (UNLOCK_PATTERN[this.level.num] && UNLOCK_PATTERN[this.level.num].length) {
+		let unlockPattern = WORLDS_DATA[this.level.world - 1].unlock_pattern;
+
+		if (unlockPattern && unlockPattern.length && unlockPattern[this.level.num]) {
 			this.initialDelay = this.delay;
 			let unlock = this.game.add.text(this.game.world.centerX, 350, this.game.translate('LEVELS_UNLOCKED') + ' :', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 			unlock.anchor.setTo(0.5, 0.5);
 			unlock.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 7);
 			unlock.alpha = 0;
 			this.game.add.tween(unlock).to({ alpha: 1 }, 800, "Quart.easeInOut", true, 1700);
-			UNLOCK_PATTERN[this.level.num].forEach(num => {
+			unlockPattern[this.level.num].forEach(num => {
 				if (this.game.localStorageManager.unlockLevel(num)) {
 					this.displayLevel(num, getLevelFromLevelNum(num), getWorldFromLevelNum(num));
 				}
@@ -122,9 +124,9 @@ class EndLevel extends Phaser.State {
 	/**
      * Si un joueur se déconnecte
      */
-    onDisconnect() {
-        this.disconnectScreen.display();
-    }
+	onDisconnect() {
+		this.disconnectScreen.display();
+	}
 
 	onBackToMenu() {
 		this.continue = false;

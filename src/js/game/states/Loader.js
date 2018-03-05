@@ -36,6 +36,7 @@ class Loader extends Phaser.State {
         this.game.load.image('rightBands', BASE_URL + 'sprites/levelSelect/right_bands.png');
         this.game.load.image('completed', BASE_URL + 'sprites/levelSelect/completed.png');
         this.game.load.image('worldMap', BASE_URL + 'sprites/levelSelect/world_map.png');
+        this.game.load.image('lock', BASE_URL + 'sprites/levelSelect/lock.png');
         this.game.load.image('worldCursor', BASE_URL + 'sprites/levelSelect/world_cursor.png');
         this.game.load.image('tbMedium', BASE_URL + 'sprites/textMessage/background_medium.png');
         this.game.load.image('info', BASE_URL + 'sprites/textMessage/info.png');

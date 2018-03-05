@@ -5,6 +5,7 @@ module.exports = function (grunt) {
         'src/js/data/translate-fr.js',
         'src/js/data/translate-en.js',
         'src/js/data/animations.js',
+        'src/js/data/worlds-data.js',
         'src/js/utils/helpers.js',
         'src/js/utils/controlsManager.js',
         'src/js/utils/AudioManager.js',

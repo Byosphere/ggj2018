@@ -99,5 +99,11 @@ var TEXT_FR = {
     CONTINUE: 'Continuer ?',
     READY_SELECT: 'En attente de l\'autre joueur...',
     EXIT_FLEUR: 'Chou Fleur est arrivée à la sortie !',
-    EXIT_COLI: 'Ton bro Coli est arrivé à la sortie !'
+    EXIT_COLI: 'Ton bro Coli est arrivé à la sortie !',
+    TEXT_1_1_1: 'Bienvenue dans le monde de Chou Fleur et Bro Coli !',
+    TEXT_1_1_2: 'Déplace toi avec les flèches de ton clavier.',
+    TEXT_1_1_3: 'Aide ton partenaire à ouvrir les portes qui lui',
+    TEXT_1_1_4: 'permettront de t\'aider à progresser jusqu\'à la sortie.',
+    TEXT_2_1_1: 'Il se pourrait que tu ai besoin que quelqu\'un reste sur',
+    TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.'
 }
