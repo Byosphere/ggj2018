@@ -61,7 +61,7 @@ class Scene extends Phaser.State {
         if (WORLDS_DATA[level.world - 1] && WORLDS_DATA[level.world - 1].story_texts) {
             let storyTexts = WORLDS_DATA[level.world - 1].story_texts;
             storyTexts.forEach(levelText => {
-                if (levelText.level = level.level) {
+                if (levelText.level === level.level) {
                     texts = levelText.text;
                 }
             });
@@ -308,27 +308,27 @@ class Scene extends Phaser.State {
     }
 
     leftButtonDown() {
-        if(this.pauseScreen.isOnPause()) return;
+        if (this.pauseScreen.isOnPause()) return;
         this.character.moveLeft();
     }
 
     rightButtonDown() {
-        if(this.pauseScreen.isOnPause()) return;
+        if (this.pauseScreen.isOnPause()) return;
         this.character.moveRight();
     }
 
     upButtonDown() {
-        if(this.pauseScreen.isOnPause()) return;
+        if (this.pauseScreen.isOnPause()) return;
         this.character.moveUp();
     }
 
     downButtonDown() {
-        if(this.pauseScreen.isOnPause()) return;
+        if (this.pauseScreen.isOnPause()) return;
         this.character.moveDown();
     }
 
     leftButtonReleased() {
-        if(this.pauseScreen.isOnPause()) return;
+        if (this.pauseScreen.isOnPause()) return;
         this.character.stopLeft();
     }
 
