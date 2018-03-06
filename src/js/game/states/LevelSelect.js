@@ -413,6 +413,7 @@ class LevelSelect {
 				} else if (this.heroSelected === FLEUR_HEROS && !this.levelList[this.worldPos][this.playerPosition][COLI_HEROS].selected) {
 					this.heroSelected = COLI_HEROS;
 				}
+				this.game.audioManager.playSound('cursor');
 				this.displayLevels();
 				break;
 		}
@@ -427,6 +428,7 @@ class LevelSelect {
 				} else if (this.heroSelected === FLEUR_HEROS && !this.levelList[this.worldPos][this.playerPosition][COLI_HEROS].selected) {
 					this.heroSelected = COLI_HEROS;
 				}
+				this.game.audioManager.playSound('cursor');
 				this.displayLevels();
 				break;
 		}
