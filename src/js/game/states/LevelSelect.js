@@ -106,6 +106,12 @@ class LevelSelect {
 		for (let w = 1; w <= WORLDS.length; w++) {
 			this.levelList[w] = [];
 			let posY = 80;
+			let mouseArea = this.game.add.graphics(WORLDS_DATA[w - 1].world_position.x, WORLDS_DATA[w - 1].world_position.y - 15);
+			mouseArea.beginFill(0xFF000, 0);
+			mouseArea.drawRect(0, 0, CELL_SIZE, CELL_SIZE);
+			mouseArea.endFill();
+			mouseArea.worldNum = w;
+			this.game.controlsManager.clickable(mouseArea);
 
 			for (let i = 0; i < NB_LEVELS; i++) {
 
@@ -117,7 +123,9 @@ class LevelSelect {
 				let score = this.game.add.text(graph.x + 50, graph.centerY + 5, this.game.translate('BEST_TIME') + ': -min -s | ' + this.game.translate('COLLECTIBLE') + ': -', { font: SMALLEST_FONT, fill: DEFAULT_COLOR });
 				score.alpha = 0.7;
 				let coliSelect = this.game.add.sprite(levelHud.x + 6, levelHud.y - 2, 'coli');
+				this.game.controlsManager.clickable(coliSelect);
 				let fleurSelect = this.game.add.sprite(levelHud.x + 61, levelHud.y - 2, 'fleur');
+				this.game.controlsManager.clickable(fleurSelect);
 				coliSelect.tint = 0x222222;
 				fleurSelect.tint = 0x222222;
 				text.anchor.setTo(0, 0.5);
@@ -285,18 +293,59 @@ class LevelSelect {
 	}
 
 	mouseOver(obj) {
-		if (this.state === this.LEVEL_SELECT_STATE) {
+
+		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum && obj.worldNum != this.worldPos) {
+
+			this.worldPos = obj.worldNum;
+			this.displayLevels();
+			this.game.audioManager.playSound('cursor');
+
+		} else if (this.state === this.LEVEL_SELECT_STATE && this.playerPosition != obj.id) {
 			this.playerPosition = obj.id;
 			this.displayLevels();
 			this.game.audioManager.playSound('cursor');
-		} else if (this.state === this.WORLD_SELECT_STATE) {
+		} else if (
+			this.state === this.HEROS_SELECT_STATE
+			&& obj.key === 'coli'
+			&& !this.levelList[this.worldPos][this.playerPosition][COLI_HEROS].selected
+			&& this.heroSelected != COLI_HEROS
+		) {
 
+			this.heroSelected = COLI_HEROS;
+			this.game.audioManager.playSound('cursor');
+			this.displayLevels();
+
+		} else if (
+			this.state === this.HEROS_SELECT_STATE
+			&& obj.key === 'fleur'
+			&& !this.levelList[this.worldPos][this.playerPosition][FLEUR_HEROS].selected
+			&& this.heroSelected != FLEUR_HEROS
+		) {
+
+			this.heroSelected = FLEUR_HEROS;
+			this.game.audioManager.playSound('cursor');
+			this.displayLevels();
 		}
 	}
 
 	mouseClick(obj) {
-		if (obj.id >= 0 && this.state === this.LEVEL_SELECT_STATE) {
+
+		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum === this.worldPos) {
+
+			this.state = this.LEVEL_SELECT_STATE;
+			this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
+			this.game.audioManager.playSound('bip');
+			this.displayLevels();
+
+		} else if (obj.id >= 0 && this.state === this.LEVEL_SELECT_STATE) {
 			this.actionButtonReleased();
+		} else if (this.state === this.HEROS_SELECT_STATE && (obj.key === this.heroSelected)) {
+			if (this.levelList[this.worldPos][this.playerPosition].selected) return;
+			this.state = this.READY_STATE;
+			this.infoText.show(null, this.game.translate('READY_SELECT'));
+			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
+			this.game.controlsManager.disableControls();
+			this.game.audioManager.playSound('bip');
 		}
 	}
 

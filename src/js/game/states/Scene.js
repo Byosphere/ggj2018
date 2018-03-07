@@ -177,7 +177,7 @@ class Scene extends Phaser.State {
         this.loadGroup.add(loadBack);
         this.loadGroup.add(preload);
 
-        this.pauseScreen = new PauseScreen(this.game);
+        this.pauseScreen = new PauseScreen(this.game, this);
         this.disconnectScreen = new DisconnectScreen(this.game);
         this.infoText = new TextMessage(this.game);
         this.game.serverManager.getSocket().emit('levelready', this.debug);
@@ -349,6 +349,19 @@ class Scene extends Phaser.State {
             this.pauseScreen.moveUp();
         } else {
             this.character.stopUp();
+        }
+    }
+
+    mouseOver(obj) {
+        if (obj.id && this.pauseScreen.isOnPause() && this.pauseScreen.positionChanged(obj.id)) {
+            this.pauseScreen.updateMenu(obj.id);
+            this.game.audioManager.playSound('cursor');
+        }
+    }
+
+    mouseClick(obj) {
+        if (obj.id && this.pauseScreen.isOnPause()) {
+            this.pauseScreen.action();
         }
     }
 

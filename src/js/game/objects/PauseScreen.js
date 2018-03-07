@@ -1,7 +1,8 @@
 class PauseScreen {
 
-    constructor(game) {
-        this.game = game
+    constructor(game, scene) {
+        this.game = game;
+        this.scene = scene;
         this.pauseGroup = null;
         this.onPause = false;
         this.index = 0;
@@ -88,18 +89,29 @@ class PauseScreen {
         this.textMenu1 = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 50, 'Recommencer le niveau', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.textMenu1.anchor.setTo(0.5);
         this.textMenu1.alpha = 1;
+        this.textMenu1.id = 1;
+        this.game.controlsManager.clickable(this.textMenu1);
         this.pauseGroup.add(this.textMenu1);
+
         this.textMenu2 = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Retourner à la carte des mondes', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.textMenu2.anchor.setTo(0.5);
         this.textMenu2.alpha = 0.3;
+        this.textMenu2.id = 2;
+        this.game.controlsManager.clickable(this.textMenu2);
         this.pauseGroup.add(this.textMenu2);
+
         this.textMenu3 = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.translate('INSTRUCTIONS'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.textMenu3.anchor.setTo(0.5);
         this.textMenu3.alpha = 0.3;
+        this.textMenu3.id = 3;
+        this.game.controlsManager.clickable(this.textMenu3);
         this.pauseGroup.add(this.textMenu3);
+
         this.textMenu4 = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 100, 'Reprendre la partie', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.textMenu4.anchor.setTo(0.5);
         this.textMenu4.alpha = 0.3;
+        this.textMenu4.id = 4;
+        this.game.controlsManager.clickable(this.textMenu4);
         this.pauseGroup.add(this.textMenu4);
     }
 
@@ -113,7 +125,15 @@ class PauseScreen {
         });
     }
 
-    updateMenu() {
+    positionChanged(objId) {
+        return (objId -1) != this.index;
+    }
+
+    updateMenu(objId) {
+
+        if (objId)
+            this.index = objId - 1;
+
         this.textMenu1.alpha = 0.3;
         this.textMenu2.alpha = 0.3;
         this.textMenu3.alpha = 0.3;
@@ -152,12 +172,12 @@ class PauseScreen {
         }
     }
 
-    action(scene) {
+    action() {
         switch (this.index) {
             case 0:
                 this.game.serverManager.getSocket().emit('reset');
                 this.game.audioManager.playSound('bip');
-                scene.onResetLevel();
+                this.scene.onResetLevel();
                 break;
             case 1:
                 this.game.serverManager.getSocket().emit('backmenu');
@@ -167,7 +187,7 @@ class PauseScreen {
                 });
                 break;
             case 2:
-            this.game.audioManager.playSound('bip');
+                this.game.audioManager.playSound('bip');
                 window.open('./instructions', '_blank');
                 break;
             case 3:
