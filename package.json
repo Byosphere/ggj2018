@@ -7,7 +7,8 @@
     "start": "node server.js",
     "build": "grunt",
     "postinstall": "grunt prod",
-    "dev": "grunt && node server.js"
+    "dev": "grunt && node server.js",
+    "electron": "electron main.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,8 @@
   },
   "homepage": "https://github.com/campignon/ggj2018#readme",
   "devDependencies": {
+    "electron": "^1.8.3",
+    "electron-rebuild": "^1.7.3",
     "grunt-contrib-watch": "^1.0.0",
     "http-server": "^0.11.1"
   },

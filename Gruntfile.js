@@ -31,9 +31,9 @@ module.exports = function (grunt) {
         'src/js/game/objects/TextMessage.js'
     ];
 
-    var jsSourcesDev = ['src/js/utils/storage-dev.js'];
+    var jsSourcesDev = ['src/js/utils/var-dev.js'];
 
-    var jsSourcesProd = ['src/js/utils/storage-prod.js'];
+    var jsSourcesProd = ['src/js/utils/var-prod.js'];
 
     // Load modules
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -55,7 +55,8 @@ module.exports = function (grunt) {
                     { src: 'src/index-dev.html', dest: 'public/index.html' },
                     { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
                     { src: 'src/css/style.css', dest: 'public/css/style.css' },
-                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' }
+                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
                 ]
             },
             prod: {
