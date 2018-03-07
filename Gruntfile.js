@@ -125,6 +125,7 @@ module.exports = function (grunt) {
     // Tasks definition
     grunt.registerTask('default', ['dev']);
     grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets', 'watch:scripts']);
+    grunt.registerTask('build', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets']);
     grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
 
     grunt.registerTask('scripts:dev', ['concat:src']);

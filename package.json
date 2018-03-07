@@ -8,7 +8,7 @@
     "build": "grunt",
     "postinstall": "grunt prod",
     "dev": "grunt && node server.js",
-    "electron": "electron main.js"
+    "electron": "grunt build && electron main.js"
   },
   "repository": {
     "type": "git",
