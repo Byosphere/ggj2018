@@ -6,25 +6,6 @@ const CONTROLLER = false;
 const DEFAULT_CURSOR_POSITION = 'fleur';
 const NB_LEVELS = 10;
 const WORLDS = ['laserWorld', 'forestWorld'];
-const UNLOCK_PATTERN = [
-    [],
-    [2, 11],
-    [3],
-    [4],
-    [5],
-    [6, 12],
-    [7],
-    [8],
-    [9],
-    [10],
-    [],
-    [12],
-    [13],
-    [14],
-    [15],
-    [16],
-    [17]
-];
 
 /** Default values */
 const DEFAULT_LANGUAGE = 0;
@@ -63,12 +44,6 @@ const VICTORY_HEIGHT = 800;
 const CREDITS_HEIGHT = 1200;
 const CREDITS_WIDTH = 800;
 const MENU_HEROS_POS_Y = 350;
-const WORLD_POSITIONS = [
-    {},
-    { x: 206, y: 110 },
-    { x: 145, y: 175 },
-    { x: 328, y: 300 },
-];
 
 /* OBJECTS */
 

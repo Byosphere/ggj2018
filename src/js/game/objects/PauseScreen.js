@@ -58,6 +58,7 @@ class PauseScreen {
             this.game.add.tween(this.textMenu1).to({ alpha: 0 }, 500, 'Quart.easeInOut', true, 0);
             this.game.add.tween(this.textMenu2).to({ alpha: 0 }, 500, 'Quart.easeInOut', true, 0);
             this.game.add.tween(this.textMenu3).to({ alpha: 0 }, 500, 'Quart.easeInOut', true, 0);
+            this.game.add.tween(this.textMenu4).to({ alpha: 0 }, 500, 'Quart.easeInOut', true, 0);
             this.game.add.tween(this.backgroundTopCorner1).to({ x: -200, y: -200 }, 500, 'Quart.easeInOut', true, 300);
             this.game.add.tween(this.backgroundTopMiddle).to({ y: -200 }, 500, 'Quart.easeInOut', true, 300);
             this.game.add.tween(this.backgroundTopMiddle2).to({ y: -200 }, 500, 'Quart.easeInOut', true, 300);
@@ -72,9 +73,11 @@ class PauseScreen {
 
     display() {
         this.game.audioManager.getCurrentMusic().pause();
+        this.onPause = true;
+        this.game.controlsManager.disableControls();
         this.displayBackground().then(() => {
+            this.game.controlsManager.enableControls();
             this.displayMenu();
-            this.onPause = true;
         });
     }
 
@@ -90,14 +93,19 @@ class PauseScreen {
         this.textMenu2.anchor.setTo(0.5);
         this.textMenu2.alpha = 0.3;
         this.pauseGroup.add(this.textMenu2);
-        this.textMenu3 = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, 'Reprendre la partie', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.textMenu3 = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 50, this.game.translate('INSTRUCTIONS'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.textMenu3.anchor.setTo(0.5);
         this.textMenu3.alpha = 0.3;
         this.pauseGroup.add(this.textMenu3);
+        this.textMenu4 = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 100, 'Reprendre la partie', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.textMenu4.anchor.setTo(0.5);
+        this.textMenu4.alpha = 0.3;
+        this.pauseGroup.add(this.textMenu4);
     }
 
     hide() {
         this.hideBackground().then(() => {
+            this.index = 0;
             this.pauseGroup.destroy();
             this.game.controlsManager.enableControls();
             this.game.audioManager.getCurrentMusic().resume();
@@ -109,6 +117,7 @@ class PauseScreen {
         this.textMenu1.alpha = 0.3;
         this.textMenu2.alpha = 0.3;
         this.textMenu3.alpha = 0.3;
+        this.textMenu4.alpha = 0.3;
         switch (this.index) {
             case 0:
                 this.textMenu1.alpha = 1;
@@ -119,20 +128,25 @@ class PauseScreen {
             case 2:
                 this.textMenu3.alpha = 1;
                 break;
+            case 3:
+                this.textMenu4.alpha = 1;
+                break;
         }
     }
 
     moveUp() {
-        console.log('move');
+
         if (this.index > 0) {
+            this.game.audioManager.playSound('cursor');
             this.index--;
             this.updateMenu();
         }
     }
 
     moveDown() {
-        console.log('move');
-        if (this.index < 2) {
+
+        if (this.index < 3) {
+            this.game.audioManager.playSound('cursor');
             this.index++;
             this.updateMenu();
         }
@@ -142,11 +156,23 @@ class PauseScreen {
         switch (this.index) {
             case 0:
                 this.game.serverManager.getSocket().emit('reset');
+                this.game.audioManager.playSound('bip');
                 scene.onResetLevel();
                 break;
             case 1:
+                this.game.serverManager.getSocket().emit('backmenu');
+                this.game.audioManager.playSound('bip');
+                this.hideBackground().then(() => {
+                    this.game.state.start('levelhub');
+                });
                 break;
             case 2:
+            this.game.audioManager.playSound('bip');
+                window.open('./instructions', '_blank');
+                break;
+            case 3:
+                this.game.audioManager.playSound('bip');
+                this.hide();
                 break;
         }
     }
@@ -156,6 +182,7 @@ class PauseScreen {
     }
 
     destroy() {
-        this.pauseGroup.destroy();
+        if (this.pauseGroup)
+            this.pauseGroup.destroy();
     }
 }

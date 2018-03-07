@@ -9,7 +9,7 @@ class ServerManager {
     constructor(game) {
         this.game = game;
         this.callbackContext = null;
-        this.socket = io.connect();
+        this.socket = io(IO_CONNEXION);
         this.addListeners();
     }
 
