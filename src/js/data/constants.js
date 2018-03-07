@@ -97,6 +97,7 @@ const LEFT = 'left';
 const RIGHT = 'right';
 const CANCEL = 'cancel';
 const START = 'start';
+const MOUSE = 'mouse';
 const COLI_HEROS = 'coli';
 const FLEUR_HEROS = 'fleur';
 const ORANGE = 'orange';

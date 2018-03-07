@@ -94,6 +94,7 @@ class LevelSelect {
 			for (let i = 0; i < NB_LEVELS; i++) {
 
 				let graph = this.game.add.sprite(rightBands.x + 94, posY, 'levelBack');
+				graph.id = i;
 				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, this.game.translate('LEVEL_NAMES', index), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelNum = this.game.add.text(graph.x + 25, graph.centerY, w + '-' + (i + 1), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelHud = this.game.add.sprite(graph.x + graph.width - 11, graph.y, 'hudSelect');
@@ -153,6 +154,7 @@ class LevelSelect {
 				});
 				index++;
 				posY += 70;
+				this.game.controlsManager.clickable(graph);
 				this.levelListGroup.add(levelGroup);
 			}
 		}
@@ -247,6 +249,22 @@ class LevelSelect {
 				}
 			});
 		});
+	}
+
+	mouseOver(obj) {
+		if (this.state === this.LEVEL_SELECT_STATE) {
+			this.playerPosition = obj.id;
+			this.displayLevels();
+			this.game.audioManager.playSound('cursor');
+		} else if (this.state === this.WORLD_SELECT_STATE) {
+
+		}
+	}
+
+	mouseClick(obj) {
+		if (obj.id >= 0 && this.state === this.LEVEL_SELECT_STATE) {
+			this.actionButtonReleased();
+		}
 	}
 
 	downButtonReleased() {

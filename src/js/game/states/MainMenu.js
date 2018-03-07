@@ -96,18 +96,26 @@ class MainMenu extends Phaser.State {
         this.menuList = [];
         let elem1 = this.game.add.text(this.game.world.centerX, 450, this.game.translate('LOBBY_TEXT_CREATE'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         elem1.anchor.setTo(0.5, 0);
+        elem1.id = 0;
+        this.game.controlsManager.clickable(elem1);
         this.menuList.push(elem1);
         let elem2 = this.game.add.text(this.game.world.centerX, elem1.y + 60, this.game.translate('LOBBY_TEXT_JOIN'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         elem2.anchor.setTo(0.5, 0);
         elem2.alpha = 0.3;
+        elem2.id = 1;
+        this.game.controlsManager.clickable(elem2);
         this.menuList.push(elem2);
         let elem3 = this.game.add.text(this.game.world.centerX, elem2.y + 60, this.game.translate('PARAMETERS_TITLE'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         elem3.anchor.setTo(0.5, 0);
         elem3.alpha = 0.3;
+        elem3.id = 2;
+        this.game.controlsManager.clickable(elem3);
         this.menuList.push(elem3);
         let elem4 = this.game.add.text(this.game.world.centerX, elem3.y + 60, this.game.translate('INSTRUCTIONS'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         elem4.anchor.setTo(0.5, 0);
         elem4.alpha = 0.3;
+        elem4.id = 3;
+        this.game.controlsManager.clickable(elem4);
         this.menuList.push(elem4);
         this.game.serverManager.getSocket().emit('init');
     }
@@ -263,6 +271,45 @@ class MainMenu extends Phaser.State {
                     this.game.serverManager.getSocket().emit('joinlobby', this.input.text.text);
                 }
                 break;
+        }
+    }
+
+    mouseClick() {
+        if (this.state === this.MENU_GENERAL_STATE) {
+            switch (this.playerIndex) {
+                case 0:
+                    this.game.audioManager.playSound('bip');
+                    this.game.serverManager.getSocket().emit('newlobby');
+                    break;
+                case 1:
+                    this.game.audioManager.playSound('bip');
+                    this.displayJoinLobby();
+                    break;
+                case 2:
+                    this.game.audioManager.playSound('bip');
+                    this.menuList.forEach(el => {
+                        el.alpha = 0;
+                    });
+                    this.game.controlsManager.disableControls();
+                    this.hideBackground().then(() => {
+                        this.game.state.start('param', true, false, 'menu');
+                    });
+                    break;
+                case 3:
+                    window.open('./instructions', '_blank');
+                    break;
+            }
+        }
+    }
+
+    mouseOver(obj) {
+        if (this.playerIndex != obj.id && this.state === this.MENU_GENERAL_STATE) {
+            this.playerIndex = obj.id;
+            this.menuList.forEach(el => {
+                el.alpha = 0.3;
+            });
+            this.menuList[this.playerIndex].alpha = 1;
+            this.game.audioManager.playSound('cursor');
         }
     }
 

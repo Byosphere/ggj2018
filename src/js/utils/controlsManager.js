@@ -35,6 +35,7 @@ class ControlsManager {
         this.controlsEnabled[RIGHT] = true;
         this.controlsEnabled[CANCEL] = true;
         this.controlsEnabled[START] = true;
+        this.controlsEnabled[MOUSE] = true;
         this.secretCode = 0;
     }
 
@@ -46,6 +47,18 @@ class ControlsManager {
             this.initController();
         } else {
             this.initKeyboard();
+        }
+    }
+
+    clickable(obj, group) {
+        if (group) {
+            obj.inputEnableChildren = true;
+            obj.onChildInputUp.add(this.onMouseClick, this);
+            obj.onChildInputOver.add(this.onMouseOver, this);
+        } else {
+            obj.inputEnabled = true;
+            obj.events.onInputUp.add(this.onMouseClick, this);
+            obj.events.onInputOver.add(this.onMouseOver, this);
         }
     }
 
@@ -169,7 +182,7 @@ class ControlsManager {
                     this.callbackContext.secretCodeReleased();
                 }
 
-                    
+
                 break;
             default:
                 console.warn('Button pressed unknown : ' + button);
@@ -256,6 +269,16 @@ class ControlsManager {
             default:
                 console.warn('Button pressed unknown : ' + button);
         }
+    }
+
+    onMouseClick(obj, event) {
+        if (this.callbackContext.mouseClick && this.controlsEnabled[MOUSE])
+            this.callbackContext.mouseClick(obj, event);
+    }
+
+    onMouseOver(obj, event) {
+        if (this.callbackContext.mouseOver && this.controlsEnabled[MOUSE])
+            this.callbackContext.mouseOver(obj, event);
     }
 
     onKeyboardButtonPressed(button) {
