@@ -89,8 +89,8 @@ class MainMenu extends Phaser.State {
     }
 
     initMenu() {
-        this.coli = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'coli');
-        this.fleur = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.height - MENU_HEROS_POS_Y, 'fleur');
+        this.coli = this.game.add.sprite(this.game.world.centerX + (this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.centerY, 'coli');
+        this.fleur = this.game.add.sprite((this.game.world.centerX / 2) - ((HEROS_WIDTH * CELL_SIZE) / 2), this.game.world.centerY, 'fleur');
         this.coli.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
         this.fleur.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
         this.menuList = [];
@@ -168,10 +168,9 @@ class MainMenu extends Phaser.State {
     onJoinLobby(success) {
         if (success) {
             this.game.serverManager.getSocket().emit('newplayer');
-        } else {
-
         }
     }
+
     backFromJoinLobby() {
         this.state = this.MENU_GENERAL_STATE;
         this.infoText.show(null, this.game.translate('LOBBY_TEXT_CONNECTED'), this.game.translate('LOBBY_TEXT_INSTRUCTIONS'));
@@ -206,7 +205,7 @@ class MainMenu extends Phaser.State {
         });
         this.input.visible = true;
         this.input.startFocus();
-        this.validateText = this.game.add.text(this.game.world.centerX, 630, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName() + ' ' + this.game.translate('TO_JOIN_LOBBY'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+        this.validateText = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 190, this.game.translate('GENERIC_PRESS_BUTTON') + ' ' + this.game.controlsManager.getActionButtonName() + ' ' + this.game.translate('TO_JOIN_LOBBY'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
         this.validateText.anchor.set(0.5);
         this.joinLobbyGroup.add(this.validateText);
     }
