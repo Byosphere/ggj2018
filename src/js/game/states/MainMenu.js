@@ -109,6 +109,12 @@ class MainMenu extends Phaser.State {
         elem4.anchor.setTo(0.5, 0);
         elem4.alpha = 0.3;
         this.menuList.push(elem4);
+        if (this.game.isElectronApp) {
+            let elem5 = this.game.add.text(this.game.world.centerX, elem4.y + 60, this.game.translate('QUIT'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
+            elem5.anchor.setTo(0.5, 0);
+            elem5.alpha = 0.3;
+            this.menuList.push(elem5);
+        }
         this.game.serverManager.getSocket().emit('init');
     }
 
@@ -255,6 +261,9 @@ class MainMenu extends Phaser.State {
                         break;
                     case 3:
                         window.open('./instructions', '_blank');
+                        break;
+                    case 4:
+                        this.game.electronManager.quit();
                         break;
                 }
                 break;

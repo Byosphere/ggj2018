@@ -25,6 +25,12 @@ class Game extends Phaser.Game {
         //server socket io
         this.serverManager = new ServerManager(this);
 
+        //check if is an electron app
+        this.isElectronApp = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+        if (this.isElectronApp) {
+            this.electronManager = new ElectronManager(this);
+        }
+
         this.state.start('boot');
     }
 

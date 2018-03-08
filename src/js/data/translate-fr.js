@@ -6,6 +6,7 @@ var TEXT_FR = {
     GENERIC_TO_START: 'pour commencer',
     LOADING_TEXT: 'Chargement...',
     GAME_OVER: 'Game Over',
+    QUIT: 'Quitter',
     YES: 'Oui',
     NO: 'Non',
     INSTRUCTIONS: 'Comment jouer ?',
