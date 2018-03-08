@@ -12,7 +12,7 @@ class PauseScreen {
             this.pauseGroup = this.game.add.group();
             this.darkBack = this.game.add.graphics(0, 0);
             this.darkBack.beginFill(0x00000, 0.8);
-            this.darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            this.darkBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
             this.darkBack.endFill();
             this.pauseGroup.add(this.darkBack);
 

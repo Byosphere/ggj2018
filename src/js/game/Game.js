@@ -2,7 +2,7 @@ class Game extends Phaser.Game {
 
     constructor() {
 
-        super(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, '', null, false, false);
+        super('100', '100', Phaser.AUTO, '', null, false, false);
 
         this.state.add('boot', Booter);
         this.state.add('loader', Loader);

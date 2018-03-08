@@ -16,7 +16,7 @@ class SceneHud {
         let darkBack = this.game.add.graphics(0, 0);
         this.timerGroup.add(darkBack);
         darkBack.beginFill(0x00000, 0.7);
-        darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        darkBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
         darkBack.endFill();
         this.game.world.bringToTop(this.timerGroup);
 
@@ -27,13 +27,13 @@ class SceneHud {
 
         let index = (currentLevel.world - 1) * 10 + currentLevel.level;
         let levelName = this.game.translate('LEVEL_NAMES', index);
-        let levelSubtitle = this.game.add.text(GAME_WIDTH - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        let levelSubtitle = this.game.add.text(this.game.world.width - 300, 200, levelName, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         levelSubtitle.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
         levelSubtitle.anchor.setTo(0.5, 0.5);
         this.timerGroup.add(levelSubtitle);
 
         let tween1 = this.game.add.tween(level).to({ x: this.game.world.centerX + 200 }, 2000, "Quart.easeOut");
-        let tween2 = this.game.add.tween(levelSubtitle).to({ x: GAME_WIDTH - 350 }, 2000, "Quart.easeOut");
+        let tween2 = this.game.add.tween(levelSubtitle).to({ x: this.game.world.width - 350 }, 2000, "Quart.easeOut");
         let tween3 = this.game.add.tween(this.timerGroup).to({ alpha: 0 }, 500, "Linear");
 
         tween1.onComplete.add(() => {
@@ -144,7 +144,7 @@ class SceneHud {
         this.hudGroup = this.game.add.group();
         this.hudBack = this.game.add.graphics(0, 0);
         this.hudBack.beginFill(0x00000, 0.7);
-        this.hudBack.drawRect(0, 8, GAME_WIDTH, 46);
+        this.hudBack.drawRect(0, 8, this.game.world.width, 46);
         this.hudBack.endFill();
         this.hudGroup.add(this.hudBack);
         this.hudGroup.add(this.game.add.sprite(264, -1, 'bulle'));

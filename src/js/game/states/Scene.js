@@ -131,7 +131,7 @@ class Scene extends Phaser.State {
 
         let loadBack = this.game.add.graphics(0, 0);
         loadBack.beginFill(0x00000, 1);
-        loadBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        loadBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
         loadBack.endFill();
         let preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
         preload.anchor.setTo(0.5);

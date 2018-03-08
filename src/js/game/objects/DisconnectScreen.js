@@ -11,7 +11,7 @@ class DisconnectScreen {
         let darkBack = this.game.add.graphics(0, 0);
         this.disconnectGroup.add(darkBack);
         darkBack.beginFill(0x00000, 0.7);
-        darkBack.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        darkBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
         darkBack.endFill();
         let disconnectText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, this.game.translate('MENU_TEXT_ERROR'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.disconnectGroup.add(disconnectText);
