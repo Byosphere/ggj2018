@@ -7,7 +7,6 @@ class TextMessage {
         this.game = game;
         this.currentTextGroup = null;
         this.textGroup = game.add.group();
-        this.textGroup.x = game.world.width / 4 - this.textGroup.width / 2;
         this.textGroup.y = game.world.height;
         let background = game.add.sprite(0, 20, 'tbMedium');
         background.alpha = 0.9;
@@ -18,6 +17,7 @@ class TextMessage {
         this.displayText2 = game.add.text(30, this.displayText1.y + this.displayText1.height, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
         this.textGroup.add(this.displayText2);
         this.textGroup.add(info);
+        this.textGroup.x = game.world.centerX - (this.textGroup.width / 2);
     }
 
     /**
