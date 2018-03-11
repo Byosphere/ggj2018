@@ -90,6 +90,10 @@ class EndLevel extends Phaser.State {
 		this.yes = this.game.add.text(250, 0, '< ' + this.game.translate('YES') + ' >', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 		this.no = this.game.add.text(390, 0, '  ' + this.game.translate('NO') + '  ', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 		this.no.alpha = 0.3;
+		this.yes.id = 1;
+		this.no.id = 2;
+		this.game.controlsManager.clickable(this.yes);
+		this.game.controlsManager.clickable(this.no);
 		group.add(text);
 		group.add(this.yes);
 		group.add(this.no);
@@ -118,6 +122,19 @@ class EndLevel extends Phaser.State {
 			this.yes.text = '  ' + this.game.translate('YES') + '  ';
 			this.no.alpha = 1;
 			this.no.text = '< ' + this.game.translate('NO') + ' >';
+		}
+	}
+
+	mouseLeftClick() {
+		this.actionButtonReleased();
+	}
+
+	mouseOver(obj) {
+		console.log(obj);
+		if (obj.id === 1) {
+			this.leftButtonReleased();
+		} else if (obj.id === 2) {
+			this.rightButtonReleased();
 		}
 	}
 
