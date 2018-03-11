@@ -32,10 +32,9 @@ class Character extends Phaser.Sprite {
 	 * Initialisation des animations possibles du personnage
 	 */
 	initAnimations() {
-		this.animations.add(HEROS_ANIMATIONS.WALK_RIGHT.NAME, HEROS_ANIMATIONS.WALK_RIGHT.FRAMES, 12, true);
-		this.animations.add(HEROS_ANIMATIONS.WALK_LEFT.NAME, HEROS_ANIMATIONS.WALK_LEFT.FRAMES, 12, true);
-		this.animations.add(HEROS_ANIMATIONS.WALK_UP.NAME, HEROS_ANIMATIONS.WALK_UP.FRAMES, 12, true);
-		this.animations.add(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES, 12, true);
+		Object.keys(HEROS_ANIMATIONS).map(objectKey => {
+			this.animations.add(HEROS_ANIMATIONS[objectKey].NAME, HEROS_ANIMATIONS[objectKey].FRAMES, 12, true);
+		});
 	}
 
 	/**
@@ -138,7 +137,7 @@ class Character extends Phaser.Sprite {
 	moveLeft() {
 		this.facing = LEFT;
 		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
+			this.animations.play(HEROS_ANIMATIONS.STONE_LEFT.NAME, true);
 			this.body.velocity.x = -100;
 		} else {
 			this.animations.play(HEROS_ANIMATIONS.WALK_LEFT.NAME, true);
@@ -152,7 +151,7 @@ class Character extends Phaser.Sprite {
 	moveRight() {
 		this.facing = RIGHT;
 		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
+			this.animations.play(HEROS_ANIMATIONS.STONE_RIGHT.NAME, true);
 			this.body.velocity.x = 100;
 		} else {
 			this.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
@@ -167,7 +166,7 @@ class Character extends Phaser.Sprite {
 	moveUp() {
 		this.facing = UP;
 		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
+			this.animations.play(HEROS_ANIMATIONS.STONE_UP.NAME, true);
 			this.body.velocity.y = -100;
 		} else {
 			this.animations.play(HEROS_ANIMATIONS.WALK_UP.NAME, true);
@@ -182,10 +181,10 @@ class Character extends Phaser.Sprite {
 	moveDown() {
 		this.facing = DOWN;
 		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.CARRY_RIGHT.NAME, true);
+			this.animations.play(HEROS_ANIMATIONS.STONE_DOWN.NAME, true);
 			this.body.velocity.y = 100;
 		} else {
-			this.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
+			this.animations.play(HEROS_ANIMATIONS.WALK_DOWN.NAME, true);
 			this.body.velocity.y = 200;
 		}
 		this.scale.setTo(1, 1);
@@ -199,7 +198,7 @@ class Character extends Phaser.Sprite {
 		this.animations.stop();
 		this.facing = LEFT;
 		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES[0];
+			this.frame = HEROS_ANIMATIONS.STONE_LEFT.FRAMES[0];
 		else
 			this.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
 	}
@@ -212,7 +211,7 @@ class Character extends Phaser.Sprite {
 		this.animations.stop();
 		this.facing = RIGHT;
 		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES[0];
+			this.frame = HEROS_ANIMATIONS.STONE_RIGHT.FRAMES[0];
 		else
 			this.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
 	}
@@ -225,7 +224,7 @@ class Character extends Phaser.Sprite {
 		this.animations.stop();
 		this.facing = UP;
 		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES[0];
+			this.frame = HEROS_ANIMATIONS.STONE_UP.FRAMES[0];
 		else
 			this.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
 	}
@@ -238,8 +237,8 @@ class Character extends Phaser.Sprite {
 		this.animations.stop();
 		this.facing = DOWN;
 		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.CARRY_RIGHT.FRAMES[0];
+			this.frame = HEROS_ANIMATIONS.STONE_DOWN.FRAMES[0];
 		else
-			this.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
+			this.frame = HEROS_ANIMATIONS.WALK_DOWN.FRAMES[0];
 	}
 }
