@@ -9,7 +9,7 @@ class Booter extends Phaser.State {
 
         // Scaling options
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
+        this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
         //init controllers
         this.game.controlsManager.init();
 

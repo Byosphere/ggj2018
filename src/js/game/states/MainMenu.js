@@ -121,6 +121,8 @@ class MainMenu extends Phaser.State {
             let elem5 = this.game.add.text(this.game.world.centerX, elem4.y + 60, this.game.translate('QUIT'), { font: DEFAULT_FONT, fill: MENU_TEXT_WAITING_COLOR });
             elem5.anchor.setTo(0.5, 0);
             elem5.alpha = 0.3;
+            elem5.id = 4;
+            this.game.controlsManager.clickable(elem5);
             this.menuList.push(elem5);
         }
         this.game.serverManager.getSocket().emit('init');
@@ -282,32 +284,8 @@ class MainMenu extends Phaser.State {
         }
     }
 
-    mouseClick() {
-        if (this.state === this.MENU_GENERAL_STATE) {
-            switch (this.playerIndex) {
-                case 0:
-                    this.game.audioManager.playSound('bip');
-                    this.game.serverManager.getSocket().emit('newlobby');
-                    break;
-                case 1:
-                    this.game.audioManager.playSound('bip');
-                    this.displayJoinLobby();
-                    break;
-                case 2:
-                    this.game.audioManager.playSound('bip');
-                    this.menuList.forEach(el => {
-                        el.alpha = 0;
-                    });
-                    this.game.controlsManager.disableControls();
-                    this.hideBackground().then(() => {
-                        this.game.state.start('param', true, false, 'menu');
-                    });
-                    break;
-                case 3:
-                    window.open('./instructions', '_blank');
-                    break;
-            }
-        }
+    mouseLeftClick() {
+        this.actionButtonReleased();
     }
 
     mouseOver(obj) {

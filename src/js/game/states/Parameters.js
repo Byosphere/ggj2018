@@ -64,7 +64,7 @@ class Parameters extends Phaser.State {
 		}
 	}
 
-	mouseClick() {
+	mouseLeftClick() {
 		this.actionButtonReleased();
 	}
 

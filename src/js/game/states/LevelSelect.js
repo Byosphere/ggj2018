@@ -328,7 +328,7 @@ class LevelSelect {
 		}
 	}
 
-	mouseClick(obj) {
+	mouseLeftClick(obj) {
 
 		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum === this.worldPos) {
 

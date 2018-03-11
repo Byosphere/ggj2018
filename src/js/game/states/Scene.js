@@ -359,7 +359,7 @@ class Scene extends Phaser.State {
         }
     }
 
-    mouseClick(obj) {
+    mouseLeftClick(obj) {
         if (obj.id && this.pauseScreen.isOnPause()) {
             this.pauseScreen.action();
         }

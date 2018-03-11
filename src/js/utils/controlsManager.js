@@ -36,6 +36,9 @@ class ControlsManager {
         this.controlsEnabled[CANCEL] = true;
         this.controlsEnabled[START] = true;
         this.controlsEnabled[MOUSE] = true;
+        this.controlsEnabled[MOUSE_LEFT] = true;
+        this.controlsEnabled[MOUSE_RIGHT] = true;
+        this.controlsEnabled[MOUSE_MIDDLE] = true;
         this.secretCode = 0;
     }
 
@@ -272,8 +275,21 @@ class ControlsManager {
     }
 
     onMouseClick(obj, event) {
-        if (this.callbackContext.mouseClick && this.controlsEnabled[MOUSE])
-            this.callbackContext.mouseClick(obj, event);
+        switch (event.button) {
+            case Phaser.Mouse.LEFT_BUTTON:
+                if (this.callbackContext.mouseLeftClick && this.controlsEnabled[MOUSE] && this.controlsEnabled[MOUSE_LEFT])
+                    this.callbackContext.mouseLeftClick(obj, event);
+                break;
+            case Phaser.Mouse.RIGHT_BUTTON:
+                if (this.callbackContext.mouseRightClick && this.controlsEnabled[MOUSE] && this.controlsEnabled[MOUSE_RIGHT])
+                    this.callbackContext.mouseRightClick(obj, event);
+                break;
+
+            case Phaser.Mouse.MIDDLE_BUTTON:
+                if (this.callbackContext.mouseMiddleClick && this.controlsEnabled[MOUSE] && this.controlsEnabled[MOUSE_MIDDLE])
+                    this.callbackContext.mouseMiddleClick(obj, event);
+                break;
+        }
     }
 
     onMouseOver(obj, event) {
