@@ -139,6 +139,8 @@ class Parameters extends Phaser.State {
 				delete param.tempVal;
 			}
 			this.game.localStorageManager.save('parameters');
+			if (this.game.isElectronApp)
+				this.game.electronManager.initDisplay();
 			if (this.game.parameters.debugMode.value && this.game.parameters.debugLevel.value) {
 				let value = this.game.parameters.debugLevel.value;
 				let level = { level: getLevelFromLevelNum(value), world: getWorldFromLevelNum(value) };

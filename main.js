@@ -22,6 +22,10 @@ function createWindow() {
 		slashes: true
 	}));
 
+	app.on('window-all-closed', function () {
+		app.quit();
+	});
+	
 	// Open the DevTools.
 	//mainWindow.webContents.openDevTools();
 

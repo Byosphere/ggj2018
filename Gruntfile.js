@@ -10,6 +10,7 @@ module.exports = function (grunt) {
         'src/js/utils/controlsManager.js',
         'src/js/utils/AudioManager.js',
         'src/js/utils/ServerManager.js',
+        'src/js/utils/ElectronManager.js',
         'src/js/utils/LocalStorageManager.js',
         'src/js/game/Game.js',
         'src/js/game/states/Parameters.js',
@@ -125,6 +126,7 @@ module.exports = function (grunt) {
     // Tasks definition
     grunt.registerTask('default', ['dev']);
     grunt.registerTask('dev', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets', 'watch:scripts']);
+    grunt.registerTask('build', ['clean', 'copy:dev', 'scripts:dev', 'copy:assets']);
     grunt.registerTask('prod', ['clean', 'copy:prod', 'scripts:prod', 'cssmin', 'copy:assets']);
 
     grunt.registerTask('scripts:dev', ['concat:src']);

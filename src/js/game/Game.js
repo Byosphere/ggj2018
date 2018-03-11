@@ -2,7 +2,7 @@ class Game extends Phaser.Game {
 
     constructor() {
 
-        super(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, '', null, false, false);
+        super('100', '100', Phaser.AUTO, '', null, false, false);
 
         this.state.add('boot', Booter);
         this.state.add('loader', Loader);
@@ -24,6 +24,12 @@ class Game extends Phaser.Game {
 
         //server socket io
         this.serverManager = new ServerManager(this);
+
+        //check if is an electron app
+        this.isElectronApp = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+        if (this.isElectronApp) {
+            this.electronManager = new ElectronManager(this);
+        }
 
         this.state.start('boot');
     }
