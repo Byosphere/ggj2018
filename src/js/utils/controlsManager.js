@@ -53,8 +53,8 @@ class ControlsManager {
         }
     }
 
-    clickable(obj, group) {
-        if (group) {
+    clickable(obj) {
+        if (obj.name === 'group') {
             obj.inputEnableChildren = true;
             obj.onChildInputUp.add(this.onMouseClick, this);
             obj.onChildInputOver.add(this.onMouseOver, this);

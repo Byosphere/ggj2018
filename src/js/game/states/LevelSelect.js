@@ -67,6 +67,8 @@ class LevelSelect {
 			this.worldCursor.alpha = 0;
 			this.worldCursor.add(worldCursor);
 			this.worldCursor.add(worldCursorText);
+			worldCursorText.key = 'cursor';
+			this.game.controlsManager.clickable(worldCursorText);
 			this.worldCursor.add(worldCursorText2);
 			this.worldCursor.x = WORLDS_DATA[this.worldPos - 1].world_position.x;
 			this.worldCursor.y = WORLDS_DATA[this.worldPos - 1].world_position.y;
@@ -116,7 +118,7 @@ class LevelSelect {
 			for (let i = 0; i < NB_LEVELS; i++) {
 
 				let graph = this.game.add.sprite(94, posY, 'levelBack');
-				graph.id = i;
+				graph.id = i + 1;
 				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, this.game.translate('LEVEL_NAMES', index), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelNum = this.game.add.text(graph.x + 25, graph.centerY, w + '-' + (i + 1), { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelHud = this.game.add.sprite(graph.x + graph.width - 11, graph.y, 'hudSelect');
@@ -184,12 +186,16 @@ class LevelSelect {
 			}
 		}
 		this.levelListGroup.x = this.game.world.centerX - 64;
+		this.backButton = this.game.add.text(100, 730, '<- Retour', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.backButton.name = 'backbutton';
+		this.backButton.alpha = 0;
 		this.setLockedWorld();
 	}
 
 	create() {
 		this.displayBackground().then(() => {
 			this.displayLevels();
+			this.game.controlsManager.clickable(this.backButton);
 			this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 			this.game.controlsManager.enableControls();
 		});
@@ -268,8 +274,10 @@ class LevelSelect {
 
 		if (this.state === this.WORLD_SELECT_STATE) {
 			this.worldCursor.alpha = 1;
+			this.backButton.alpha = 0.3;
 		} else {
 			this.worldCursor.alpha = 0.5;
+			this.backButton.alpha = 1;
 		}
 		if (this.state === this.HEROS_SELECT_STATE) {
 			this.levelList[this.worldPos][this.playerPosition][this.heroSelected].sprite.tint = 0xffffff;
@@ -300,8 +308,8 @@ class LevelSelect {
 			this.displayLevels();
 			this.game.audioManager.playSound('cursor');
 
-		} else if (this.state === this.LEVEL_SELECT_STATE && this.playerPosition != obj.id) {
-			this.playerPosition = obj.id;
+		} else if (this.state === this.LEVEL_SELECT_STATE && obj.id && this.playerPosition != obj.id - 1) {
+			this.playerPosition = obj.id - 1;
 			this.displayLevels();
 			this.game.audioManager.playSound('cursor');
 		} else if (
@@ -329,8 +337,7 @@ class LevelSelect {
 	}
 
 	mouseLeftClick(obj) {
-
-		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum === this.worldPos) {
+		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum === this.worldPos || obj.key === 'cursor') {
 
 			this.state = this.LEVEL_SELECT_STATE;
 			this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
@@ -346,6 +353,8 @@ class LevelSelect {
 			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
 			this.game.controlsManager.disableControls();
 			this.game.audioManager.playSound('bip');
+		} else if (obj.name === 'backbutton') {
+			this.cancelButtonReleased();
 		}
 	}
 
