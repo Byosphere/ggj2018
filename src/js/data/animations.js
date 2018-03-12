@@ -4,12 +4,17 @@ const HEROS_ANIMATIONS = {
     JUMP: { NAME: 'jump', FRAMES: [2, 3, 4, 5, 6] },
     SIT: { NAME: 'sit', FRAMES: 8 },
     DANCE: { NAME: 'dance', FRAMES: [9, 10, 11, 12] },
-    WALK_RIGHT: { NAME: 'walk_right', FRAMES: [13, 14, 15, 16] },
-    CRY: { NAME: 'cry', FRAMES: [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
-    CARRY_RIGHT: { NAME: 'carry_right', FRAMES: [28, 29, 30, 31] },
-    WALK_UP: { NAME: 'walk-up', FRAMES: [32, 33, 34, 35] },
+    BEGIN_CRY: { NAME: 'begin_cry', FRAMES: [13, 14, 15, 16, 17, 18, 19, 20] },
+    CRY: { NAME: 'cry', FRAMES: [21, 22, 23] },
+    WALK_DOWN: { NAME: 'walk_down', FRAMES: [24, 25, 26, 27] },
+    WALK_RIGHT: { NAME: 'walk_right', FRAMES: [28, 29, 30, 31] },
+    WALK_UP: { NAME: 'walk_up', FRAMES: [32, 33, 34, 35] },
     WALK_LEFT: { NAME: 'walk_left', FRAMES: [36, 37, 38, 39] },
-    HIGHLIGHT: { NAME: 'highlight', FRAMES: [40, 41, 42, 43, 44] }
+    STONE_DOWN: { NAME: 'stone_down', FRAMES: [40, 41, 42, 43] },
+    STONE_RIGHT: { NAME: 'stone_right', FRAMES: [44, 45, 46, 47] },
+    STONE_UP: { NAME: 'stone_up', FRAMES: [48, 49, 50, 51] },
+    STONE_LEFT: { NAME: 'stone_left', FRAMES: [52, 53, 54, 55] },
+    HIGHLIGHT: { NAME: 'highlight', FRAMES: [56, 57, 58, 59, 60] }
 }
 
 const DOOR_ANIMATIONS = {
