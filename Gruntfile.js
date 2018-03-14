@@ -66,7 +66,8 @@ module.exports = function (grunt) {
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.min.js', dest: 'public/js/phaser-input.min.js' },
                     { src: 'src/index-prod.html', dest: 'public/index.html' },
                     { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
-                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' }
+                    { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
                 ]
             },
             assets: {
