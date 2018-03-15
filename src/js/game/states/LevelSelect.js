@@ -188,6 +188,7 @@ class LevelSelect {
 		}
 		this.levelListGroup.x = this.game.world.centerX - 64;
 		this.backButton = this.game.add.text(100, 730, '<- Retour', { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+		this.backButton.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
 		this.backButton.name = 'backbutton';
 		this.backButton.alpha = 0;
 		this.setLockedWorld();
@@ -196,11 +197,12 @@ class LevelSelect {
 	create() {
 		this.displayBackground().then(() => {
 			this.displayLevels();
+			this.backButton.alpha = 1;
 			this.game.controlsManager.clickable(this.backButton);
 			this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 			this.game.controlsManager.enableControls();
+			this.confirmDialog = new ConfirmDialog(this.game, this);
 		});
-
 	}
 
 	setLockedWorld() {
@@ -278,10 +280,8 @@ class LevelSelect {
 
 		if (this.state === this.WORLD_SELECT_STATE) {
 			this.worldCursor.alpha = 1;
-			this.backButton.alpha = 0.3;
 		} else {
 			this.worldCursor.alpha = 0.5;
-			this.backButton.alpha = 1;
 		}
 		if (this.state === this.HEROS_SELECT_STATE) {
 			this.levelList[this.worldPos][this.playerPosition][this.heroSelected].sprite.tint = 0xffffff;
@@ -457,6 +457,11 @@ class LevelSelect {
 
 	cancelButtonReleased() {
 		switch (this.state) {
+
+			case this.WORLD_SELECT_STATE:
+				this.confirmDialog.display(this.game.translate('LEVEL_HUB_BACK'), this.game.translate('LEVEL_HUB_BACK_2'));
+				this.game.audioManager.playSound('back');
+				break;
 
 			case this.LEVEL_SELECT_STATE:
 				this.state = this.WORLD_SELECT_STATE;

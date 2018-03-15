@@ -102,6 +102,8 @@ var TEXT_FR = {
     TIME: 'Temps',
     COLLECTIBLE: 'Collection',
     CONTINUE: 'Continuer ?',
+    LEVEL_HUB_BACK:'Voulez-vous vraiment quitter le salon actuel ?',
+    LEVEL_HUB_BACK_2:'(Le lien avec l\'autre joueur sera interrompu)',
     READY_SELECT: 'En attente de l\'autre joueur...',
     EXIT_FLEUR: 'Chou Fleur est arrivée à la sortie !',
     EXIT_COLI: 'Ton bro Coli est arrivé à la sortie !',
