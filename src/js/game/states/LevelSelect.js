@@ -175,6 +175,7 @@ class LevelSelect {
 					levelGroup: levelGroup,
 					text: text,
 					score: score,
+					textNum: levelNum,
 					finished: finished,
 					coli: { selected: null, sprite: coliSelect },
 					fleur: { selected: null, sprite: fleurSelect }
@@ -234,16 +235,19 @@ class LevelSelect {
 					if (this.playerPosition === level.levelNum) {
 						tween1 = this.game.add.tween(level.levelGroup).to({ x: 30 }, 500, "Quart.easeOut").start();
 						level.text.alpha = 1;
+						level.textNum.alpha = 1;
 						level.score.alpha = 0.7;
 					} else {
 						tween1 = this.game.add.tween(level.levelGroup).to({ x: 0 }, 500, "Quart.easeOut").start();
 						level.text.alpha = 0.2;
 						level.score.alpha = 0.2;
+						level.textNum.alpha = 0.2;
 					}
 				} else if (this.state === this.WORLD_SELECT_STATE) {
 					level.levelGroup.x = 0;
 					level.text.alpha = 0.2;
 					level.score.alpha = 0.2;
+					level.textNum.alpha = 0.2;
 				}
 				if (level.coli.selected) {
 					level.coli.sprite.tint = 0xFFFFFF;
