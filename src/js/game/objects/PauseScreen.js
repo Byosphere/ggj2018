@@ -75,6 +75,7 @@ class PauseScreen {
     display() {
         this.game.audioManager.getCurrentMusic().pause();
         this.onPause = true;
+        this.game.controlsManager.setCallbackContext(this);
         this.game.controlsManager.disableControls();
         this.displayBackground().then(() => {
             this.game.controlsManager.enableControls();
@@ -116,17 +117,20 @@ class PauseScreen {
     }
 
     hide() {
+        this.onPause = false;
         this.hideBackground().then(() => {
             this.index = 0;
             this.pauseGroup.destroy();
+            this.game.controlsManager.setCallbackContext(this.scene);
             this.game.controlsManager.enableControls();
             this.game.audioManager.getCurrentMusic().resume();
-            this.onPause = false;
+            this.scene.hud.showHud();
+            this.scene.hud.resumeTime();
         });
     }
 
     positionChanged(objId) {
-        return (objId -1) != this.index;
+        return (objId - 1) != this.index;
     }
 
     updateMenu(objId) {
@@ -154,7 +158,7 @@ class PauseScreen {
         }
     }
 
-    moveUp() {
+    upButtonReleased() {
 
         if (this.index > 0) {
             this.game.audioManager.playSound('cursor');
@@ -163,7 +167,7 @@ class PauseScreen {
         }
     }
 
-    moveDown() {
+    downButtonReleased() {
 
         if (this.index < 3) {
             this.game.audioManager.playSound('cursor');
@@ -171,15 +175,37 @@ class PauseScreen {
             this.updateMenu();
         }
     }
+    actionButtonReleased() {
+        this.action();
+    }
+
+    cancelButtonReleased() {
+        this.hide();
+    }
+
+    mouseOver(obj) {
+        if (obj.id && this.isOnPause() && this.positionChanged(obj.id)) {
+            this.updateMenu(obj.id);
+            this.game.audioManager.playSound('cursor');
+        }
+    }
+
+    mouseLeftClick(obj) {
+        if (obj.id && this.isOnPause()) {
+            this.action();
+        }
+    }
 
     action() {
         switch (this.index) {
             case 0:
+                this.onPause = false;
                 this.game.serverManager.getSocket().emit('reset');
                 this.game.audioManager.playSound('bip');
                 this.scene.onResetLevel();
                 break;
             case 1:
+                this.onPause = false;
                 this.game.serverManager.getSocket().emit('backmenu');
                 this.game.audioManager.playSound('bip');
                 this.hideBackground().then(() => {
@@ -199,10 +225,5 @@ class PauseScreen {
 
     isOnPause() {
         return this.onPause;
-    }
-
-    destroy() {
-        if (this.pauseGroup)
-            this.pauseGroup.destroy();
     }
 }

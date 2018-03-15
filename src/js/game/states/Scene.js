@@ -274,29 +274,15 @@ class Scene extends Phaser.State {
     }
 
     actionButtonReleased() {
-
-        if (this.pauseScreen.isOnPause()) {
-            this.pauseScreen.action(this);
-        } else if (this.character.hasItem()) {
+        if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }
     }
-
-    // startButtonReleased() {
-    //     if (this.pauseScreen.isOnPause()) {
-    //         this.game.serverManager.getSocket().emit('reset');
-    //         this.onResetLevel();
-    //     }
-    // }
 
     cancelButtonReleased() {
 
         if (this.disconnectScreen.isDisconnected()) {
             this.game.state.start('menu');
-        } else if (this.pauseScreen.isOnPause()) {
-            this.pauseScreen.hide();
-            this.hud.showHud();
-            this.hud.resumeTime();
         } else {
             this.game.audioManager.playSound('back');
             this.pauseScreen.display();
@@ -308,27 +294,22 @@ class Scene extends Phaser.State {
     }
 
     leftButtonDown() {
-        if (this.pauseScreen.isOnPause()) return;
         this.character.moveLeft();
     }
 
     rightButtonDown() {
-        if (this.pauseScreen.isOnPause()) return;
         this.character.moveRight();
     }
 
     upButtonDown() {
-        if (this.pauseScreen.isOnPause()) return;
         this.character.moveUp();
     }
 
     downButtonDown() {
-        if (this.pauseScreen.isOnPause()) return;
         this.character.moveDown();
     }
 
     leftButtonReleased() {
-        if (this.pauseScreen.isOnPause()) return;
         this.character.stopLeft();
     }
 
@@ -337,32 +318,11 @@ class Scene extends Phaser.State {
     }
 
     downButtonReleased() {
-        if (this.pauseScreen.isOnPause()) {
-            this.pauseScreen.moveDown();
-        } else {
-            this.character.stopDown();
-        }
+        this.character.stopDown();
     }
 
     upButtonReleased() {
-        if (this.pauseScreen.isOnPause()) {
-            this.pauseScreen.moveUp();
-        } else {
-            this.character.stopUp();
-        }
-    }
-
-    mouseOver(obj) {
-        if (obj.id && this.pauseScreen.isOnPause() && this.pauseScreen.positionChanged(obj.id)) {
-            this.pauseScreen.updateMenu(obj.id);
-            this.game.audioManager.playSound('cursor');
-        }
-    }
-
-    mouseLeftClick(obj) {
-        if (obj.id && this.pauseScreen.isOnPause()) {
-            this.pauseScreen.action();
-        }
+        this.character.stopUp();
     }
 
     /**
@@ -433,7 +393,6 @@ class Scene extends Phaser.State {
         this.hud.resetTime();
         this.hud = null;
         this.disconnectScreen.destroy();
-        this.pauseScreen.destroy();
         this.layer.destroy();
         this.background.destroy();
         this.foreground.destroy();
