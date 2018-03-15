@@ -130,6 +130,15 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('quit', () => {
+        if (socket.player) {
+            io.to(socket.code).emit('disconnect');
+            server.lobbies[socket.code].playerCount--;
+            server.lobbies[socket.code].players[socket.player.id] = null;
+            socket.leave(socket.code);
+        }
+    });
+
     //disconnect
     socket.on('disconnect', function () {
         if (socket.player) {

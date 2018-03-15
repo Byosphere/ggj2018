@@ -204,7 +204,7 @@ class MainMenu extends Phaser.State {
                 el.alpha = 0.3;
         });
         this.newLobbyGroup.destroy();
-        this.game.serverManager.getSocket().emit('disconnect');
+        this.game.serverManager.getSocket().emit('quit');
     }
 
     displayJoinLobby() {

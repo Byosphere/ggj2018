@@ -95,7 +95,7 @@ class ConfirmDialog {
 	action() {
 		if (this.position === 'yes') {
 			this.game.audioManager.playSound('bip');
-			this.game.serverManager.getSocket().emit('disconnect');
+			this.game.serverManager.getSocket().emit('quit');
 			this.game.state.start('menu');
 		} else {
 			this.game.audioManager.playSound('back');
