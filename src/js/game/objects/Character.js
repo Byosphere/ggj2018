@@ -19,6 +19,15 @@ class Character extends Phaser.Sprite {
 		this.previousY = data.y;
 		this.carry = null;
 		this.facing = null;
+		this.inputs = [];
+		this.inputs[UP] = false;
+		this.inputs[DOWN] = false;
+		this.inputs[LEFT] = false;
+		this.inputs[RIGHT] = false;
+		this.DEFAULT_SKIN = 'WALK';
+		this.DEFAULT_SPEED = 200;
+		this.skin = this.DEFAULT_SKIN;
+		this.speed = this.DEFAULT_SPEED;
 	}
 
 	/**
@@ -50,6 +59,11 @@ class Character extends Phaser.Sprite {
 	 */
 	catchItem(item) {
 		this.carry = item.name;
+		if (item.weight)
+			this.speed -= 100;
+		if (item.skin)
+			this.skin = item.skin;
+		this._animate();
 		item.destroy();
 	}
 
@@ -83,16 +97,10 @@ class Character extends Phaser.Sprite {
 			rock.visible = true;
 			group.add(rock);
 			this.carry = null;
-			switch (this.facing) {
-				case DOWN: this.stopDown();
-					break;
-				case UP: this.stopUp();
-					break;
-				case LEFT: this.stopLeft();
-					break;
-				case RIGHT: this.stopRight();
-					break;
-			}
+			this.speed = this.DEFAULT_SPEED;
+			this.skin = this.DEFAULT_SKIN;
+			this.frame = HEROS_ANIMATIONS[this.skin + '_' + this.facing.toUpperCase()].FRAMES[0];
+			this.stop(this.facing);
 		} else {
 			rock.destroy();
 		}
@@ -118,127 +126,68 @@ class Character extends Phaser.Sprite {
 		}, 2000);
 	}
 
-	stop() {
-		switch (this.facing) {
-			case DOWN: this.stopDown();
-				break;
-			case UP: this.stopUp();
-				break;
-			case LEFT: this.stopLeft();
-				break;
-			case RIGHT: this.stopRight();
-				break;
+	move(direction) {
+		this.inputs[direction] = true;
+		this.facing = direction;
+		this._animate();
+	}
+
+	stop(direction) {
+		this.inputs[direction] = false;
+		this._animate();
+	}
+
+	_animate() {
+		for (let index in this.inputs) {
+			if (this.inputs[index]) {
+				this.facing = index;
+				this.animations.play(HEROS_ANIMATIONS[this.skin + '_' + index.toUpperCase()].NAME, true);
+				switch (index) {
+					case UP:
+						this.body.velocity.y = this.speed * (-1);
+						break;
+
+					case DOWN:
+						this.body.velocity.y = this.speed;
+						break;
+
+					case RIGHT:
+						this.body.velocity.x = this.speed;
+						break;
+
+					case LEFT:
+						this.body.velocity.x = this.speed * (-1);
+						break;
+				}
+			} else if (this.animations.currentAnim.name === HEROS_ANIMATIONS[this.skin + '_' + index.toUpperCase()].NAME) {
+				this.animations.stop();
+				this.frame = HEROS_ANIMATIONS[this.skin + '_' + index.toUpperCase()].FRAMES[0];
+			}
+
+			switch (index) {
+				case UP:
+					if (!this.inputs[index] && this.body.velocity.y < 0) {
+						this.body.velocity.y = 0;
+					}
+					break;
+
+				case DOWN:
+					if (!this.inputs[index] && this.body.velocity.y > 0) {
+						this.body.velocity.y = 0;
+					}
+					break;
+
+				case RIGHT:
+					if (!this.inputs[index] && this.body.velocity.x > 0) {
+						this.body.velocity.x = 0;
+					}
+					break;
+				case LEFT:
+					if (!this.inputs[index] && this.body.velocity.x < 0) {
+						this.body.velocity.x = 0;
+					}
+					break;
+			}
 		}
-	}
-
-	/**
-	 * Déplacement vers la gauche
-	 */
-	moveLeft() {
-		this.facing = LEFT;
-		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.STONE_LEFT.NAME, true);
-			this.body.velocity.x = -100;
-		} else {
-			this.animations.play(HEROS_ANIMATIONS.WALK_LEFT.NAME, true);
-			this.body.velocity.x = -200;
-		}
-	}
-
-	/**
-	 * Déplacement vers la droite
-	 */
-	moveRight() {
-		this.facing = RIGHT;
-		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.STONE_RIGHT.NAME, true);
-			this.body.velocity.x = 100;
-		} else {
-			this.animations.play(HEROS_ANIMATIONS.WALK_RIGHT.NAME, true);
-			this.body.velocity.x = 200;
-		}
-		this.scale.setTo(1, 1);
-	}
-
-	/**
-	 * Déplacement vers le haut
-	 */
-	moveUp() {
-		this.facing = UP;
-		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.STONE_UP.NAME, true);
-			this.body.velocity.y = -100;
-		} else {
-			this.animations.play(HEROS_ANIMATIONS.WALK_UP.NAME, true);
-			this.body.velocity.y = -200;
-		}
-		this.scale.setTo(1, 1);
-	}
-
-	/**
-	 * Déplacement vers le bas
-	 */
-	moveDown() {
-		this.facing = DOWN;
-		if (this.carry) {
-			this.animations.play(HEROS_ANIMATIONS.STONE_DOWN.NAME, true);
-			this.body.velocity.y = 100;
-		} else {
-			this.animations.play(HEROS_ANIMATIONS.WALK_DOWN.NAME, true);
-			this.body.velocity.y = 200;
-		}
-		this.scale.setTo(1, 1);
-	}
-
-	/**
-	 * Arrêt vers la gauche
-	 */
-	stopLeft() {
-		this.body.velocity.x = 0;
-		this.animations.stop();
-		this.facing = LEFT;
-		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.STONE_LEFT.FRAMES[0];
-		else
-			this.frame = HEROS_ANIMATIONS.WALK_LEFT.FRAMES[0];
-	}
-
-	/**
-	 * Arrêt vers la droite
-	 */
-	stopRight() {
-		this.body.velocity.x = 0;
-		this.animations.stop();
-		this.facing = RIGHT;
-		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.STONE_RIGHT.FRAMES[0];
-		else
-			this.frame = HEROS_ANIMATIONS.WALK_RIGHT.FRAMES[0];
-	}
-
-	/**
-	 * Arrêt vers le haut
-	 */
-	stopUp() {
-		this.body.velocity.y = 0;
-		this.animations.stop();
-		this.facing = UP;
-		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.STONE_UP.FRAMES[0];
-		else
-			this.frame = HEROS_ANIMATIONS.WALK_UP.FRAMES[0];
-	}
-
-	/**
-	 * Arrêt vers le bas
-	 */
-	stopDown() {
-		this.body.velocity.y = 0;
-		this.animations.stop();
-		this.facing = DOWN;
-		if (this.carry)
-			this.frame = HEROS_ANIMATIONS.STONE_DOWN.FRAMES[0];
-		else
-			this.frame = HEROS_ANIMATIONS.WALK_DOWN.FRAMES[0];
 	}
 }

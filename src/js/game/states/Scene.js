@@ -294,35 +294,35 @@ class Scene extends Phaser.State {
     }
 
     leftButtonDown() {
-        this.character.moveLeft();
+        this.character.move(LEFT);
     }
 
     rightButtonDown() {
-        this.character.moveRight();
+        this.character.move(RIGHT);
     }
 
     upButtonDown() {
-        this.character.moveUp();
+        this.character.move(UP);
     }
 
     downButtonDown() {
-        this.character.moveDown();
+        this.character.move(DOWN);
     }
 
     leftButtonReleased() {
-        this.character.stopLeft();
+        this.character.stop(LEFT);
     }
 
     rightButtonReleased() {
-        this.character.stopRight();
+        this.character.stop(RIGHT);
     }
 
     downButtonReleased() {
-        this.character.stopDown();
+        this.character.stop(DOWN);
     }
 
     upButtonReleased() {
-        this.character.stopUp();
+        this.character.stop(UP);
     }
 
     /**

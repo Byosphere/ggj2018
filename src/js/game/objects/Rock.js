@@ -10,6 +10,8 @@ class Rock extends Phaser.Sprite {
         this.body.setSize(46, 42, 8, 8);
         this.name = 'rock';
         this.visible = !data.invisible;
+        this.weight = 100;
+        this.skin = 'STONE';
     }
 
     /**
