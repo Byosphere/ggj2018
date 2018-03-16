@@ -20,10 +20,10 @@ class Character extends Phaser.Sprite {
 		this.carry = null;
 		this.facing = null;
 		this.inputs = [];
-		this.inputs[UP] = false;
 		this.inputs[DOWN] = false;
 		this.inputs[LEFT] = false;
 		this.inputs[RIGHT] = false;
+		this.inputs[UP] = false;
 		this.DEFAULT_SKIN = 'WALK';
 		this.DEFAULT_SPEED = 200;
 		this.skin = this.DEFAULT_SKIN;
