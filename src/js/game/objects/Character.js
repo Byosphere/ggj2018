@@ -63,6 +63,7 @@ class Character extends Phaser.Sprite {
 			this.speed -= 100;
 		if (item.skin)
 			this.skin = item.skin;
+		this.frame = HEROS_ANIMATIONS[this.skin + '_' + this.facing.toUpperCase()].FRAMES[0];
 		this._animate();
 		item.destroy();
 	}
