@@ -40,17 +40,14 @@ class ControlsManager {
         this.controlsEnabled[MOUSE_RIGHT] = true;
         this.controlsEnabled[MOUSE_MIDDLE] = true;
         this.secretCode = 0;
+        this.setKeyboardNames();
     }
 
     init() {
         this.game.input.gamepad.start();
-        let pad = this.game.input.gamepad.pad1;
-
-        if (pad.connected) {
-            this.initController();
-        } else {
-            this.initKeyboard();
-        }
+        this.game.input.gamepad.onConnectCallback = this.gamepadConnect.bind(this);
+        this.game.input.gamepad.onDisconnectCallback = this.gamepadDisconnect.bind(this);
+        this.game.input.keyboard.addCallbacks(this, this.onKeyboardButtonDown, this.onKeyboardButtonReleased, this.onKeyboardButtonPressed);
     }
 
     clickable(obj) {
@@ -65,11 +62,7 @@ class ControlsManager {
         }
     }
 
-    initController() {
-        pad.callbackContext = this;
-        pad.onUpCallback = this.onControllerButtonReleased;
-        pad.onDownCallback = this.onControllerButtonDown;
-        pad.onAxisCallback = this.onControllerAxisChanged;
+    setGamepadNames() {
 
         //button names
         this.actionButtonName = this.game.translate('PAD_ACTION_BUTTON');
@@ -81,8 +74,7 @@ class ControlsManager {
         this.startButtonName = this.game.translate('PAD_START_BUTTON');
     }
 
-    initKeyboard() {
-        let keyboard = this.game.input.keyboard.addCallbacks(this, this.onKeyboardButtonDown, this.onKeyboardButtonReleased, this.onKeyboardButtonPressed);
+    setKeyboardNames() {
 
         //button names
         this.actionButtonName = this.game.translate('KEY_ACTION_BUTTON');
@@ -96,6 +88,19 @@ class ControlsManager {
 
     setCallbackContext(context) {
         this.callbackContext = context;
+    }
+
+    gamepadConnect() {
+        let pad = this.game.input.gamepad.pad1;
+        pad.callbackContext = this;
+        pad.onUpCallback = this.onControllerButtonReleased;
+        pad.onDownCallback = this.onControllerButtonDown;
+        pad.onAxisCallback = this.onControllerAxisChanged;
+        this.setGamepadNames();
+    }
+
+    gamepadDisconnect() {
+        this.setKeyboardNames();
     }
 
     /* ------------------ BUTTONS ON RELEASE ------------------------------ */
