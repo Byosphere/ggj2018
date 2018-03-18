@@ -180,6 +180,7 @@ class PauseScreen {
     }
 
     cancelButtonReleased() {
+        this.game.controlsManager.disableControls();
         this.hide();
     }
 
@@ -218,6 +219,7 @@ class PauseScreen {
                 break;
             case 3:
                 this.game.audioManager.playSound('bip');
+                this.game.controlsManager.disableControls();
                 this.hide();
                 break;
         }
