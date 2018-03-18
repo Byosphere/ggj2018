@@ -134,7 +134,10 @@ class Character extends Phaser.Sprite {
 	}
 
 	stop(direction) {
-		this.inputs[direction] = false;
+		if (direction)
+			this.inputs[direction] = false;
+		else
+			this.inputs[this.facing] = false;
 		this._animate();
 	}
 

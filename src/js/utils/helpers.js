@@ -1,10 +1,10 @@
 function getWorldFromLevelNum(num) {
-	return Math.floor(num / NB_LEVELS) + 1
+	return Math.ceil(num / NB_LEVELS);
 }
 
 function getLevelFromLevelNum(num) {
-	if (num <= NB_LEVELS) {
-		return num;
+	if (num % NB_LEVELS === 0) {
+		return NB_LEVELS;
 	} else {
 		return (num % NB_LEVELS);
 	}
