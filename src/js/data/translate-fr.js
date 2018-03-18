@@ -112,5 +112,6 @@ var TEXT_FR = {
     TEXT_1_1_3: 'Aide ton partenaire à ouvrir les portes qui lui',
     TEXT_1_1_4: 'permettront de t\'aider à progresser jusqu\'à la sortie.',
     TEXT_2_1_1: 'Il se pourrait que tu ai besoin que quelqu\'un reste sur',
-    TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.'
+    TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.',
+    PICK: 'Prendre',
 }

@@ -8,10 +8,29 @@ class Rock extends Phaser.Sprite {
         this.anchor.setTo(0, 0);
         this.game.physics.arcade.enable(this);
         this.body.setSize(46, 42, 8, 8);
+        this.body.immovable = true;
         this.name = 'rock';
         this.visible = !data.invisible;
         this.weight = 100;
         this.skin = 'STONE';
+        this.infoTextGroup = this.game.add.group();
+
+        let button = this.game.add.sprite(0, 0, this.game.controlsManager.getSpriteName(ACTION));
+        button.animations.add('default', [0, 1, 2], 6, true).play();
+        button.scale.setTo(0.7, 0.7);
+        button.anchor.setTo(0, 0.5);
+
+        let infoText = this.game.add.text(45, -5, this.game.translate('PICK'), { font: SMALL_FONT, fill: DEFAULT_COLOR });
+        infoText.setShadow(6, 6, "rgba(0, 0, 0, 0.8)", 7);
+        this.infoTextGroup.add(button);
+        this.infoTextGroup.add(infoText);
+
+        this.game.world.bringToTop(this.infoTextGroup);
+        this.infoTextGroup.x = this.centerX - this.infoTextGroup.width / 2;
+        this.infoTextGroup.y = this.y - 20;
+        this.infoTextGroup.visible = false;
+
+        this.uid = Math.floor(Date.now() + (Math.random() * 10));
     }
 
     /**
@@ -34,5 +53,13 @@ class Rock extends Phaser.Sprite {
             return false;
 
         return droppable;
+    }
+
+    onContact() {
+        this.infoTextGroup.visible = true;
+    }
+
+    outContact() {
+        this.infoTextGroup.visible = false;
     }
 }

@@ -40,7 +40,6 @@ class ControlsManager {
         this.controlsEnabled[MOUSE_RIGHT] = true;
         this.controlsEnabled[MOUSE_MIDDLE] = true;
         this.secretCode = 0;
-        this.setKeyboardNames();
     }
 
     init() {
@@ -48,6 +47,7 @@ class ControlsManager {
         this.game.input.gamepad.onConnectCallback = this.gamepadConnect.bind(this);
         this.game.input.gamepad.onDisconnectCallback = this.gamepadDisconnect.bind(this);
         this.game.input.keyboard.addCallbacks(this, this.onKeyboardButtonDown, this.onKeyboardButtonReleased, this.onKeyboardButtonPressed);
+        this.setKeyboardNames();
     }
 
     clickable(obj) {
@@ -72,6 +72,8 @@ class ControlsManager {
         this.leftButtonName = this.game.translate('PAD_LEFT_BUTTON');
         this.rightButtonName = this.game.translate('PAD_RIGHT_BUTTON');
         this.startButtonName = this.game.translate('PAD_START_BUTTON');
+        this.actionButtonSprite = 'btnA';
+        this.cancelButtonSprite = 'btnB';
     }
 
     setKeyboardNames() {
@@ -101,6 +103,16 @@ class ControlsManager {
 
     gamepadDisconnect() {
         this.setKeyboardNames();
+    }
+    
+    getSpriteName(btn) {
+        switch(btn) {
+            case ACTION:
+            return this.actionButtonSprite;
+
+            case CANCEL:
+            return this.cancelButtonSprite;
+        }
     }
 
     /* ------------------ BUTTONS ON RELEASE ------------------------------ */

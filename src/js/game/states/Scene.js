@@ -211,10 +211,16 @@ class Scene extends Phaser.State {
     update() {
         this.game.physics.arcade.collide(this.character, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
-        if (!this.character.carry) {
-            this.game.physics.arcade.overlap(this.character, this.rocksGroup, (char, rock) => {
-                char.catchItem(rock);
-            });
+        this.game.physics.arcade.collide(this.character, this.rocksGroup);
+
+        if (!this.character.hasItem()) {
+            for (let child in this.rocksGroup.children) {
+                if (this.game.physics.arcade.distanceBetween(this.character, this.rocksGroup.children[child], true, true) <= 80) {
+                    this.character.contactItem(this.rocksGroup.children[child]);
+                } else {
+                    this.character.noContactItem(this.rocksGroup.children[child]);
+                }
+            }
         }
 
         if (this.game.parameters.debugMode.value) {
@@ -274,7 +280,10 @@ class Scene extends Phaser.State {
     }
 
     actionButtonReleased() {
-        if (this.character.hasItem()) {
+
+        if (this.character.itemOnContact) {
+            this.character.catchItem();
+        } else if (this.character.hasItem()) {
             this.character.dropItem(this.rocksGroup);
         }
     }

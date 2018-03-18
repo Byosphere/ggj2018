@@ -61,6 +61,7 @@ var TEXT_EN = {
     LEVEL_SELECT: 'Select a level',
     HEROS_SELECT: 'Select a heros',
     COLLECTIBLE: 'Collectible',
-    BEST_TIME: 'Best time'
+    BEST_TIME: 'Best time',
+    PICK: 'Pick',
 
 }

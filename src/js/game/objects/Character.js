@@ -28,6 +28,7 @@ class Character extends Phaser.Sprite {
 		this.DEFAULT_SPEED = 200;
 		this.skin = this.DEFAULT_SKIN;
 		this.speed = this.DEFAULT_SPEED;
+		this.itemOnContact = null;
 	}
 
 	/**
@@ -53,19 +54,33 @@ class Character extends Phaser.Sprite {
 		return this.carry;
 	}
 
+	contactItem(item) {
+		this.itemOnContact = item;
+		item.onContact();
+	}
+
+	noContactItem(item) {
+		if (this.itemOnContact && this.itemOnContact.uid === item.uid) {
+			this.itemOnContact.outContact();
+			this.itemOnContact = null;
+		}
+	}
+
 	/**
 	 * Donne au personnage un objet qu'il transporte
 	 * @param {Sprite} item
 	 */
-	catchItem(item) {
-		this.carry = item.name;
-		if (item.weight)
+	catchItem() {
+		this.carry = this.itemOnContact;
+		this.noContactItem(this.carry);
+		this.itemOnContact = null;
+		if (this.carry.weight)
 			this.speed -= 100;
-		if (item.skin)
-			this.skin = item.skin;
+		if (this.carry.skin)
+			this.skin = this.carry.skin;
 		this.frame = HEROS_ANIMATIONS[this.skin + '_' + this.facing.toUpperCase()].FRAMES[0];
 		this._animate();
-		item.destroy();
+		this.carry.destroy();
 	}
 
 	/**
@@ -134,7 +149,12 @@ class Character extends Phaser.Sprite {
 	}
 
 	stop(direction) {
-		this.inputs[direction] = false;
+		if(direction) {
+			this.inputs[direction] = false;
+		} else {
+			this.inputs[this.facing] = false;
+		}
+		
 		this._animate();
 	}
 
