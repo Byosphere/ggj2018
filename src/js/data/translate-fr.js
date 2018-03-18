@@ -68,6 +68,9 @@ var TEXT_FR = {
         'Caillou Chou Genou',
         'Rock \'n\' Roll',
         'On the rocks',
+        'Pots de Fleur',
+        'Bro Coli Itératif',
+        'Physique des solides'
     ],
     WORLD_NAMES: [
         '',
