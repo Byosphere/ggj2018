@@ -210,7 +210,7 @@ class LevelSelect {
 		this.friendGroup.add(this.friendCursor2);
 		this.friendGroup.x = this.game.world.width - 140;
 		this.friendGroup.y = 90;
-		this.friendGroup.alpha = 0;
+		this.friendGroup.visible = false;
 		this.setLockedWorld();
 	}
 
@@ -260,6 +260,7 @@ class LevelSelect {
 				});
 				this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
 				this.worldCursor.children[2].text = finishedLevels + '/10';
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
 				break;
 
 			case this.LEVEL_SELECT_STATE:
@@ -286,6 +287,7 @@ class LevelSelect {
 						level.levelGroup.setAll('tint', 0xFFFFFF);
 					});
 				}
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
 				break;
 
 			case this.HEROS_SELECT_STATE:
@@ -297,10 +299,26 @@ class LevelSelect {
 					currentLevel.coli.sprite.tint = 0x222222;
 					currentLevel.fleur.sprite.tint = 0xffffff;
 				}
-				currentLevel.coli.sprite.animations.stop();
-				currentLevel.coli.sprite.animations.frame = 0;
-				currentLevel.fleur.sprite.animations.stop();
-				currentLevel.fleur.sprite.animations.frame = 0;
+				if (this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === COLI_HEROS) {
+					currentLevel.coli.selected = true;
+					currentLevel.coli.sprite.tint = 0xFFFFFF;
+					currentLevel.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				} else {
+					currentLevel.coli.selected = false;
+					currentLevel.coli.sprite.animations.stop();
+					currentLevel.coli.sprite.animations.frame = 0;
+				}
+
+				if (this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === FLEUR_HEROS) {
+					currentLevel.fleur.selected = true;
+					currentLevel.fleur.sprite.tint = 0xFFFFFF;
+					currentLevel.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				} else {
+					currentLevel.fleur.selected = false;
+					currentLevel.fleur.sprite.animations.stop();
+					currentLevel.fleur.sprite.animations.frame = 0;
+				}
+
 				if (!currentLevel.herosGroup.visible) {
 					currentLevel.herosGroup.alpha = 0;
 					currentLevel.herosGroup.x = this.levelListGroup.x + LEVEL_POS_X + currentLevel.levelGroup.width - 90;
@@ -319,131 +337,39 @@ class LevelSelect {
 						level.levelGroup.setAll('tint', 0x999999);
 					}
 				});
-
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
 				break;
 			case this.READY_STATE:
 				let heros = this.levelList[this.worldPos][this.playerPosition][this.heroSelected];
-				if (heros.selected) {
-					heros.sprite.tint = 0xFFFFFF;
-					heros.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-				}
+				heros.sprite.tint = 0xFFFFFF;
+				heros.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
 
 				break;
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: this.heroSelected });
+		}
+		if (this.otherPlayer)
+			this.updateFriendCursor(this.otherPlayer.world, this.otherPlayer.pos, this.otherPlayer.heros);
+	}
+
+
+	updateFriendCursor(world, pos, heros) {
+
+		if (this.worldPos != world) {
+			this.friendGroup.visible = false;
+		} else {
+			this.friendGroup.visible = true;
+			this.friendGroup.y = 90 + (70 * pos);
+			if (heros === COLI_HEROS || heros === FLEUR_HEROS) {
+				this.friendCursor2.text = 'choisi : ' + heros;
+				let h = this.levelList[world][pos][heros];
+				h.sprite.tint = 0xFFFFFF;
+				h.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+			} else {
+				this.friendCursor2.text = 'choisi : -';
+
+			}
 		}
 	}
-
-
-	updateFriendCursor() {
-		//TODO
-	}
-
-	// /**
-	//  * Mets à jour l'affichage
-	//  */
-	// updateDisplay() {
-	// 	this.showOnly(this.worldPos);
-	// 	let finishedLevels = 0;
-	// 	let tween1 = null;
-	// 	if (this.levelList[this.worldPos]) {
-	// 		this.levelList[this.worldPos].forEach(level => {
-	// 			if (level.locked) {
-	// 				level.text.text = "????????";
-	// 			}
-	// 			if (level.finished) {
-	// 				finishedLevels++;
-	// 			}
-	// 			if (this.state === this.LEVEL_SELECT_STATE) {
-
-	// 				if (this.playerPosition === level.levelNum) {
-	// 					tween1 = this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X + 30 }, 500, "Quart.easeOut").start();
-	// 					level.text.alpha = 1;
-	// 					level.textNum.alpha = 1;
-	// 					level.score.alpha = 0.7;
-	// 				} else {
-	// 					tween1 = this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X }, 500, "Quart.easeOut").start();
-	// 					level.text.alpha = 0.2;
-	// 					level.score.alpha = 0.2;
-	// 					level.textNum.alpha = 0.2;
-	// 				}
-	// 			} else if (this.state === this.WORLD_SELECT_STATE) {
-	// 				level.levelGroup.x = LEVEL_POS_X;
-	// 				level.text.alpha = 0.2;
-	// 				level.score.alpha = 0.2;
-	// 				level.textNum.alpha = 0.2;
-	// 				level.herosGroup.visible = false;
-	// 			}
-
-	// 			if (level.coli.selected) {
-	// 				level.coli.sprite.tint = 0xFFFFFF;
-	// 				level.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-	// 				if (!level.herosGroup.visible) {
-	// 					level.herosGroup.alpha = 0;
-	// 					level.herosGroup.x = level.levelGroup.x + 246;
-	// 					level.herosGroup.visible = true;
-	// 					this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X - 116 }, 501, 'Quart.easeOut', true, 0);
-	// 					this.game.add.tween(level.herosGroup).to({ x: LEVEL_POS_X + 246, alpha: 1 }, 500, 'Circ.easeInOut', true, 0);
-	// 				}
-	// 			} else {
-	// 				level.coli.sprite.tint = 0x222222;
-	// 				level.coli.sprite.animations.stop();
-	// 				level.coli.sprite.animations.frame = 0;
-	// 			}
-
-	// 			if (level.fleur.selected) {
-	// 				level.fleur.sprite.tint = 0xFFFFFF;
-	// 				level.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
-	// 				if (!level.herosGroup.visible) {
-	// 					level.herosGroup.alpha = 0;
-	// 					level.herosGroup.x = level.levelGroup.x + 246;
-	// 					level.herosGroup.visible = true;
-	// 					this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X - 116 }, 501, 'Quart.easeOut', true, 0);
-	// 					this.game.add.tween(level.herosGroup).to({ x: LEVEL_POS_X - 96, alpha: 1 }, 500, 'Circ.easeInOut', true, 0);
-	// 				}
-	// 			} else {
-	// 				level.fleur.sprite.tint = 0x222222;
-	// 				level.fleur.sprite.animations.stop();
-	// 				level.fleur.sprite.animations.frame = 0;
-	// 			}
-
-	// 		});
-	// 	}
-	// 	this.worldCursor.alpha = 0.5;
-
-	// 	switch (this.state) {
-	// 		case this.WORLD_SELECT_STATE:
-	// 			this.worldCursor.alpha = 1;
-	// 			this.animCursor = true;
-	// 			let cursor = this.game.add.tween(this.worldCursor).to({ x: WORLDS_DATA[this.worldPos - 1].world_position.x, y: WORLDS_DATA[this.worldPos - 1].world_position.y }, 200, 'Circ.easeInOut', true, 0);
-	// 			cursor.onComplete.add(() => {
-	// 				this.animCursor = false;
-	// 			}, this);
-	// 			this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
-	// 			this.worldCursor.children[2].text = finishedLevels + '/10';
-	// 			break;
-
-	// 		case this.LEVEL_SELECT_STATE:
-
-	// 			break;
-
-	// 		case this.HEROS_SELECT_STATE:
-	// 			this.levelList[this.worldPos][this.playerPosition][this.heroSelected].sprite.tint = 0xffffff;
-	// 			let herosGroup = this.levelList[this.worldPos][this.playerPosition].herosGroup;
-	// 			let levelGroup = this.levelList[this.worldPos][this.playerPosition].levelGroup;
-
-	// 			if (!herosGroup.visible) {
-	// 				herosGroup.alpha = 0;
-	// 				herosGroup.x = levelGroup.x + 246;
-	// 				herosGroup.visible = true;
-	// 				this.game.add.tween(levelGroup).to({ x: LEVEL_POS_X - 116 }, 501, 'Quart.easeOut', true, 0);
-	// 				this.game.add.tween(herosGroup).to({ x: herosGroup.x - 20, alpha: 1 }, 500, 'Circ.easeInOut', true, 0);
-	// 			}
-	// 			break;
-
-	// 		default:
-
-	// 			break;
-	// 	}
-	// }
 
 	/**
 	 * Filtre les niveaux à afficher en fonction du monde sélectionné
@@ -511,9 +437,9 @@ class LevelSelect {
 			if (this.levelList[this.worldPos][this.playerPosition].selected) return;
 			this.state = this.READY_STATE;
 			this.infoText.show(null, this.game.translate('READY_SELECT'));
-			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
-			this.game.controlsManager.disableControls();
+			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, pos: this.playerPosition, world: this.worldPos });
 			this.game.audioManager.playSound('bip');
+			this.updateDisplay();
 		} else if (obj.name === 'backbutton') {
 			this.cancelButtonReleased();
 		}
@@ -588,28 +514,20 @@ class LevelSelect {
 				this.state = this.READY_STATE;
 				this.infoText.show(null, this.game.translate('READY_SELECT'));
 				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
-				this.game.controlsManager.disableControls();
 				this.game.audioManager.playSound('bip');
+				this.updateDisplay();
 				break;
 		}
 	}
 
-	onUpdatePlayers(players) {
-		this.game.controlsManager.enableControls();
-		for (let w = 1; w <= WORLDS.length; w++) {
-			this.levelList[w].forEach(level => {
-				level.coli.selected = false;
-				level.fleur.selected = false;
-			});
-		}
+	onUpdatePlayers(otherPlayer) {
 
-		if (players[0] && players[0].levelData) {
-			this.levelList[players[0].levelData.world][players[0].levelData.level - 1][players[0].levelData.heros].selected = true;
+		if (otherPlayer) {
+			this.otherPlayer = otherPlayer;
+			this.updateFriendCursor(this.otherPlayer.world, this.otherPlayer.pos, this.otherPlayer.heros);
+		} else {
+			this.friendGroup.visible = false;
 		}
-		if (players[1] && players[1].levelData) {
-			this.levelList[players[1].levelData.world][players[1].levelData.level - 1][players[1].levelData.heros].selected = true;
-		}
-		this.updateDisplay();
 	}
 
 	cancelButtonReleased() {
