@@ -117,11 +117,11 @@ class LevelSelect {
 
 			for (let i = 0; i < NB_LEVELS; i++) {
 
-				let graph = this.game.add.sprite(94, posY, 'levelBack');
+				let graph = this.game.add.sprite(0, 0, 'levelBack');
 				graph.id = i + 1;
-				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, this.game.translate('LEVEL_NAMES', index), { font: SMALL_FONT, fill: DEFAULT_COLOR });
+				let text = this.game.add.text(graph.x + 50, graph.centerY - 5, '????????', { font: SMALL_FONT, fill: DEFAULT_COLOR });
 				let levelNum = this.game.add.text(graph.x + 25, graph.centerY, w + '-' + (i + 1), { font: SMALL_FONT, fill: DEFAULT_COLOR });
-				let levelHud = this.game.add.sprite(graph.x + graph.width - 11, graph.y, 'hudSelect');
+				let levelHud = this.game.add.sprite(0, 0, 'hudSelect');
 				let score = this.game.add.text(graph.x + 50, graph.centerY + 5, this.game.translate('BEST_TIME') + ': -min -s | ' + this.game.translate('COLLECTIBLE') + ': -', { font: SMALLEST_FONT, fill: DEFAULT_COLOR });
 				score.alpha = 0.7;
 				let coliSelect = this.game.add.sprite(levelHud.x + 6, levelHud.y - 2, 'coli');
@@ -136,13 +136,20 @@ class LevelSelect {
 				levelNum.angle = -90;
 				levelNum.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 2);
 				let levelGroup = this.game.add.group();
+				let herosGroup = this.game.add.group();
+				herosGroup.y = graph.y + posY;
+				herosGroup.add(levelHud);
+				herosGroup.add(coliSelect);
+				herosGroup.add(fleurSelect);
+
 				levelGroup.add(graph);
 				levelGroup.add(text);
 				levelGroup.add(score);
 				levelGroup.add(levelNum);
-				levelGroup.add(levelHud);
-				levelGroup.add(coliSelect);
-				levelGroup.add(fleurSelect);
+				levelGroup.x = LEVEL_POS_X;
+				levelGroup.y = posY;
+
+				herosGroup.visible = false;
 				levelGroup.visible = false;
 
 				let isLocked = true;
@@ -153,10 +160,12 @@ class LevelSelect {
 					finished = this.game.add.sprite(graph.x, graph.centerY, 'completed');
 					finished.anchor.setTo(0.5, 0.5);
 					levelGroup.add(finished);
+					text.text = this.game.translate('LEVEL_NAMES', index);
 					score.text = 'debug mode';
 
 				} else if (savedLevel) {
 					isLocked = false;
+					text.text = this.game.translate('LEVEL_NAMES', index);
 					if (savedLevel.finished) {
 						finished = this.game.add.sprite(graph.x, graph.centerY, 'completed');
 						finished.anchor.setTo(0.5, 0.5);
@@ -177,6 +186,7 @@ class LevelSelect {
 					score: score,
 					textNum: levelNum,
 					finished: finished,
+					herosGroup: herosGroup,
 					coli: { selected: null, sprite: coliSelect },
 					fleur: { selected: null, sprite: fleurSelect }
 				});
@@ -191,13 +201,24 @@ class LevelSelect {
 		this.backButton.setShadow(4, 4, "rgba(163, 73, 164, 0.7)", 7);
 		this.backButton.name = 'backbutton';
 		this.backButton.alpha = 0;
+		this.friendGroup = this.game.add.group();
+		this.friendCursor = this.game.add.text(0, 0, '<- J2', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+		this.friendCursor.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 7);
+		this.friendCursor2 = this.game.add.text(0, 21, 'choisi: -', { font: SMALLEST_FONT, fill: DEFAULT_COLOR });
+		this.friendCursor2.setShadow(4, 4, "rgba(0, 0, 0, 0.7)", 7);
+		this.friendGroup.add(this.friendCursor);
+		this.friendGroup.add(this.friendCursor2);
+		this.friendGroup.x = this.game.world.width - 140;
+		this.friendGroup.y = 90;
+		this.friendGroup.visible = false;
 		this.setLockedWorld();
 	}
 
 	create() {
 		this.displayBackground().then(() => {
-			this.displayLevels();
+			this.updateDisplay();
 			this.backButton.alpha = 1;
+			this.friendGroup.alpha = 0.8;
 			this.game.controlsManager.clickable(this.backButton);
 			this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 			this.game.controlsManager.enableControls();
@@ -217,74 +238,136 @@ class LevelSelect {
 		});
 	}
 
-	/**
-	 * Mets à jour l'affichage
-	 */
-	displayLevels() {
-		this.showOnly(this.worldPos);
-		let finishedLevels = 0;
-		if (this.levelList[this.worldPos]) {
-			this.levelList[this.worldPos].forEach(level => {
-				if (level.locked) {
-					level.text.text = "????????";
-				}
-				if (level.finished) {
-					finishedLevels++;
-				}
+	updateDisplay() {
 
-				if (this.state === this.LEVEL_SELECT_STATE) {
-					let tween1 = null;
-					if (this.playerPosition === level.levelNum) {
-						tween1 = this.game.add.tween(level.levelGroup).to({ x: 30 }, 500, "Quart.easeOut").start();
-						level.text.alpha = 1;
-						level.textNum.alpha = 1;
-						level.score.alpha = 0.7;
-					} else {
-						tween1 = this.game.add.tween(level.levelGroup).to({ x: 0 }, 500, "Quart.easeOut").start();
-						level.text.alpha = 0.2;
-						level.score.alpha = 0.2;
-						level.textNum.alpha = 0.2;
-					}
-				} else if (this.state === this.WORLD_SELECT_STATE) {
-					level.levelGroup.x = 0;
+		switch (this.state) {
+			case this.WORLD_SELECT_STATE:
+				this.showOnly(this.worldPos);
+				this.worldCursor.alpha = 1;
+				this.animCursor = true;
+				let cursorTween = this.game.add.tween(this.worldCursor).to({ x: WORLDS_DATA[this.worldPos - 1].world_position.x, y: WORLDS_DATA[this.worldPos - 1].world_position.y }, 200, 'Circ.easeInOut', true, 0);
+				cursorTween.onComplete.add(() => {
+					this.animCursor = false;
+				}, this);
+				let finishedLevels = 0;
+				this.levelList[this.worldPos].forEach(level => {
+					if (level.finished) finishedLevels++;
+					this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X }, 500, "Quart.easeOut").start();
 					level.text.alpha = 0.2;
 					level.score.alpha = 0.2;
 					level.textNum.alpha = 0.2;
+					level.levelGroup.setAll('tint', 0x999999);
+				});
+				this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
+				this.worldCursor.children[2].text = finishedLevels + '/10';
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
+				break;
+
+			case this.LEVEL_SELECT_STATE:
+				this.worldCursor.alpha = 0.5;
+				let tween1 = null;
+				if (this.levelList[this.worldPos]) {
+					this.levelList[this.worldPos].forEach(level => {
+						if (this.playerPosition === level.levelNum) {
+							tween1 = this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X - 30 }, 500, "Quart.easeOut").start();
+							level.text.alpha = 1;
+							level.textNum.alpha = 1;
+							level.score.alpha = 0.7;
+						} else {
+							tween1 = this.game.add.tween(level.levelGroup).to({ x: LEVEL_POS_X }, 500, "Quart.easeOut").start();
+							level.text.alpha = 0.2;
+							level.score.alpha = 0.2;
+							level.textNum.alpha = 0.2;
+						}
+						level.coli.sprite.animations.stop();
+						level.coli.sprite.animations.frame = 0;
+						level.fleur.sprite.animations.stop();
+						level.fleur.sprite.animations.frame = 0;
+						level.herosGroup.visible = false;
+						level.levelGroup.setAll('tint', 0xFFFFFF);
+					});
 				}
-				if (level.coli.selected) {
-					level.coli.sprite.tint = 0xFFFFFF;
-					level.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
+				break;
+
+			case this.HEROS_SELECT_STATE:
+				let currentLevel = this.levelList[this.worldPos][this.playerPosition];
+				if (this.heroSelected === COLI_HEROS) {
+					currentLevel.coli.sprite.tint = 0xffffff;
+					currentLevel.fleur.sprite.tint = 0x222222;
 				} else {
-					level.coli.sprite.tint = 0x222222;
-					level.coli.sprite.animations.stop();
-					level.coli.sprite.animations.frame = 0;
+					currentLevel.coli.sprite.tint = 0x222222;
+					currentLevel.fleur.sprite.tint = 0xffffff;
+				}
+				if (this.otherPlayer && this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === COLI_HEROS) {
+					currentLevel.coli.selected = true;
+					currentLevel.coli.sprite.tint = 0xFFFFFF;
+					currentLevel.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				} else {
+					currentLevel.coli.selected = false;
+					currentLevel.coli.sprite.animations.stop();
+					currentLevel.coli.sprite.animations.frame = 0;
 				}
 
-				if (level.fleur.selected) {
-					level.fleur.sprite.tint = 0xFFFFFF;
-					level.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+				if (this.otherPlayer && this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === FLEUR_HEROS) {
+					currentLevel.fleur.selected = true;
+					currentLevel.fleur.sprite.tint = 0xFFFFFF;
+					currentLevel.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
 				} else {
-					level.fleur.sprite.tint = 0x222222;
-					level.fleur.sprite.animations.stop();
-					level.fleur.sprite.animations.frame = 0;
+					currentLevel.fleur.selected = false;
+					currentLevel.fleur.sprite.animations.stop();
+					currentLevel.fleur.sprite.animations.frame = 0;
 				}
-			});
+
+				if (!currentLevel.herosGroup.visible) {
+					currentLevel.herosGroup.alpha = 0;
+					currentLevel.herosGroup.x = this.levelListGroup.x + LEVEL_POS_X + currentLevel.levelGroup.width - 90;
+					currentLevel.herosGroup.visible = true;
+
+					this.game.add.tween(currentLevel.levelGroup).to({ x: LEVEL_POS_X - 116 }, 501, 'Quart.easeOut', true, 0);
+					if (currentLevel.finished) {
+						this.game.add.tween(currentLevel.herosGroup).to({ x: currentLevel.herosGroup.x - 50, alpha: 1 }, 500, 'Quart.easeOut', true, 0);
+					} else {
+						this.game.add.tween(currentLevel.herosGroup).to({ x: currentLevel.herosGroup.x - 37, alpha: 1 }, 500, 'Quart.easeOut', true, 0);
+					}
+
+				}
+				this.levelList[this.worldPos].forEach(level => {
+					if (level.name != this.levelList[this.worldPos][this.playerPosition].name) {
+						level.levelGroup.setAll('tint', 0x999999);
+					}
+				});
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: null });
+				break;
+			case this.READY_STATE:
+				let heros = this.levelList[this.worldPos][this.playerPosition][this.heroSelected];
+				heros.sprite.tint = 0xFFFFFF;
+				heros.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+
+				break;
+				this.game.serverManager.getSocket().emit('updatelevel', { world: this.worldPos, pos: this.playerPosition, heros: this.heroSelected });
 		}
-		this.animCursor = true;
-		let cursor = this.game.add.tween(this.worldCursor).to({ x: WORLDS_DATA[this.worldPos - 1].world_position.x, y: WORLDS_DATA[this.worldPos - 1].world_position.y }, 200, 'Circ.easeInOut', true, 0);
-		cursor.onComplete.add(() => {
-			this.animCursor = false;
-		}, this);
-		this.worldCursor.children[1].text = this.game.translate('WORLD_NAMES', this.worldPos);
-		this.worldCursor.children[2].text = finishedLevels + '/10';
+		if (this.otherPlayer)
+			this.updateFriendCursor(this.otherPlayer.world, this.otherPlayer.pos, this.otherPlayer.heros);
+	}
 
-		if (this.state === this.WORLD_SELECT_STATE) {
-			this.worldCursor.alpha = 1;
+
+	updateFriendCursor(world, pos, heros) {
+
+		if (this.worldPos != world) {
+			this.friendGroup.visible = false;
 		} else {
-			this.worldCursor.alpha = 0.5;
-		}
-		if (this.state === this.HEROS_SELECT_STATE) {
-			this.levelList[this.worldPos][this.playerPosition][this.heroSelected].sprite.tint = 0xffffff;
+			this.friendGroup.visible = true;
+			this.friendGroup.y = 90 + (70 * pos);
+			if (heros === COLI_HEROS || heros === FLEUR_HEROS) {
+				this.friendCursor2.text = 'choisi : ' + heros;
+				let h = this.levelList[world][pos][heros];
+				h.sprite.tint = 0xFFFFFF;
+				h.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
+			} else {
+				this.friendCursor2.text = 'choisi : -';
+
+			}
 		}
 	}
 
@@ -309,12 +392,12 @@ class LevelSelect {
 		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum && obj.worldNum != this.worldPos) {
 
 			this.worldPos = obj.worldNum;
-			this.displayLevels();
+			this.updateDisplay();
 			this.game.audioManager.playSound('cursor');
 
 		} else if (this.state === this.LEVEL_SELECT_STATE && obj.id && this.playerPosition != obj.id - 1) {
 			this.playerPosition = obj.id - 1;
-			this.displayLevels();
+			this.updateDisplay();
 			this.game.audioManager.playSound('cursor');
 		} else if (
 			this.state === this.HEROS_SELECT_STATE
@@ -325,7 +408,7 @@ class LevelSelect {
 
 			this.heroSelected = COLI_HEROS;
 			this.game.audioManager.playSound('cursor');
-			this.displayLevels();
+			this.updateDisplay();
 
 		} else if (
 			this.state === this.HEROS_SELECT_STATE
@@ -336,17 +419,17 @@ class LevelSelect {
 
 			this.heroSelected = FLEUR_HEROS;
 			this.game.audioManager.playSound('cursor');
-			this.displayLevels();
+			this.updateDisplay();
 		}
 	}
 
 	mouseLeftClick(obj) {
-		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum === this.worldPos || obj.key === 'cursor') {
+		if (this.state === this.WORLD_SELECT_STATE && (obj.worldNum === this.worldPos || obj.key === 'cursor')) {
 
 			this.state = this.LEVEL_SELECT_STATE;
 			this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
 			this.game.audioManager.playSound('bip');
-			this.displayLevels();
+			this.updateDisplay();
 
 		} else if (obj.id >= 0 && this.state === this.LEVEL_SELECT_STATE) {
 			this.actionButtonReleased();
@@ -354,9 +437,9 @@ class LevelSelect {
 			if (this.levelList[this.worldPos][this.playerPosition].selected) return;
 			this.state = this.READY_STATE;
 			this.infoText.show(null, this.game.translate('READY_SELECT'));
-			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
-			this.game.controlsManager.disableControls();
+			this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, pos: this.playerPosition, world: this.worldPos });
 			this.game.audioManager.playSound('bip');
+			this.updateDisplay();
 		} else if (obj.name === 'backbutton') {
 			this.cancelButtonReleased();
 		}
@@ -368,7 +451,7 @@ class LevelSelect {
 			case this.WORLD_SELECT_STATE:
 				if (this.worldPos < this.lockedWorld.id - 1 && !this.animCursor) {
 					this.worldPos++;
-					this.displayLevels();
+					this.updateDisplay();
 					this.game.audioManager.playSound('cursor');
 				}
 				break;
@@ -376,7 +459,7 @@ class LevelSelect {
 			case this.LEVEL_SELECT_STATE:
 				if (this.playerPosition < NB_LEVELS - 1) {
 					this.playerPosition++;
-					this.displayLevels();
+					this.updateDisplay();
 					this.game.audioManager.playSound('cursor');
 				}
 				break;
@@ -389,7 +472,7 @@ class LevelSelect {
 			case this.WORLD_SELECT_STATE:
 				if (this.worldPos > 1 && !this.animCursor) {
 					this.worldPos--;
-					this.displayLevels();
+					this.updateDisplay();
 					this.game.audioManager.playSound('cursor');
 				}
 				break;
@@ -397,7 +480,7 @@ class LevelSelect {
 			case this.LEVEL_SELECT_STATE:
 				if (this.playerPosition > 0) {
 					this.playerPosition--;
-					this.displayLevels();
+					this.updateDisplay();
 					this.game.audioManager.playSound('cursor');
 				}
 				break;
@@ -411,7 +494,7 @@ class LevelSelect {
 				this.state = this.LEVEL_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
 				this.game.audioManager.playSound('bip');
-				this.displayLevels();
+				this.updateDisplay();
 				break;
 
 			case this.LEVEL_SELECT_STATE:
@@ -422,7 +505,7 @@ class LevelSelect {
 					}
 					this.infoText.show(null, this.game.translate('HEROS_SELECT'));
 					this.game.audioManager.playSound('bip');
-					this.displayLevels();
+					this.updateDisplay();
 				}
 				break;
 
@@ -431,28 +514,20 @@ class LevelSelect {
 				this.state = this.READY_STATE;
 				this.infoText.show(null, this.game.translate('READY_SELECT'));
 				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
-				this.game.controlsManager.disableControls();
 				this.game.audioManager.playSound('bip');
+				this.updateDisplay();
 				break;
 		}
 	}
 
-	onUpdatePlayers(players) {
-		this.game.controlsManager.enableControls();
-		for (let w = 1; w <= WORLDS.length; w++) {
-			this.levelList[w].forEach(level => {
-				level.coli.selected = false;
-				level.fleur.selected = false;
-			});
-		}
+	onUpdatePlayers(otherPlayer) {
 
-		if (players[0] && players[0].levelData) {
-			this.levelList[players[0].levelData.world][players[0].levelData.level - 1][players[0].levelData.heros].selected = true;
+		if (otherPlayer) {
+			this.otherPlayer = otherPlayer;
+			this.updateFriendCursor(this.otherPlayer.world, this.otherPlayer.pos, this.otherPlayer.heros);
+		} else {
+			this.friendGroup.visible = false;
 		}
-		if (players[1] && players[1].levelData) {
-			this.levelList[players[1].levelData.world][players[1].levelData.level - 1][players[1].levelData.heros].selected = true;
-		}
-		this.displayLevels();
 	}
 
 	cancelButtonReleased() {
@@ -468,20 +543,21 @@ class LevelSelect {
 				this.infoText.show(null, this.game.translate('WORLD_SELECT'));
 				this.playerPosition = 0;
 				this.game.audioManager.playSound('back');
-				this.displayLevels();
+				this.updateDisplay();
 				break;
 
 			case this.HEROS_SELECT_STATE:
 				this.state = this.LEVEL_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
 				this.game.audioManager.playSound('back');
-				this.displayLevels();
+				this.updateDisplay();
 				break;
 			case this.READY_STATE:
 				this.state = this.HEROS_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('HEROS_SELECT'));
 				this.game.audioManager.playSound('back');
 				this.game.serverManager.getSocket().emit('unselectlevel');
+				this.updateDisplay();
 				break;
 		}
 		if (this.disconnectScreen.isDisconnected()) {
@@ -499,7 +575,7 @@ class LevelSelect {
 					this.heroSelected = COLI_HEROS;
 				}
 				this.game.audioManager.playSound('cursor');
-				this.displayLevels();
+				this.updateDisplay();
 				break;
 		}
 	}
@@ -514,7 +590,7 @@ class LevelSelect {
 					this.heroSelected = COLI_HEROS;
 				}
 				this.game.audioManager.playSound('cursor');
-				this.displayLevels();
+				this.updateDisplay();
 				break;
 		}
 	}

@@ -45,6 +45,7 @@ const VICTORY_HEIGHT = 800;
 const CREDITS_HEIGHT = 1200;
 const CREDITS_WIDTH = 800;
 const MENU_HEROS_POS_Y = 350;
+const LEVEL_POS_X = 140;
 
 /* OBJECTS */
 

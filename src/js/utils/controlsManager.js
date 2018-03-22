@@ -249,7 +249,8 @@ class ControlsManager {
 
     onKeyboardButtonDown(keyboardEvent) {
         let button = keyboardEvent.keyCode;
-
+        if(keyboardEvent.repeat) return;
+        
         switch (button) {
             case Phaser.KeyCode.ENTER:
                 if (this.callbackContext.actionButtonDown && this.controlsEnabled[ACTION])
@@ -315,7 +316,7 @@ class ControlsManager {
     }
 
     onKeyboardButtonPressed(button) {
-        //TODO
+        //let button = keyboardEvent.keyCode;
     }
 
 

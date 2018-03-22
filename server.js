@@ -87,23 +87,26 @@ io.on('connection', function (socket) {
         let player2 = server.lobbies[socket.code].players[1];
         if (player1.levelData && player2.levelData
             && player1.levelData.world === player2.levelData.world
-            && player1.levelData.level === player2.levelData.level
+            && player1.levelData.pos === player2.levelData.pos
+            && player1.levelData.heros && player2.levelData.heros
             && player1.levelData.heros != player2.levelData.heros) {
             player1.levelData = null;
             player2.levelData = null;
             socket.emit('startlevel');
             socket.broadcast.to(socket.code).emit('startlevel');
         } else {
-            socket.emit('updateplayers', server.lobbies[socket.code].players);
-            socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+            socket.broadcast.to(socket.code).emit('updateplayers', levelData);
         }
     });
 
     socket.on('unselectlevel', function () {
-        server.lobbies[socket.code].players[socket.player.id].levelData = null;
-        socket.emit('updateplayers', server.lobbies[socket.code].players);
-        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players);
+        server.lobbies[socket.code].players[socket.player.id].levelData.heros = null;
+        socket.broadcast.to(socket.code).emit('updateplayers', server.lobbies[socket.code].players[socket.player.id].levelData);
     });
+
+    socket.on('updatelevel', function (levelData) {
+        socket.broadcast.to(socket.code).emit('updateplayers', levelData);
+    })
     // ---------------------------- GAME STATE ------------------------------------ //
     // reset le niveau en cours
     socket.on('reset', function (gameover) {
