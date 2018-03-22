@@ -69,7 +69,7 @@ class Loader extends Phaser.State {
     }
 
     loadTilemaps() {
-        for (let w = 1; w < WORLDS.length; w++) {
+        for (let w = 1; w <= WORLDS.length; w++) {
             for (let i = 1; i <= NB_LEVELS; i++) {
                 this.game.load.tilemap('level' + i + '_world' + w + '_fleur', BASE_URL + 'tilemaps/maps/' + 'world-' + w + '/level' + i + '_fleur.json', null, Phaser.Tilemap.TILED_JSON);
                 this.game.load.tilemap('level' + i + '_world' + w + '_coli', BASE_URL + 'tilemaps/maps/' + 'world-' + w + '/level' + i + '_coli.json', null, Phaser.Tilemap.TILED_JSON);
