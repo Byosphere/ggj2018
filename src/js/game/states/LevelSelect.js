@@ -299,7 +299,7 @@ class LevelSelect {
 					currentLevel.coli.sprite.tint = 0x222222;
 					currentLevel.fleur.sprite.tint = 0xffffff;
 				}
-				if (this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === COLI_HEROS) {
+				if (this.otherPlayer && this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === COLI_HEROS) {
 					currentLevel.coli.selected = true;
 					currentLevel.coli.sprite.tint = 0xFFFFFF;
 					currentLevel.coli.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
@@ -309,7 +309,7 @@ class LevelSelect {
 					currentLevel.coli.sprite.animations.frame = 0;
 				}
 
-				if (this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === FLEUR_HEROS) {
+				if (this.otherPlayer && this.otherPlayer.world === this.worldPos && this.otherPlayer.pos === this.playerPosition && this.otherPlayer.heros === FLEUR_HEROS) {
 					currentLevel.fleur.selected = true;
 					currentLevel.fleur.sprite.tint = 0xFFFFFF;
 					currentLevel.fleur.sprite.animations.add(HEROS_ANIMATIONS.HIGHLIGHT.NAME, HEROS_ANIMATIONS.HIGHLIGHT.FRAMES, 10, true).play();
