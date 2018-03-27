@@ -86,6 +86,8 @@ class ControlsManager {
         this.leftButtonName = this.game.translate('KEY_LEFT_BUTTON');
         this.rightButtonName = this.game.translate('KEY_RIGHT_BUTTON');
         this.startButtonName = this.game.translate('KEY_START_BUTTON');
+        this.actionButtonSprite = 'btnA';
+        this.cancelButtonSprite = 'btnB';
     }
 
     setCallbackContext(context) {
