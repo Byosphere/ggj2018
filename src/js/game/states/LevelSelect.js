@@ -493,6 +493,7 @@ class LevelSelect {
 			case this.WORLD_SELECT_STATE:
 				this.state = this.LEVEL_SELECT_STATE;
 				this.infoText.show(null, this.game.translate('LEVEL_SELECT'));
+				this.game.serverManager.getSocket().emit('selectlevel', { heros: null, pos: null, world: this.worldPos });
 				this.game.audioManager.playSound('bip');
 				this.updateDisplay();
 				break;
@@ -503,6 +504,7 @@ class LevelSelect {
 					if (this.levelList[this.worldPos][this.playerPosition].coli.selected) {
 						this.heroSelected = FLEUR_HEROS;
 					}
+					this.game.serverManager.getSocket().emit('selectlevel', { heros: null, pos: this.playerPosition, world: this.worldPos });
 					this.infoText.show(null, this.game.translate('HEROS_SELECT'));
 					this.game.audioManager.playSound('bip');
 					this.updateDisplay();
@@ -513,7 +515,7 @@ class LevelSelect {
 				if (this.levelList[this.worldPos][this.playerPosition].selected) break;
 				this.state = this.READY_STATE;
 				this.infoText.show(null, this.game.translate('READY_SELECT'));
-				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, level: this.playerPosition + 1, world: this.worldPos });
+				this.game.serverManager.getSocket().emit('selectlevel', { heros: this.heroSelected, pos: this.playerPosition, world: this.worldPos });
 				this.game.audioManager.playSound('bip');
 				this.updateDisplay();
 				break;
