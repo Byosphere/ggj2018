@@ -15,11 +15,11 @@ This is the repository for our video-game developed durring the 2018 edition of 
  - sprites
  - tilemaps
 	- maps
-		- laserWorld
+		- world-1
 			- level1_coli
 			- level1_fleur
 			- ...
-		- forestWorld
+		- world-2
 			- level1_coli
 			- level1_fleur
 			- ...
