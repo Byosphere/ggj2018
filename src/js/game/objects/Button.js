@@ -63,7 +63,7 @@ class Button extends Phaser.Sprite {
      */
     update() {
 
-        this.herosTrigger = this.game.physics.arcade.overlap(this.character, this, this.toggleOn, null, this);
+        this.herosTrigger = this.game.physics.arcade.overlap(this.character.feet(), this, this.toggleOn, null, this);
         this.rockTrigger = this.game.physics.arcade.overlap(this.rocksGroup, this, this.toggleOn, null, this);
 
         if (!this.herosTrigger && !this.rockTrigger && this.activated) {

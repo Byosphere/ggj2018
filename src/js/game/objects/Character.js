@@ -29,6 +29,20 @@ class Character extends Phaser.Sprite {
 		this.skin = this.DEFAULT_SKIN;
 		this.speed = this.DEFAULT_SPEED;
 		this.itemOnContact = null;
+		this.feetCollide = this.game.add.graphics(17, -16);
+		if (this.game.parameters.debugMode.value) {
+			this.feetCollide.beginFill(0xFF0000, 0.5);
+		} else {
+			this.feetCollide.beginFill(0xFF0000, 0);
+		}
+		this.feetCollide.drawRect(0, 0, 30, 15);
+		this.feetCollide.endFill();
+		this.game.physics.arcade.enable(this.feetCollide);
+		this.addChild(this.feetCollide);
+	}
+
+	feet() {
+		return this.feetCollide;
 	}
 
 	/**
