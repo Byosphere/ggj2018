@@ -30,7 +30,7 @@ class Loader extends Phaser.State {
 
     loadImages() {
         //simple images
-        this.game.load.image('decor', BASE_URL + 'tilemaps/tiles/decor.png');
+        //this.game.load.image('decor', BASE_URL + 'tilemaps/tiles/decor.png');
         this.game.load.image('hudSelect', BASE_URL + 'sprites/levelSelect/hud_select.png');
         this.game.load.image('levelBack', BASE_URL + 'sprites/levelSelect/level_back.png');
         this.game.load.image('rightBands', BASE_URL + 'sprites/levelSelect/right_bands.png');
@@ -41,9 +41,9 @@ class Loader extends Phaser.State {
         this.game.load.image('tbMedium', BASE_URL + 'sprites/textMessage/background_medium.png');
         this.game.load.image('info', BASE_URL + 'sprites/textMessage/info.png');
         this.game.load.image('cursor', BASE_URL + 'sprites/mainMenu/cursor.png');
-        // for (let w = 0; w < WORLDS.length; w++) {
-        //     this.game.load.image(WORLDS[w], BASE_URL + 'tilemaps/tiles/'+WORLDS+'.png');
-        // }
+        for (let w = 0; w < WORLDS.length; w++) {
+            this.game.load.image('tileset-' + (w + 1), BASE_URL + 'tilemaps/tiles/tileset-' + (w + 1) + '.png');
+        }
     }
 
     loadSpritesheets() {
@@ -62,6 +62,7 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('door', BASE_URL + 'sprites/door.png', CELL_SIZE * DOOR_WIDTH, CELL_SIZE * DOOR_HEIGHT);
         this.game.load.spritesheet('door_horizontal', BASE_URL + 'sprites/door_horizontal.png', CELL_SIZE * DOOR_HEIGHT, CELL_SIZE * DOOR_WIDTH);
         this.game.load.spritesheet('button', BASE_URL + 'sprites/button.png', CELL_SIZE * BUTTON_WIDTH, CELL_SIZE * BUTTON_HEIGHT);
+        this.game.load.spritesheet('hole', BASE_URL + 'sprites/hole.png', 64, 64);
         this.game.load.spritesheet('rock', BASE_URL + 'sprites/caillou.png', CELL_SIZE * ROCK_WIDTH, CELL_SIZE * ROCK_HEIGHT);
         this.game.load.spritesheet('exit', BASE_URL + 'sprites/exit.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         this.game.load.spritesheet('victory', BASE_URL + 'sprites/vousavezgagne.png', VICTORY_WIDTH, VICTORY_HEIGHT);

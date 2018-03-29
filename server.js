@@ -181,6 +181,10 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('senditem', function (itemData) {
+        socket.broadcast.to(socket.code).emit('receiveitem', itemData);
+    });
+
     // player on exit spot
     socket.on('inexit', function () {
         server.lobbies[socket.code].exitCount++;

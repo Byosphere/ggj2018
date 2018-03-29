@@ -24,6 +24,7 @@ module.exports = function (grunt) {
         'src/js/game/objects/Door.js',
         'src/js/game/objects/Exit.js',
         'src/js/game/objects/Rock.js',
+        'src/js/game/objects/Hole.js',
         'src/js/game/objects/Character.js',
         'src/js/game/objects/PauseScreen.js',
         'src/js/game/objects/DisconnectScreen.js',
