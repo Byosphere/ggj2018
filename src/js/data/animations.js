@@ -72,6 +72,10 @@ const TITLE_ANIMATIONS = {
     DEFAULT: { NAME: 'title_default', FRAMES: [0, 1, 2, 3, 4, 5, 6, 7] }
 }
 
+const HOLE_ANIMATIONS = {
+    DEFAULT: { NAME: 'hole-default', FRAMES: [0, 1, 2, 3, 4, 5, 6, 7] }
+}
+
 const MENU_BACKGROUND_ANIMATIONS = {
     DEFAULT: { NAME: 'background_default', FRAMES: [0, 1] }
 }

@@ -162,10 +162,12 @@ class Scene extends Phaser.State {
         this.exitGroup = this.game.add.group();
         this.buttonsGroup = this.game.add.group();
         this.buttonsGroup.enableBody = true;
+        this.holesGroup = this.game.add.group();
         this.rocksGroup = this.game.add.group();
         this.rocksGroup.enableBody = true;
         this.doorsGroup = this.game.add.group();
         this.doorsGroup.enableBody = true;
+
         this.characterGroup = this.game.add.group();
 
         // Adding map objects
@@ -212,6 +214,9 @@ class Scene extends Phaser.State {
             case 'exit':
                 this.exitGroup.add(new Exit(this.game, obj, this.currentLevel.world));
                 break;
+            case 'hole':
+                this.holesGroup.add(new Hole(this.game, obj));
+                break;
             default:
                 console.warn(type);
                 break;
@@ -222,6 +227,10 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         this.game.physics.arcade.collide(this.character, this.rocksGroup);
+
+        this.game.physics.arcade.overlap(this.holesGroup, this.rocksGroup, (hole, rock) => {
+            hole.sendItem(rock);
+        });
 
         if (!this.character.hasItem()) {
             for (let child in this.rocksGroup.children) {
@@ -353,6 +362,20 @@ class Scene extends Phaser.State {
         if (!this.exitActive) {
             this.game.serverManager.getSocket().emit('inexit');
             this.exitActive = true;
+        }
+    }
+
+    onReceiveItem(itemData) {
+        switch (itemData.type) {
+            case 'rock':
+                for (let i = 0; i < this.holesGroup.children.length; i++) {
+                    if (this.holesGroup.children[i].linkedHoleId === itemData.id) {
+                        this.rocksGroup.add(new Rock(this.game, { x: this.holesGroup.children[i].x, y: this.holesGroup.children[i].y, invisible: false }));
+                        rock.alpha = 0;
+                        let tween = this.game.add.tween(rock).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0);
+                    }
+                }
+                break;
         }
     }
 

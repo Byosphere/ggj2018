@@ -25,7 +25,7 @@ const WORLDS_DATA = [
         id: 3,
         name: '',
         unlock_pattern: [],
-        to_unlock: -1,
+        to_unlock: 0,
         world_position: { x: 338, y: 300 },
     },
     {

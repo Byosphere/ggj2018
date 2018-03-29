@@ -63,6 +63,11 @@ class ServerManager {
                 this.callbackContext.onCloseDoor(color);
         });
 
+        this.socket.on('receiveitem', (itemData) => {
+            if (this.callbackContext && this.callbackContext.onReceiveItem)
+                this.callbackContext.onReceiveItem(itemData);
+        });
+
         this.socket.on('inexit', (player) => {
             if (this.callbackContext && this.callbackContext.onInExit)
                 this.callbackContext.onInExit(player);
