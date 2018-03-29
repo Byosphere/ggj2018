@@ -62,4 +62,9 @@ class Rock extends Phaser.Sprite {
     outContact() {
         this.infoTextGroup.visible = false;
     }
+
+    destroy() {
+        this.infoTextGroup.destroy();
+        super.destroy();
+    }
 }
