@@ -75,7 +75,8 @@ var TEXT_FR = {
     WORLD_NAMES: [
         '',
         'Forêt de Brocolande',
-        'Porte de Saint Laser'
+        'Porte de Saint Laser',
+        'Monde 3'
     ],
     LEVEL: 'niveau',
     LEVEL_COMPLETED: 'Niveau terminé !',
