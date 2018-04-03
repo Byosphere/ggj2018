@@ -1,4 +1,4 @@
-class EndLevel extends Phaser.State {
+class ScoreScreen extends Phaser.State {
 
 	init(levelData, hero) {
 		this.level = levelData;

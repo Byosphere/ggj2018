@@ -355,7 +355,7 @@ class Scene extends Phaser.State {
         this.exitGroup.children[0].animateSuccess();
         setTimeout(() => {
             this.game.audioManager.stopCurrentMusic();
-            this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
+            this.game.state.start('scorescreen', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
         }, 3000);
     }
 

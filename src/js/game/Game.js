@@ -9,7 +9,7 @@ class Game extends Phaser.Game {
         this.state.add('param', Parameters);
         this.state.add('menu', MainMenu);
         this.state.add('levelhub', LevelSelect);
-        this.state.add('endlevel', EndLevel);
+        this.state.add('scorescreen', ScoreScreen);
         this.state.add('scene', Scene);
 
         //localstoragemanager
