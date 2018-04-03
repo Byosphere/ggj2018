@@ -33,32 +33,7 @@ class MainMenu extends Phaser.State {
         this.title.anchor.set(0.5, 0);
         this.title.scale.setTo(0.2, 0.2);
         this.title.animations.add(TITLE_ANIMATIONS.DEFAULT.NAME, TITLE_ANIMATIONS.DEFAULT.FRAMES, 4, false).play();
-
-        this.backgroundTopCorner1 = this.game.add.sprite(-200, -200, 'background_top_corner');
-        this.backgroundTopCorner1.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.game.add.tween(this.backgroundTopCorner1).to({ x: 0, y: 0 }, 500, 'Quart.easeInOut', true, 0);
-
-        this.backgroundTopMiddle = this.game.add.sprite(300, -200, 'background_top_middle');
-        this.backgroundTopMiddle.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.game.add.tween(this.backgroundTopMiddle).to({ y: 0 }, 500, 'Quart.easeInOut', true, 0);
-
-        this.backgroundTopMiddle2 = this.game.add.sprite(800, -200, 'background_top_middle2');
-        this.backgroundTopMiddle2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.game.add.tween(this.backgroundTopMiddle2).to({ y: 0 }, 500, 'Quart.easeInOut', true, 0);
-
-        this.backgroundTopCorner2 = this.game.add.sprite(this.game.world.width + 200, -200, 'background_top_corner');
-        this.backgroundTopCorner2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.backgroundTopCorner2.scale.setTo(-1, 1);
-        this.game.add.tween(this.backgroundTopCorner2).to({ x: this.game.world.width, y: 0 }, 500, 'Quart.easeInOut', true, 0);
-
-        this.backgroundbotCorner1 = this.game.add.sprite(-100, this.game.world.height, 'background_bot_corner');
-        this.backgroundbotCorner1.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.game.add.tween(this.backgroundbotCorner1).to({ x: -5, y: this.game.world.height - 272 }, 500, 'Quart.easeInOut', true, 500);
-
-        this.backgroundbotCorner2 = this.game.add.sprite(this.game.world.width, this.game.world.height, 'background_bot_corner2');
-        this.backgroundbotCorner2.animations.add(MENU_BACKGROUND_ANIMATIONS.DEFAULT.NAME, MENU_BACKGROUND_ANIMATIONS.DEFAULT.FRAMES, 1, true).play();
-        this.game.add.tween(this.backgroundbotCorner2).to({ x: this.game.world.width - 132, y: this.game.world.height - 296 }, 500, 'Quart.easeInOut', true, 500);
-
+        displayOverlay(this);
         this.game.add.tween(this.title).to({ y: MENU_TITLE_HEIGHT }, 1000, 'Quart.easeInOut', true, 1000);
         let lastTween = this.game.add.tween(this.title.scale).to({ x: 1, y: 1 }, 1000, 'Quart.easeInOut', true, 1000);
         lastTween.onComplete.add(() => {
@@ -76,15 +51,9 @@ class MainMenu extends Phaser.State {
             this.fleur.alpha = 0;
             this.input.visible = false;
             this.game.add.tween(this.title).to({ alpha: 0 }, 500, 'Quart.easeInOut', true, 0);
-            this.game.add.tween(this.backgroundTopCorner1).to({ x: -200, y: -200 }, 500, 'Quart.easeInOut', true, 500);
-            this.game.add.tween(this.backgroundTopMiddle).to({ y: -200 }, 500, 'Quart.easeInOut', true, 500);
-            this.game.add.tween(this.backgroundTopMiddle2).to({ y: -200 }, 500, 'Quart.easeInOut', true, 500);
-            this.game.add.tween(this.backgroundTopCorner2).to({ x: this.game.world.width + 200, y: -200 }, 500, 'Quart.easeInOut', true, 500);
-            this.game.add.tween(this.backgroundbotCorner1).to({ x: -100, y: this.game.world.height }, 500, 'Quart.easeInOut', true, 1000);
-            let lastTween = this.game.add.tween(this.backgroundbotCorner2).to({ x: this.game.world.width, y: this.game.world.height }, 500, 'Quart.easeInOut', true, 1000);
-            lastTween.onComplete.add(() => {
+            hideOverlay(this).then(() => {
                 resolve(true);
-            }, this);
+            });
         });
     }
 
