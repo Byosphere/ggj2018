@@ -30,7 +30,6 @@ class Loader extends Phaser.State {
 
     loadImages() {
         //simple images
-        this.game.load.image('decor', BASE_URL + 'tilemaps/tiles/decor.png');
         this.game.load.image('hudSelect', BASE_URL + 'sprites/levelSelect/hud_select.png');
         this.game.load.image('levelBack', BASE_URL + 'sprites/levelSelect/level_back.png');
         this.game.load.image('rightBands', BASE_URL + 'sprites/levelSelect/right_bands.png');
@@ -41,9 +40,9 @@ class Loader extends Phaser.State {
         this.game.load.image('tbMedium', BASE_URL + 'sprites/textMessage/background_medium.png');
         this.game.load.image('info', BASE_URL + 'sprites/textMessage/info.png');
         this.game.load.image('cursor', BASE_URL + 'sprites/mainMenu/cursor.png');
-        // for (let w = 0; w < WORLDS.length; w++) {
-        //     this.game.load.image(WORLDS[w], BASE_URL + 'tilemaps/tiles/'+WORLDS+'.png');
-        // }
+        for (let w = 0; w < WORLDS.length; w++) {
+            this.game.load.image('tileset-' + (w + 1), BASE_URL + 'tilemaps/tiles/tileset-' + (w + 1) + '.png');
+        }
     }
 
     loadSpritesheets() {
@@ -59,8 +58,6 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('background_title', BASE_URL + 'sprites/background_title.png', this.game.world.width, this.game.world.height);
         this.game.load.spritesheet('bulle', BASE_URL + 'sprites/bulle.png', CELL_SIZE, CELL_SIZE);
         this.game.load.spritesheet('anim_title', BASE_URL + 'sprites/titre_anim.png', HEAD_TITLE_WIDTH, HEAD_TITLE_HEIGHT);
-        this.game.load.spritesheet('door', BASE_URL + 'sprites/door.png', CELL_SIZE * DOOR_WIDTH, CELL_SIZE * DOOR_HEIGHT);
-        this.game.load.spritesheet('door_horizontal', BASE_URL + 'sprites/door_horizontal.png', CELL_SIZE * DOOR_HEIGHT, CELL_SIZE * DOOR_WIDTH);
         this.game.load.spritesheet('button', BASE_URL + 'sprites/button.png', CELL_SIZE * BUTTON_WIDTH, CELL_SIZE * BUTTON_HEIGHT);
         this.game.load.spritesheet('rock', BASE_URL + 'sprites/caillou.png', CELL_SIZE * ROCK_WIDTH, CELL_SIZE * ROCK_HEIGHT);
         this.game.load.spritesheet('exit', BASE_URL + 'sprites/exit.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
@@ -72,6 +69,10 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('background_top_middle', BASE_URL + 'sprites/mainMenu/background_top_middle.png', 416, 96);
         this.game.load.spritesheet('background_top_middle2', BASE_URL + 'sprites/mainMenu/background_top_middle2.png', 212, 64);
         this.game.load.spritesheet('background_bot_corner2', BASE_URL + 'sprites/mainMenu/background_bot_corner2.png', 132, 296);
+        for (let w = 1; w <= WORLDS.length; w++) {
+            this.game.load.spritesheet('door_w' + w, BASE_URL + 'sprites/doors/door_w' + w + '.png', CELL_SIZE * DOOR_WIDTH, CELL_SIZE * DOOR_HEIGHT);
+            this.game.load.spritesheet('door_horizontal_w' + w, BASE_URL + 'sprites/doors/door_horizontal_w' + w + '.png', CELL_SIZE * DOOR_HEIGHT, CELL_SIZE * DOOR_WIDTH);
+        }
     }
 
     loadTilemaps() {
@@ -95,6 +96,7 @@ class Loader extends Phaser.State {
         this.game.load.audio('back', BASE_URL + 'sound/back.wav');
         this.game.load.audio('pop', BASE_URL + 'sound/pop.wav');
         this.game.load.audio('door_laser', BASE_URL + 'sound/door_laser.wav');
+        this.game.load.audio('door_leaves', BASE_URL + 'sound/door_leaves.wav');
         this.game.load.audio('button', BASE_URL + 'sound/button.wav');
     }
 

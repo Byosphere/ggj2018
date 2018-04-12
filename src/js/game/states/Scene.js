@@ -129,6 +129,7 @@ class Scene extends Phaser.State {
      */
     generateLevel(currentLevel, callback) {
 
+        this.game.stage.backgroundColor = WORLDS_DATA[currentLevel.world - 1].backgroundColor;
         let loadBack = this.game.add.graphics(0, 0);
         loadBack.beginFill(0x00000, 1);
         loadBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
@@ -139,7 +140,12 @@ class Scene extends Phaser.State {
         preload.animations.play('default');
 
         this.map = this.game.add.tilemap('level' + currentLevel.level + '_world' + currentLevel.world + '_' + this.characterName);
-        this.map.addTilesetImage('decor');
+        try {
+            this.map.addTilesetImage('decor', 'tileset-' + currentLevel.world);
+        } catch (error) {
+            console.warn(error);
+            this.map.addTilesetImage('decor', 'tileset-1');
+        }
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
@@ -194,7 +200,7 @@ class Scene extends Phaser.State {
                 this.buttonsGroup.add(new Button(this.game, obj, this.character, this.rocksGroup));
                 break;
             case 'door':
-                this.doorsGroup.add(new Door(this.game, obj));
+                this.doorsGroup.add(new Door(this.game, obj, this.currentLevel.world));
                 break;
             case 'rock':
                 this.rocksGroup.add(new Rock(this.game, obj));
