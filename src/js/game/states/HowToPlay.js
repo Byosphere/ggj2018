@@ -16,11 +16,11 @@ class HowToPlay extends Phaser.State {
         this.quickText2 = this.game.add.text(this.game.world.centerX, 200, this.game.translate('QUICK_TEXT_2'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.quickText2.anchor.setTo(0.5);
 
-        this.btnAction = this.game.add.sprite(100, 280, 'btnA');
+        this.btnAction = this.game.add.sprite(100, 300, 'btnA');
         this.keyAction = this.game.add.sprite(200, 280, 'enter');
         this.textAction = this.game.add.text(320, 300, this.game.translate('HTP_ACTION'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 
-        this.btnCancel = this.game.add.sprite(100, 410, 'btnB');
+        this.btnCancel = this.game.add.sprite(100, 430, 'btnB');
         this.keyCancel = this.game.add.sprite(200, 430, 'esc');
         this.textCancel = this.game.add.text(320, 430, this.game.translate('HTP_CANCEL'), { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
 
