@@ -17,6 +17,7 @@ module.exports = function (grunt) {
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
         'src/js/game/states/MainMenu.js',
+        'src/js/game/states/HowToPlay.js',
         'src/js/game/states/ScoreScreen.js',
         'src/js/game/states/LevelSelect.js',
         'src/js/game/states/Scene.js',

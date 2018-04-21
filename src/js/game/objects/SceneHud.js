@@ -124,7 +124,7 @@ class SceneHud {
         if (this.heroLife === 0) {
             this.game.serverManager.getSocket().emit('reset', true);
         } else {
-            this.bulle.animations.play(BULLE_ANIMATIONS.HEART_BREAK.NAME);
+            this.coeur.animations.play(HEART_ANIMATIONS.BREAK.NAME);
             this.lifeText.text = this.heroLife + '/' + HEROS_MAX_LIVES;
         }
     }
@@ -134,7 +134,7 @@ class SceneHud {
      * @param {number} nb : nombre de points de vie
      */
     addLife(nb) {
-        this.bulle.animations.play(BULLE_ANIMATIONS.HEART_FLASH.NAME);
+        this.coeur.animations.play(HEART_ANIMATIONS.BREAK.NAME);
         this.heroLife += nb;
         if (this.heroLife > HEROS_MAX_LIVES) this.heroLife = HEROS_MAX_LIVES;
         this.lifeText.text = this.heroLife + '/' + HEROS_MAX_LIVES;
@@ -147,24 +147,26 @@ class SceneHud {
         this.hudBack.drawRect(0, 8, this.game.world.width, 46);
         this.hudBack.endFill();
         this.hudGroup.add(this.hudBack);
-        this.hudGroup.add(this.game.add.sprite(264, -1, 'bulle'));
-        this.hudGroup.add(this.game.add.sprite(10, -1, 'bulle'));
-        this.hudGroup.add(this.game.add.text(254 + CELL_SIZE, 10, ': ' + this.game.translate('LEVEL') + ' ' + this.currentLevel.world + '-' + this.currentLevel.level, { font: DEFAULT_FONT, fill: DEFAULT_COLOR }));
+        let levelIcon = this.game.add.sprite(270, -4, 'hud');
+        levelIcon.frame = 1;
+        this.hudGroup.add(levelIcon);
+        this.hudGroup.add(this.game.add.sprite(10, -2, 'hud'));
+        this.hudGroup.add(this.game.add.text(278 + CELL_SIZE, 10, ': ' + this.game.translate('LEVEL') + ' ' + this.currentLevel.world + '-' + this.currentLevel.level, { font: DEFAULT_FONT, fill: DEFAULT_COLOR }));
         this.hudGroup.add(this._startTimer());
         this.hudGroup.add(this._displayLife());
     }
 
     _displayLife() {
         this.lifeGroup = this.game.add.group();
-        this.bulle = this.game.add.sprite(this.game.world.width - 200, CELL_SIZE / 2, 'bulle');
-        this.bulle.frame = BULLE_ANIMATIONS.HEART_DEFAULT.FRAMES;
-        this.bulle.anchor.setTo(.5, .5);
-        this.bulle.scale.setTo(-1, 1);
-        this.bulle.animations.add(BULLE_ANIMATIONS.HEART_BREAK.NAME, BULLE_ANIMATIONS.HEART_BREAK.FRAMES, 10, false);
-        this.bulle.animations.add(BULLE_ANIMATIONS.HEART_FLASH.NAME, BULLE_ANIMATIONS.HEART_FLASH.FRAMES, 10, false);
-        this.lifeText = this.game.add.text(this.game.world.width - 150, 14, this.heroLife + '/' + HEROS_MAX_LIVES, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
+        this.coeur = this.game.add.sprite(this.game.world.width - 200, (CELL_SIZE / 2) - 4, 'hud');
+        this.coeur.frame = 2;
+        this.coeur.anchor.setTo(.5, .5);
+        this.coeur.scale.setTo(-1, 1);
+        this.coeur.animations.add(HEART_ANIMATIONS.BREAK.NAME, HEART_ANIMATIONS.BREAK.FRAMES, 10, false);
+        this.coeur.animations.add(HEART_ANIMATIONS.BREAK.NAME, HEART_ANIMATIONS.BREAK.FRAMES, 10, false);
+        this.lifeText = this.game.add.text(this.coeur.x + (CELL_SIZE / 2) + 10, 10, ': ' + this.heroLife + '/' + HEROS_MAX_LIVES, { font: DEFAULT_FONT, fill: DEFAULT_COLOR });
         this.lifeGroup.add(this.lifeText);
-        this.lifeGroup.add(this.bulle);
+        this.lifeGroup.add(this.coeur);
         return this.lifeGroup;
     }
 

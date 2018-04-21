@@ -16,7 +16,7 @@ const WORLDS_DATA = [
         unlock_pattern: [[], [12], [13], [14], [15], [16], [17]],
         to_unlock: 0,
         world_position: { x: 145, y: 175 },
-        backgroundColor:'#1d2b53',
+        backgroundColor: '#134c82', //#1d2b53',
         story_texts: [
             { level: 1, text: ['TEXT_2_1_1', 'TEXT_2_1_2'] }
         ]

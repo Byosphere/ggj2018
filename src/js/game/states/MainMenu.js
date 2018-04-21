@@ -238,7 +238,7 @@ class MainMenu extends Phaser.State {
                         });
                         break;
                     case 3:
-                        window.open('./instructions', '_blank');
+                        this.game.state.start('htp');
                         break;
                     case 4:
                         this.game.electronManager.quit();

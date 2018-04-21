@@ -20,14 +20,14 @@ class Rock extends Phaser.Sprite {
         button.scale.setTo(0.7, 0.7);
         button.anchor.setTo(0, 0.5);
 
-        let infoText = this.game.add.text(45, -5, this.game.translate('PICK'), { font: SMALL_FONT, fill: DEFAULT_COLOR });
+        let infoText = this.game.add.text(35, -10, this.game.translate('PICK'), { font: SMALL_FONT, fill: DEFAULT_COLOR });
         infoText.setShadow(6, 6, "rgba(0, 0, 0, 0.8)", 7);
         this.infoTextGroup.add(button);
         this.infoTextGroup.add(infoText);
 
         this.game.world.bringToTop(this.infoTextGroup);
         this.infoTextGroup.x = this.centerX - this.infoTextGroup.width / 2;
-        this.infoTextGroup.y = this.y - 20;
+        this.infoTextGroup.y = this.y - 10;
         this.infoTextGroup.visible = false;
 
         this.uid = Math.floor(Date.now() + (Math.random() * 10));
