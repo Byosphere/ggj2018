@@ -52,6 +52,8 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('btnLeft', BASE_URL + 'sprites/controlsIcons/btnLeft.png', 64, 64);
         this.game.load.spritesheet('btnRight', BASE_URL + 'sprites/controlsIcons/btnRight.png', 64, 64);
         this.game.load.spritesheet('enter', BASE_URL + 'sprites/controlsIcons/enter.png', 80, 96);
+        this.game.load.spritesheet('keys', BASE_URL + 'sprites/controlsIcons/keys.png', 140, 92);
+        this.game.load.spritesheet('esc', BASE_URL + 'sprites/controlsIcons/esc.png', 80, 44);
         this.game.load.spritesheet('space', BASE_URL + 'sprites/controlsIcons/space.png', 140, 44);
         this.game.load.spritesheet('fleur', BASE_URL + 'sprites/fleur.png', CELL_SIZE * HEROS_WIDTH, CELL_SIZE * HEROS_HEIGHT);
         this.game.load.spritesheet('coli', BASE_URL + 'sprites/coli.png', CELL_SIZE * HEROS_WIDTH, CELL_SIZE * HEROS_HEIGHT);

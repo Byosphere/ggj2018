@@ -118,5 +118,11 @@ var TEXT_FR = {
     TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.',
     PICK: 'Prendre',
     PRESENTS: 'présentent',
-    BACK_BUTTON: '<- Retour'
+    BACK_BUTTON: '<- Retour',
+    HOW_TO_PLAY: 'Comment jouer ?',
+    QUICK_TEXT_1: 'L\'objectif du jeu est d\'atteindre la sortie de chaque niveau',
+    QUICK_TEXT_2: 'tout en aidant ton partenaire à terminer le niveau lui aussi !',
+    HTP_ACTION: ': Valider / Ramasser',
+    HTP_MOVE: ': Se déplacer',
+    HTP_CANCEL: ': Annuler / Retour',
 }
