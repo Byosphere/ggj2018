@@ -6,7 +6,7 @@ class ScoreScreen extends Phaser.State {
 	}
 
 	preload() {
-		this.game.stage.backgroundColor = MENU_BACKGROUND_COLOR;
+		this.game.stage.backgroundColor = WORLDS_DATA[this.level.world - 1].backgroundColor;
 		this.game.controlsManager.setCallbackContext(this);
 		this.game.serverManager.setCallbackContext(this);
 		this.posY = 0;

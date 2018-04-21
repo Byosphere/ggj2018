@@ -1,7 +1,7 @@
 class Exit extends Phaser.Sprite {
 
-    constructor(game, data) {
-        super(game, data.x, data.y, 'exit', 0);
+    constructor(game, data, worldNum) {
+        super(game, data.x, data.y, 'exit_w' + worldNum, 0);
         this.game = game;
         this.data = data;
         this.anchor.setTo(0, 1);

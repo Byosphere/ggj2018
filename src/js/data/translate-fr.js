@@ -74,8 +74,8 @@ var TEXT_FR = {
     ],
     WORLD_NAMES: [
         '',
-        'Porte de Saint Laser',
-        'Forêt de Brocolande'
+        'Forêt de Brocolande',
+        'Porte de Saint Laser'
     ],
     LEVEL: 'niveau',
     LEVEL_COMPLETED: 'Niveau terminé !',
@@ -105,8 +105,8 @@ var TEXT_FR = {
     TIME: 'Temps',
     COLLECTIBLE: 'Collection',
     CONTINUE: 'Continuer ?',
-    LEVEL_HUB_BACK:'Voulez-vous vraiment quitter le salon actuel ?',
-    LEVEL_HUB_BACK_2:'(Le lien avec l\'autre joueur sera interrompu)',
+    LEVEL_HUB_BACK: 'Voulez-vous vraiment quitter le salon actuel ?',
+    LEVEL_HUB_BACK_2: '(Le lien avec l\'autre joueur sera interrompu)',
     READY_SELECT: 'En attente de l\'autre joueur...',
     EXIT_FLEUR: 'Chou Fleur est arrivée à la sortie !',
     EXIT_COLI: 'Ton bro Coli est arrivé à la sortie !',
@@ -117,4 +117,5 @@ var TEXT_FR = {
     TEXT_2_1_1: 'Il se pourrait que tu ai besoin que quelqu\'un reste sur',
     TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.',
     PICK: 'Prendre',
+    PRESENTS: 'présentent'
 }
