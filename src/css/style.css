@@ -15,6 +15,15 @@ body {
     color: #efefef;
 }
 
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.navbar-brand {
+    font-family: 'uni0553';
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'uni0553';
 }
@@ -49,4 +58,13 @@ ul.navigation li+li {
 
 .text-primary {
     color: #00e756 !important;
+}
+
+#play-btn {
+    font-family: 'uni0553';
+    font-size: 2.5rem;
+    background-color: #00e756;
+    border-color: #00e756;
+    padding: 0 2rem;
+    color: #efefef;
 }
