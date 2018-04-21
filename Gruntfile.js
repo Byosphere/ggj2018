@@ -54,9 +54,7 @@ module.exports = function (grunt) {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/js/phaser.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.js', dest: 'public/js/phaser-input.js' },
-                    { src: 'src/index.html', dest: 'public/index.html' },
                     { src: 'src/game-dev.html', dest: 'public/game.html' },
-                    { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
                     { src: 'src/css/game.css', dest: 'public/css/game.css' },
                     { src: 'src/css/style.css', dest: 'public/css/style.css' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
@@ -68,9 +66,7 @@ module.exports = function (grunt) {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/js/phaser.min.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.min.js', dest: 'public/js/phaser-input.min.js' },
-                    { src: 'src/index.html', dest: 'public/index.html' },
                     { src: 'src/game-prod.html', dest: 'public/game.html' },
-                    { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
                     { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
                     { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' }

@@ -24,6 +24,11 @@ body {
     font-family: 'uni0553';
 }
 
+.navbar-nav li.active a.nav-link.text-primary,
+.navbar-nav a.nav-link.text-primary:hover {
+    color: #04f95e !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'uni0553';
 }

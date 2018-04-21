@@ -3,13 +3,16 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 
+app.set('view engine', 'ejs');
+app.set('views', './src/views');
+
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/js', express.static(__dirname + '/public/js'));
 app.use('/assets', express.static(__dirname + '/public/assets'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+    res.render('index');
 });
 
 app.get('/game', function(req, res) {
@@ -17,11 +20,21 @@ app.get('/game', function(req, res) {
 });
 
 app.get('/instructions', function (req, res) {
-    res.sendFile(__dirname + '/public/howtoplay.html');
+    res.render('instructions');
 });
+
+app.get('/about', function(req, res) {
+    res.render('about');
+});
+
+app.get('/donations', function(req, res) {
+    res.render('donations');
+});
+
 server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
 });
+
 server.debugLobby = 'L_DEBUG';
 server.lobbies = [];
 server.lobbies[server.debugLobby] = { players: [{ id: 0, selectedHero: 'fleur', position: 'fleur' }, null], buttonsState: [], exitCount: 0, playerCount: 1, levelReady: 1 }
