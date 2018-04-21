@@ -27,9 +27,9 @@ app.get('/about', function(req, res) {
     res.render('about');
 });
 
-app.get('/donations', function(req, res) {
-    res.render('donations');
-});
+//app.get('/donations', function(req, res) {
+//    res.render('donations');
+//});
 
 server.listen(process.env.PORT || 8081, function () {
     console.log('Listening on ' + server.address().port);
