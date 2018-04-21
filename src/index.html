@@ -19,12 +19,41 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Chou Fleur et son bro' Coli</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Accueil <span class="sr-only">(actuelle)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/game">Le Jeu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/instructions">Comment jouer ?</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">À propos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="#">Faire un don</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div class="row">
             <div class="col">
                 <h1>Accueil</h1>
                 <div class="text-center">
-                    <a href="/game" class="btn btn-primary">Jouer</a>
+                    <a id="play-btn" href="/game" class="btn">Jouer</a>
                 </div>
             </div>
         </div>
