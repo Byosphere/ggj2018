@@ -56,9 +56,11 @@ module.exports = function (grunt) {
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.js', dest: 'public/js/phaser-input.js' },
                     { src: 'src/index-dev.html', dest: 'public/index.html' },
                     { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
+                    { src: 'src/css/game.css', dest: 'public/css/game.css' },
                     { src: 'src/css/style.css', dest: 'public/css/style.css' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
-                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' }
                 ]
             },
             prod: {
@@ -68,7 +70,8 @@ module.exports = function (grunt) {
                     { src: 'src/index-prod.html', dest: 'public/index.html' },
                     { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
-                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' }
                 ]
             },
             assets: {
