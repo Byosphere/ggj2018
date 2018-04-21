@@ -4,22 +4,19 @@ class Loader extends Phaser.State {
 
         this.game.stage.backgroundColor = LOADER_BACKGROUND;
 
-        // Displaying the title of the game
-        this.title = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'title');
-        this.title.anchor.setTo(0.5);
+        this.preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
+        this.preload.anchor.setTo(0.5);
+        this.preload.animations.add('default', [0, 1, 2, 3], 10, true);
+        this.preload.animations.play('default');
 
-        let preload = this.game.add.sprite(this.game.world.width - 100, this.game.world.height - 100, 'preloadbar');
-        preload.anchor.setTo(0.5);
-        preload.animations.add('default', [0, 1, 2, 3], 10, true);
-        preload.animations.play('default');
-
-        let loadingText = this.game.add.text(0, 0, this.game.translate('LOADING_TEXT'), { font: DEFAULT_FONT, fill: LOADER_COLOR });
-        loadingText.x = preload.x - loadingText.width - (preload.width / 2) - 10;
-        loadingText.y = preload.y - loadingText.height / 2;
+        this.loadingText = this.game.add.text(0, 0, this.game.translate('LOADING_TEXT'), { font: DEFAULT_FONT, fill: LOADER_COLOR });
+        this.loadingText.x = this.preload.x - this.loadingText.width - (this.preload.width / 2) - 10;
+        this.loadingText.y = this.preload.y - this.loadingText.height / 2;
 
         // Loading the assets
         this.loadAssets();
     }
+
 
     loadAssets() {
         this.loadTilemaps();
@@ -40,6 +37,7 @@ class Loader extends Phaser.State {
         this.game.load.image('tbMedium', BASE_URL + 'sprites/textMessage/background_medium.png');
         this.game.load.image('info', BASE_URL + 'sprites/textMessage/info.png');
         this.game.load.image('cursor', BASE_URL + 'sprites/mainMenu/cursor.png');
+        this.game.load.image('logo', BASE_URL + 'logo.png');
         for (let w = 0; w < WORLDS.length; w++) {
             this.game.load.image('tileset-' + (w + 1), BASE_URL + 'tilemaps/tiles/tileset-' + (w + 1) + '.png');
         }
@@ -60,7 +58,7 @@ class Loader extends Phaser.State {
         this.game.load.spritesheet('anim_title', BASE_URL + 'sprites/titre_anim.png', HEAD_TITLE_WIDTH, HEAD_TITLE_HEIGHT);
         this.game.load.spritesheet('button', BASE_URL + 'sprites/button.png', CELL_SIZE * BUTTON_WIDTH, CELL_SIZE * BUTTON_HEIGHT);
         this.game.load.spritesheet('rock', BASE_URL + 'sprites/caillou.png', CELL_SIZE * ROCK_WIDTH, CELL_SIZE * ROCK_HEIGHT);
-        this.game.load.spritesheet('exit', BASE_URL + 'sprites/exit.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
+        this.game.load.spritesheet('hud', BASE_URL + 'sprites/hud.png', 64, 64);
         this.game.load.spritesheet('victory', BASE_URL + 'sprites/vousavezgagne.png', VICTORY_WIDTH, VICTORY_HEIGHT);
         this.game.load.spritesheet('exit_perso', BASE_URL + 'sprites/exit_perso.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         this.game.load.spritesheet('felicitations', BASE_URL + 'sprites/felicitations.png', CREDITS_WIDTH, CREDITS_HEIGHT);
@@ -72,6 +70,7 @@ class Loader extends Phaser.State {
         for (let w = 1; w <= WORLDS.length; w++) {
             this.game.load.spritesheet('door_w' + w, BASE_URL + 'sprites/doors/door_w' + w + '.png', CELL_SIZE * DOOR_WIDTH, CELL_SIZE * DOOR_HEIGHT);
             this.game.load.spritesheet('door_horizontal_w' + w, BASE_URL + 'sprites/doors/door_horizontal_w' + w + '.png', CELL_SIZE * DOOR_HEIGHT, CELL_SIZE * DOOR_WIDTH);
+            this.game.load.spritesheet('exit_w' + w, BASE_URL + 'sprites/exit_w' + w + '.png', CELL_SIZE * EXIT_WIDTH, CELL_SIZE * EXIT_HEIGHT);
         }
     }
 
@@ -101,6 +100,16 @@ class Loader extends Phaser.State {
     }
 
     create() {
-        this.game.state.start('menu');
+        this.preload.destroy();
+        this.loadingText.destroy();
+        this.logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY - 100, 'logo');
+        this.logo.anchor.setTo(0.5);
+        this.game.add.tween(this.logo).to({ alpha: 0 }, 1000, 'Quart.easeInOut', true, 2000);
+        this.startText = this.game.add.text(this.game.world.centerX, 550, this.game.translate('PRESENTS'), { font: DEFAULT_FONT, fill: LOADER_COLOR });
+        this.startText.anchor.setTo(0.5);
+        let anim = this.game.add.tween(this.startText).to({ alpha: 0 }, 1000, 'Quart.easeInOut', true, 2000);
+        anim.onComplete.add(() => {
+            this.game.state.start('menu');
+        });
     }
 }

@@ -149,6 +149,10 @@ class Scene extends Phaser.State {
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
+
+        this.floor = this.map.createLayer('Floor');
+        this.floor.resizeWorld();
+        
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();
 
@@ -206,7 +210,7 @@ class Scene extends Phaser.State {
                 this.rocksGroup.add(new Rock(this.game, obj));
                 break;
             case 'exit':
-                this.exitGroup.add(new Exit(this.game, obj));
+                this.exitGroup.add(new Exit(this.game, obj, this.currentLevel.world));
                 break;
             default:
                 console.warn(type);
