@@ -60,6 +60,10 @@ const BULLE_ANIMATIONS = {
     HEART_FLASH: { NAME: 'heart_flash', FRAMES: [6, 7, 8, 9, 10, 11] },
 }
 
+const HEART_ANIMATIONS = {
+    BREAK: { NAME: 'heart_break', FRAMES: [2, 3, 4, 4, 3, 2] }
+}
+
 const EXIT_ANIMATIONS = {
     EXIT_ACTIVE: { NAME: 'exit_active', FRAMES: [0, 1, 2, 3, 4] }
 }

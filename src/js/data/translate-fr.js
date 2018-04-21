@@ -117,5 +117,6 @@ var TEXT_FR = {
     TEXT_2_1_1: 'Il se pourrait que tu ai besoin que quelqu\'un reste sur',
     TEXT_2_1_2: 'cet interrupteur. Cette pierre devrait faire l\'affaire.',
     PICK: 'Prendre',
-    PRESENTS: 'présentent'
+    PRESENTS: 'présentent',
+    BACK_BUTTON: '<- Retour'
 }
