@@ -96,6 +96,8 @@ ul.navigation li+li {
     border-radius: 0;
     position: relative;
     border: none;
+    line-height: 1em;
+    padding-bottom: 15px;
 }
 
 .eightbit-btn:hover, .eightbit-btn:focus {
@@ -144,3 +146,30 @@ ul.navigation li+li {
     perspective: 1000px;
 }
 
+b {
+    color: #00e756;
+}
+
+.navbar-brand img {
+    width: 40px;
+    height: 40px;
+}
+
+.navigation {
+    margin-top:86px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.bg1 {
+    position: absolute;
+}
+
+.bg2 {
+    position: absolute;
+    right: 0;
+    transform: scaleX(-1)
+}

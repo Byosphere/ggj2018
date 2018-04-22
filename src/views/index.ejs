@@ -6,44 +6,57 @@
 <html class="no-js">
 <!--<![endif]-->
 
-    <head>
-        <% include partials/head %>
-    </head>
+<head>
+    <% include partials/head %>
+</head>
 
-    <body>
-        <%- include('partials/header', {active:'index'}); %>
+<body>
+    <%- include('partials/header', {active:'index'}); %>
 
-        <div class="container">
+        <div class="container" id="accueil">
             <div class="row">
                 <div class="col">
                     <h1 class="text-center text-primary ">Chou Fleur et son bro' Coli</h1>
+                    <h2 class="subtitle">- le seul jeu vidéo qui rend salsifi ! -</h2>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col">
-                    <h2>Jouer au jeu</h2>
-                    <br>
-                    <p>Pour jouer au jeu rien de plus facile : clique sur le bouton <strong>Jouer</strong> ci-dessous.</p>
-                    <p>Tu ne sais pas comment jouer ? Tu aimerais lire le tutoriel que nous avons concocté rien que pour toi ? Clique <a href="/instructions">ici</a>.</p>
-                    <br>
                     <div class="text-center">
                         <a href="/game" class="btn eightbit-btn">Jouer</a>
                     </div>
                 </div>
             </div>
-            <br><br>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <h2>Jouer au jeu</h2>
+                    <br>
+                    <p>Pour jouer au jeu rien de plus facile : clique sur le bouton
+                        <b>Jouer</b> ci-dessus.</p>
+                    <p>C'est la première fois que tu joues ? Tu devrais aller lire
+                        <a href="/instructions">ce tutoriel</a> que nous avons concocté rien que pour toi !
+                        <br>
+                </div>
+            </div>
+            <br>
+            <br>
             <div class="row">
                 <div class="col">
                     <h2>Rapporter un bug</h2>
                     <br>
-                    <p>Tu as trouvé un bug ? Aides-nous à améliorer le jeu en nous le rapportant ! Pour cela, clique sur le lien suivant : <a href="#">Rapporter un bug</a>.</p>
-                    <p>Essaie d'être le plus précis possible dans la description du bug de manière à ce que les développeurs puissent facilement le reproduire et le corriger !</p>
+                    <p>Tu as trouvé un bug ? Aides-nous à améliorer le jeu en nous le rapportant ! Pour cela, clique sur le
+                        lien suivant :
+                        <a href="#">Rapporter un bug</a>.</p>
+                    <p>Essaie d'être le plus précis possible dans la description du bug de manière à ce que les développeurs
+                        puissent facilement le reproduire et le corriger !</p>
                 </div>
             </div>
         </div>
 
         <%- include('partials/footer'); %>
-    </body>
+</body>
 
 </html>
