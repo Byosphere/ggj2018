@@ -65,11 +65,50 @@ ul.navigation li+li {
     color: #00e756 !important;
 }
 
-#play-btn {
+.eightbit-btn {
+    display: inline-block;
+    background-color: #00e756;
+    color: #efefef;
     font-family: 'uni0553';
     font-size: 2.5rem;
-    background-color: #00e756;
-    border-color: #00e756;
-    padding: 0 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: inset -4px -4px 0px 0px #00b241;
+    transition: none;
+    border-radius: 0;
+    position: relative;
+    border: none;
+}
+
+.eightbit-btn:hover, .eightbit-btn:focus {
+    background-color: #00d84f;
+    box-shadow: inset -6px -6px 0px 0px #00b241;
     color: #efefef;
+}
+
+.eightbit-btn:active {
+    box-shadow: inset 4px 4px 0px 0px #00b241;
+}
+
+.eightbit-btn:before,
+.eightbit-btn:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: content-box;
+}
+
+.eightbit-btn:before {
+    top: -6px;
+    left: 0;
+    border-top: 6px black solid;
+    border-bottom: 6px black solid;
+}
+
+.eightbit-btn:after {
+    top: 0;
+    left: -6px;
+    border-left: 6px black solid;
+    border-right: 6px black solid;
 }
