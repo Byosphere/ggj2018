@@ -60,7 +60,9 @@ module.exports = function (grunt) {
                     { src: 'src/css/style.css', dest: 'public/css/style.css' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
                     { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
-                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' }
+                    { src: 'node_modules/jquery/dist/jquery.js', dest: 'public/js/jquery.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' },
+                    { src: 'node_modules/bootstrap/dist/js/bootstrap.js', dest: 'public/js/bootstrap.js' }
                 ]
             },
             prod: {
@@ -70,7 +72,9 @@ module.exports = function (grunt) {
                     { src: 'src/game-prod.html', dest: 'public/game.html' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
                     { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
-                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' }
+                    { src: 'node_modules/jquery/dist/jquery.min.js', dest: 'public/js/jquery.min.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' },
+                    { src: 'node_modules/bootstrap/dist/js/bootstrap.min.js', dest: 'public/js/bootstrap.min.js' }
                 ]
             },
             assets: {
