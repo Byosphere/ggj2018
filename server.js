@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
+var assets = require('./assets');
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
@@ -12,7 +13,7 @@ app.use('/assets', express.static(__dirname + '/public/assets'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', { baseUrl: assets.getBaseUrl(process.env.NODE_ENV)});
 });
 
 app.get('/game', function(req, res) {
@@ -20,11 +21,11 @@ app.get('/game', function(req, res) {
 });
 
 app.get('/instructions', function (req, res) {
-    res.render('instructions');
+    res.render('instructions', { baseUrl: assets.getBaseUrl(process.env.NODE_ENV)});
 });
 
 app.get('/about', function(req, res) {
-    res.render('about');
+    res.render('about', { baseUrl: assets.getBaseUrl(process.env.NODE_ENV)});
 });
 
 //app.get('/donations', function(req, res) {
