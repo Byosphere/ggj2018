@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <img src="<%= baseUrl %>/site/coli.png" alt="coli">
+        <img src="<%= baseUrl %>/site/fleur.png" alt="fleur">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item <% if (active === 'index') { %> active <% } %>">
+                <a class="nav-link" href="/">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/game">Le Jeu</a>
+            </li>
+            <li class="nav-item <% if (active === 'instructions') { %> active <% } %>">
+                <a class="nav-link" href="/instructions">Comment jouer ?</a>
+            </li>
+            <li class="nav-item <% if (active === 'about') { %> active <% } %>">
+                <a class="nav-link" href="/about">À propos</a>
+            </li>
+            <!--<li class="nav-item <% if (active === 'donations') { %> active <% } %>">
+                <a class="nav-link text-primary" href="/donations">Faire un don</a>
+            </li>-->
+        </ul>
+    </div>
+</nav>
+<img class="bg1" src="<%= baseUrl %>/site/background.png" alt="background">
+<img class="bg2" src="<%= baseUrl %>/site/background.png" alt="background">
+<br>

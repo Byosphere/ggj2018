@@ -129,6 +129,7 @@ class Scene extends Phaser.State {
      */
     generateLevel(currentLevel, callback) {
 
+        this.game.stage.backgroundColor = WORLDS_DATA[currentLevel.world - 1].backgroundColor;
         let loadBack = this.game.add.graphics(0, 0);
         loadBack.beginFill(0x00000, 1);
         loadBack.drawRect(0, 0, this.game.world.width, this.game.world.height);
@@ -139,7 +140,6 @@ class Scene extends Phaser.State {
         preload.animations.play('default');
 
         this.map = this.game.add.tilemap('level' + currentLevel.level + '_world' + currentLevel.world + '_' + this.characterName);
-
         try {
             this.map.addTilesetImage('decor', 'tileset-' + currentLevel.world);
         } catch (error) {
@@ -149,6 +149,10 @@ class Scene extends Phaser.State {
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
+
+        this.floor = this.map.createLayer('Floor');
+        this.floor.resizeWorld();
+        
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();
 
@@ -202,13 +206,13 @@ class Scene extends Phaser.State {
                 this.buttonsGroup.add(new Button(this.game, obj, this.character, this.rocksGroup));
                 break;
             case 'door':
-                this.doorsGroup.add(new Door(this.game, obj));
+                this.doorsGroup.add(new Door(this.game, obj, this.currentLevel.world));
                 break;
             case 'rock':
                 this.rocksGroup.add(new Rock(this.game, obj));
                 break;
             case 'exit':
-                this.exitGroup.add(new Exit(this.game, obj));
+                this.exitGroup.add(new Exit(this.game, obj, this.currentLevel.world));
                 break;
             case 'hole':
                 this.holesGroup.add(new Hole(this.game, obj));
@@ -384,7 +388,7 @@ class Scene extends Phaser.State {
         this.exitGroup.children[0].animateSuccess();
         setTimeout(() => {
             this.game.audioManager.stopCurrentMusic();
-            this.game.state.start('endlevel', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
+            this.game.state.start('scorescreen', true, false, { level: this.currentLevel.level, world: this.currentLevel.world, num: getLevelNumFromWorldLevel(this.currentLevel.world, this.currentLevel.level), finished: true, highScore: this.hud.getTime() }, this.characterName);
         }, 3000);
     }
 

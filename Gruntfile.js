@@ -17,7 +17,8 @@ module.exports = function (grunt) {
         'src/js/game/states/Booter.js',
         'src/js/game/states/Loader.js',
         'src/js/game/states/MainMenu.js',
-        'src/js/game/states/EndLevel.js',
+        'src/js/game/states/HowToPlay.js',
+        'src/js/game/states/ScoreScreen.js',
         'src/js/game/states/LevelSelect.js',
         'src/js/game/states/Scene.js',
         'src/js/game/objects/Button.js',
@@ -55,21 +56,26 @@ module.exports = function (grunt) {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.js', dest: 'public/js/phaser.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.js', dest: 'public/js/phaser-input.js' },
-                    { src: 'src/index-dev.html', dest: 'public/index.html' },
-                    { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
+                    { src: 'src/game-dev.html', dest: 'public/game.html' },
+                    { src: 'src/css/game.css', dest: 'public/css/game.css' },
                     { src: 'src/css/style.css', dest: 'public/css/style.css' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
-                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
+                    { src: 'node_modules/jquery/dist/jquery.js', dest: 'public/js/jquery.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' },
+                    { src: 'node_modules/bootstrap/dist/js/bootstrap.js', dest: 'public/js/bootstrap.js' }
                 ]
             },
             prod: {
                 files: [
                     { src: 'node_modules/phaser-ce/build/phaser.min.js', dest: 'public/js/phaser.min.js' },
                     { src: 'node_modules/@orange-games/phaser-input/build/phaser-input.min.js', dest: 'public/js/phaser-input.min.js' },
-                    { src: 'src/index-prod.html', dest: 'public/index.html' },
-                    { src: 'src/howtoplay.html', dest: 'public/howtoplay.html' },
+                    { src: 'src/game-prod.html', dest: 'public/game.html' },
                     { src: 'src/favicon.ico', dest: 'public/favicon.ico' },
-                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' }
+                    { src: 'node_modules/socket.io-client/dist/socket.io.js', dest: 'public/js/socket.io.js' },
+                    { src: 'node_modules/jquery/dist/jquery.min.js', dest: 'public/js/jquery.min.js' },
+                    { src: 'node_modules/bootstrap/dist/css/bootstrap.css', dest: 'public/css/bootstrap.css' },
+                    { src: 'node_modules/bootstrap/dist/js/bootstrap.min.js', dest: 'public/js/bootstrap.min.js' }
                 ]
             },
             assets: {

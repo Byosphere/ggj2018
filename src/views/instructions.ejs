@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <% include partials/head %>
+</head>
+
+<body>
+    <%- include('partials/header', { active: 'instructions' }); %>
+
+        <div class="container">
+            <div class="text-center">
+                <h1>
+                    Chou Fleur et son Bro Coli
+                    <small class="text-primary">Comment jouer ?</small>
+                </h1>
+                <br>
+                <br>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="navigation">
+                        <li>
+                            <a href="#presentation">Présentation</a>
+                        </li>
+                        <li>
+                            <a href="#objectifs">Objectif du jeu</a>
+                        </li>
+                        <li>
+                            <a href="#controls">Commandes et manettes</a>
+                        </li>
+                        <li>
+                            <a href="#create-room">Créer et rejoindre une partie</a>
+                        </li>
+                        <li>
+                            <a href="#selection">Choisir un niveau et un personnage</a>
+                        </li>
+                        <li>
+                            <a href="#levels">Déblocage des niveaux</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <article id="presentation">
+                        <h2>Présentation</h2>
+                        <hr>
+                        <p class="text-justify">
+                            Bienvenue dans l'univers de chou Fleur et son bro Coli ! Initialement réalisé en 48h lors de la Global Game Jam 2018 à l'aide
+                            de Phaser CE et Socket.io, son succès nous a poussé à poursuivre son développement.
+                            <br> Il maintenant en béta libre et gratuite, jouable sur navigateur. Tu peux donc y jouer depuis
+                            n'importe où sur la planète alors trouves-toi un partenaire de jeu et plonges dans cet univers
+                            16 bits afin de résoudre les nombreux puzzles qui composent les deux mondes du jeu !
+                            <br> Le jeu est toujours en développement ce qui signifie que de nombreuses mises à jour viendront
+                            enrichir son gameplay et corriger les éventuels bugs.
+                        </p>
+                    </article>
+                    <article id="objectifs">
+                        <h2>Objectif du jeu</h2>
+                        <hr>
+                        <p class="text-justify">
+                            Ton/ta partenaire et toi incarnez
+                            <b>Fleur</b> (
+                            <img src="<%= baseUrl %>/site/fleur.png" alt="fleur"> ) et
+                            <b>Coli</b> (
+                            <img src="<%= baseUrl %>/site/coli.png" alt="coli"> ), deux légumes intrépides !
+                            <br> Ensemble vous allez devoir parcourir les nombreux niveaux et vous entre-aider afin de réussir
+                            à
+                            <b>rejoindre la sortie chacun de votre côté</b>. Pour chaque héros, la configuration des niveaux
+                            est différente
+                            <b>une bonne communication est indispensable</b> pour venir à bout des puzzles du jeu.
+                        </p>
+                    </article>
+                    <article id="controls">
+                        <h2>Commandes et manettes</h2>
+                        <hr>
+                        <p class="text-justify">
+                            Le jeu est jouable soit
+                            <b>à la manette</b>, soit
+                            <b>au clavier</b> et est très simple de prise en main :
+                            <ul>
+                                <li> [ <img src="<%= baseUrl %>/site/enter.png" alt="button action"> ] [ <img src="<%= baseUrl %>/site/btnA.png" alt="button action"> ] : Valider / Ramasser</li>
+                                <br>
+                                <li>[ <img src="<%= baseUrl %>/site/esc.png" alt="button cancel"> ] [ <img src="<%= baseUrl %>/site/btnB.png" alt="button cancel"> ] : Annuler / Retour</li>
+                                <br>
+                                <li>[ <img src="<%= baseUrl %>/site/keys.png" alt="button move"> ] : Se déplacer (tips: les touches [Z Q S D] fonctionnent aussi !)</li>
+                            </ul>
+                        </p>
+                    </article>
+                    <article id="create-room">
+                        <h2>Créer et rejoindre une partie</h2>
+                        <hr>
+                        <p class="text-justify">
+                            Chou Fleur et son bro Coli est un jeu qui se joue impérativement à deux ! Un joueur doit créer une partie en sélectionnant
+                            "créer une partie" dans le menu principal. Il obtiendra alors un code à six qu'il devra donner
+                            à son partenaire pour que celui-ci le retrouve.
+                            <figure>
+                                <img class="img-fluid" src="<%= baseUrl %>/site/join.png" alt="join a game">
+                            </figure>
+                            Une fois les deux joueurs retrouvés, la partie se lance automatiquement.
+                        </p>
+                    </article>
+                    <article id="selection">
+                        <h2>Choisir un niveau et un personnage</h2>
+                        <hr>
+                        <p class="text-justify">
+                            Une fois la partie lancée, le menu de sélection des niveaux s'affiche. A gauche se trouve la carte stellaire des mondes.
+                            Une fois, le monde choisi, tu peux choisir le niveau à droite.
+                            <figure>
+                                <img class="img-fluid" src="<%= baseUrl %>/site/niveau.png" alt="level">
+                            </figure>
+                            Une dernière étape est ensuite nécessaire avant que le niveau démarre, tu dois choisir ton personnage ! Assure toi de ne
+                            pas choisir le même héros que ton partenaire pour que le niveau se lance.
+                        </p>
+                    </article>
+                    <article id="levels">
+                        <h2>Déblocage des niveaux</h2>
+                        <hr>
+                        <p class="text-justify">
+                            A la fin de chaque niveau, l'écran de score affiche le ou les niveaux débloqués. La progression est enregistrée dans <b>ton navigateur web</b>.
+                            Les deux joueurs doivent avoir le niveau débloqué pour pouvoir le jouer. Arriveras-tu à faire un temps record ?
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer'); %>
+        <%- include('partials/scripts'); %>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+body, html {
+    background-color: #222;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'uni0553', Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+
+canvas {
+    margin: 0 auto;
+    cursor: url(https://s3.eu-west-3.amazonaws.com/choufleur-brocoli-assets/sprites/cursor.png), pointer !important;
+}
+
+@font-face {
+    font-family: 'uni0553';
+    src: url('../fonts/uni0553-webfont.eot');
+    src: url('../fonts/uni0553-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/uni0553-webfont.woff') format('woff'),
+         url('../fonts/uni0553-webfont.ttf') format('truetype'),
+         url('../fonts/uni0553-webfont.svg#propcouriersansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

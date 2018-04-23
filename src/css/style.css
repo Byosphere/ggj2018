@@ -1,25 +1,171 @@
-body, html {
-    background-color: #222;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'uni0553', Arial, Helvetica, sans-serif;
-    overflow: hidden;
-}
-
-canvas {
-    margin: 0 auto;
-    cursor: url(https://s3.eu-west-3.amazonaws.com/choufleur-brocoli-assets/sprites/cursor.png), pointer !important;
-}
-
 @font-face {
     font-family: 'uni0553';
-    src: url('fonts/uni0553-webfont.eot');
-    src: url('fonts/uni0553-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/uni0553-webfont.woff') format('woff'),
-         url('fonts/uni0553-webfont.ttf') format('truetype'),
-         url('fonts/uni0553-webfont.svg#propcouriersansregular') format('svg');
+    src: url('../fonts/uni0553-webfont.eot');
+    src: url('../fonts/uni0553-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/uni0553-webfont.woff') format('woff'),
+         url('../fonts/uni0553-webfont.ttf') format('truetype'),
+         url('../fonts/uni0553-webfont.svg#propcouriersansregular') format('svg');
     font-weight: normal;
     font-style: normal;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+}
+
+body {
+    background-color: #222;
+    font-family: 'Righteous', cursive;
+    color: #efefef;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.navbar-brand {
+    font-family: 'uni0553';
+}
+
+.navbar-nav li.active a.nav-link.text-primary,
+.navbar-nav a.nav-link.text-primary:hover {
+    color: #04f95e !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'uni0553';
+}
+
+h1 small {
+    display: block;
+}
+
+hr {
+    border-top-color: #ddd;
+}
+
+ul.navigation {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul.navigation a {
+    font-family: 'uni0553';
+    text-decoration: none;
+    color: #efefef;
+    font-size: 1.5em;
+}
+
+ul.navigation a:hover {
+    color: #00e756;
+}
+
+ul.navigation li+li {
+    margin-top: 10px;
+}
+
+.text-primary {
+    color: #00e756 !important;
+}
+
+.eightbit-btn {
+    display: inline-block;
+    background-color: #00e756;
+    color: #efefef;
+    font-family: 'uni0553';
+    font-size: 2.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: inset -4px -4px 0px 0px #00b241;
+    transition: none;
+    border-radius: 0;
+    position: relative;
+    border: none;
+    line-height: 1em;
+    padding-bottom: 15px;
+}
+
+.eightbit-btn:hover, .eightbit-btn:focus {
+    background-color: #00d84f;
+    box-shadow: inset -6px -6px 0px 0px #00b241;
+    color: #efefef;
+}
+
+.eightbit-btn:active {
+    box-shadow: inset 4px 4px 0px 0px #00b241;
+}
+
+.eightbit-btn:before,
+.eightbit-btn:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: content-box;
+}
+
+.eightbit-btn:before {
+    top: -6px;
+    left: 0;
+    border-top: 6px black solid;
+    border-bottom: 6px black solid;
+}
+
+.eightbit-btn:after {
+    top: 0;
+    left: -6px;
+    border-left: 6px black solid;
+    border-right: 6px black solid;
+}
+
+.small-separator {
+    width: 300px;
+    height: 25px;
+    border-top: 1px solid #555;
+}
+
+.social-btn:hover {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+b {
+    color: #00e756;
+}
+
+.navbar-brand img {
+    width: 40px;
+    height: 40px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.bg1 {
+    position: absolute;
+}
+
+.bg2 {
+    position: absolute;
+    right: 0;
+    transform: scaleX(-1)
 }
