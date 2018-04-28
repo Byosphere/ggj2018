@@ -24,7 +24,7 @@ class Door extends Phaser.Sprite {
         this.isAnimating = false;
         this.closeFrame = null;
         this.openFrame = null;
-        this.setColor(this.colorParam);
+        this._setColor(this.colorParam);
     }
 
     /**
@@ -32,7 +32,7 @@ class Door extends Phaser.Sprite {
      */
     openDoor() {
         if (this.body.enable) {
-            this.playSound();
+            this._playSound();
             this.animations.play(DOOR_ANIMATIONS[this.worldNum].OPEN.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {
@@ -52,22 +52,12 @@ class Door extends Phaser.Sprite {
         }
     }
 
-    playSound() {
-        switch (this.worldNum) {
-            case 1:
-                this.game.audioManager.playSound('door_leaves');
-                break;
-            case 2:
-                this.game.audioManager.playSound('door_laser');
-                break;
-        }
-    }
     /**
      * Déclenche la fermeture de la porte
      */
     closeDoor() {
         if (!this.body.enable) {
-            this.playSound();
+            this._playSound();
             this.animations.play(DOOR_ANIMATIONS[this.worldNum].CLOSE.NAME);
             this.isAnimating = true;
             this.animations.currentAnim.onComplete.add(() => {
@@ -88,10 +78,24 @@ class Door extends Phaser.Sprite {
     }
 
     /**
+     * joue le son de la porte
+     */
+    _playSound() {
+        switch (this.worldNum) {
+            case 1:
+                this.game.audioManager.playSound('door_leaves');
+                break;
+            case 2:
+                this.game.audioManager.playSound('door_laser');
+                break;
+        }
+    }
+
+    /**
      * Défini la couleur de la porte
      * @param {string} color 
      */
-    setColor(color) {
+    _setColor(color) {
         switch (color) {
             case GREEN:
                 this.animations.frame = DOOR_ANIMATIONS[this.worldNum].GREEN_OPEN.FRAMES[0];

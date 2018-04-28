@@ -17,7 +17,7 @@ class LevelSelect extends Phaser.State {
 		this.levelList = [];
 		this.finishedLevels = 0;
 		this.playerPosition = 0;
-		this.lockedWorld = 0;
+		this.lockedWorlds = [];
 		this.animCursor = false;
 		this.game.controlsManager.setCallbackContext(this);
 		this.game.serverManager.setCallbackContext(this);
@@ -49,18 +49,23 @@ class LevelSelect extends Phaser.State {
 			this.worldCursor.x = WORLDS_DATA[this.worldPos - 1].world_position.x;
 			this.worldCursor.y = WORLDS_DATA[this.worldPos - 1].world_position.y;
 
-			if (this.lockedWorld) {
-				this.lock = this.game.add.sprite(this.lockedWorld.world_position.x, this.lockedWorld.world_position.y - 15, 'lock');
-				this.lock.alpha = 0;
-				this.lockText = this.game.add.text(this.lock.x + 60, this.lock.y + 20, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
-				if (this.lockedWorld.to_unlock > 0) {
-					this.lockText.text = this.finishedLevels + '/' + this.lockedWorld.to_unlock;
-				} else {
-					this.lockText.text = 'coming soon...';
-				}
-				this.lockText.alpha = 0;
-				this.game.add.tween(this.lock).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
-				this.game.add.tween(this.lockText).to({ alpha: 0.7 }, 500, 'Quart.easeInOut', true, 1000);
+			if (this.lockedWorlds.length) {
+				this.worldLockedGroup = this.game.add.group();
+				this.worldLockedGroup.alpha = 0;
+				this.lockedWorlds.forEach(world => {
+					let lock = this.game.add.sprite(world.world_position.x, world.world_position.y - 15, 'lock');
+					this.worldLockedGroup.add(lock);
+					let lockText = this.game.add.text(lock.x + 60, lock.y + 20, '', { font: SMALL_FONT, fill: DEFAULT_COLOR });
+					if (world.to_unlock > 0) {
+						lockText.text = this.finishedLevels + '/' + world.to_unlock;
+					} else {
+						lockText.text = 'coming soon...';
+					}
+					lockText.alpha = 0.7;
+					this.worldLockedGroup.add(lockText);
+				});
+
+				this.game.add.tween(this.worldLockedGroup).to({ alpha: 1 }, 500, 'Quart.easeInOut', true, 1000);
 			}
 
 			let lastTween = this.game.add.tween(this.rightBands).to({ x: this.game.world.centerX - 64 }, 500, 'Quart.easeInOut', true, 1000);
@@ -202,16 +207,27 @@ class LevelSelect extends Phaser.State {
 		});
 	}
 
+	/**
+	 * Récupère les mondes locked et affiche le cadenas
+	 */
 	setLockedWorld() {
 		WORLDS_DATA.some(world => {
 			if (this.finishedLevels < world.to_unlock) {
-				this.lockedWorld = world;
-				return true;
+				this.lockedWorlds.push(world);
+
 			} else if (world.to_unlock === -1) {
-				this.lockedWorld = world;
-				return true;
+				this.lockedWorlds.push(world);
+
 			}
 		});
+	}
+
+	isLockedWorld(worldNum) {
+		let isLocked = false;
+		this.lockedWorlds.forEach(world => {
+			if (world.id === worldNum) isLocked = true;
+		});
+		return isLocked;
 	}
 
 	updateDisplay() {
@@ -365,7 +381,7 @@ class LevelSelect extends Phaser.State {
 
 	mouseOver(obj) {
 
-		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum && obj.worldNum != this.worldPos) {
+		if (this.state === this.WORLD_SELECT_STATE && obj.worldNum && obj.worldNum != this.worldPos && !this.isLockedWorld(obj.worldNum)) {
 
 			this.worldPos = obj.worldNum;
 			this.updateDisplay();
@@ -425,7 +441,7 @@ class LevelSelect extends Phaser.State {
 		switch (this.state) {
 
 			case this.WORLD_SELECT_STATE:
-				if (this.worldPos < this.lockedWorld.id - 1 && !this.animCursor) {
+				if (!this.isLockedWorld(this.worldPos + 1) && !this.animCursor) {
 					this.worldPos++;
 					this.updateDisplay();
 					this.game.audioManager.playSound('cursor');

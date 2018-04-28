@@ -41,6 +41,9 @@ class Character extends Phaser.Sprite {
 		this.addChild(this.feetCollide);
 	}
 
+	/**
+	 * retourne la zone de contact des pieds du héros
+	 */
 	feet() {
 		return this.feetCollide;
 	}
@@ -68,11 +71,21 @@ class Character extends Phaser.Sprite {
 		return this.carry;
 	}
 
+	/**
+	 * Lorsque le héros est proche d'un objet, prévenir l'objet
+	 * @param {Object} item 
+	 */
 	contactItem(item) {
-		this.itemOnContact = item;
-		item.onContact();
+		if(!this.itemOnContact) {
+			this.itemOnContact = item;
+			item.onContact();
+		}
 	}
 
+	/**
+	 * Lorsque l'oject proche ne l'est plus
+	 * @param {Objet} item 
+	 */
 	noContactItem(item) {
 		if (this.itemOnContact && this.itemOnContact.uid === item.uid) {
 			this.itemOnContact.outContact();
@@ -156,12 +169,20 @@ class Character extends Phaser.Sprite {
 		}, 2000);
 	}
 
+	/**
+	 * Déplace le héros dans la direction passée en paramètre (haut, bas, gauche, droite)
+	 * @param {string} direction 
+	 */
 	move(direction) {
 		this.inputs[direction] = true;
 		this.facing = direction;
 		this._animate();
 	}
 
+	/**
+	 * Stop le déplacement du héros en faisant face à une direction donnée (haut, bas, gauche, droite)
+	 * @param {string} direction 
+	 */
 	stop(direction) {
 		if (direction)
 			this.inputs[direction] = false;
@@ -170,6 +191,9 @@ class Character extends Phaser.Sprite {
 		this._animate();
 	}
 
+	/**
+	 * Méthode privée gérant les animations du déplacement du héros
+	 */
 	_animate() {
 		for (let index in this.inputs) {
 			if (this.inputs[index]) {

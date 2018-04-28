@@ -227,6 +227,7 @@ class Scene extends Phaser.State {
         this.game.physics.arcade.collide(this.character, this.layer);
         this.game.physics.arcade.collide(this.character, this.doorsGroup);
         this.game.physics.arcade.collide(this.character, this.rocksGroup);
+        this.game.physics.arcade.collide(this.character, this.holesGroup);
 
         this.game.physics.arcade.overlap(this.holesGroup, this.rocksGroup, (hole, rock) => {
             hole.sendItem(rock);

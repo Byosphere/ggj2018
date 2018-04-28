@@ -1,3 +1,6 @@
+/**
+ * Class de la boite de dialogue générique de confirmation
+ */
 class ConfirmDialog {
 
 	constructor(game, scene) {
@@ -35,6 +38,11 @@ class ConfirmDialog {
 		this.position = 'yes';
 	}
 
+	/**
+	 * Affiche une boite de dialogue
+	 * @param {string} text1 
+	 * @param {string} text2 
+	 */
 	display(text1, text2) {
 		if (text1)
 			this.confirmText.text = text1;
@@ -46,16 +54,9 @@ class ConfirmDialog {
 		this.game.controlsManager.setCallbackContext(this);
 	}
 
-	updateDisplay() {
-		if (this.position === 'yes') {
-			this.yes.alpha = 1;
-			this.no.alpha = 0.3;
-		} else if (this.position === 'no') {
-			this.no.alpha = 1;
-			this.yes.alpha = 0.3;
-		}
-	}
-
+	/**
+	 * retourne si la boite de dialogue est actuellement affichée
+	 */
 	isDisplayed() {
 		return this.displaying;
 	}
@@ -68,31 +69,34 @@ class ConfirmDialog {
 			this.position = 'no';
 			this.game.audioManager.playSound('cursor');
 		}
-		this.updateDisplay();
+		this._updateDisplay();
 	}
 
 	leftButtonReleased() {
 		this.position === 'yes' ? this.position = 'no' : this.position = 'yes';
 		this.game.audioManager.playSound('cursor');
-		this.updateDisplay();
+		this._updateDisplay();
 	}
 
 	rightButtonReleased() {
 		this.position === 'yes' ? this.position = 'no' : this.position = 'yes';
 		this.game.audioManager.playSound('cursor');
-		this.updateDisplay();
+		this._updateDisplay();
 	}
 
 	actionButtonReleased() {
-		this.action();
+		this._action();
 	}
 
 	mouseLeftClick(obj) {
 		if (obj.confirm)
-			this.action();
+			this._action();
 	}
 
-	action() {
+	/**
+	 * gère l'action réalisée 
+	 */
+	_action() {
 		if (this.position === 'yes') {
 			this.game.audioManager.playSound('bip');
 			this.game.serverManager.getSocket().emit('quit');
@@ -102,6 +106,19 @@ class ConfirmDialog {
 			this.displaying = false;
 			this.confirmDialog.visible = false;
 			this.game.controlsManager.setCallbackContext(this.scene);
+		}
+	}
+
+	/**
+	 * méthode privée de mise à jour de la séléction de confirmation
+	 */
+	_updateDisplay() {
+		if (this.position === 'yes') {
+			this.yes.alpha = 1;
+			this.no.alpha = 0.3;
+		} else if (this.position === 'no') {
+			this.no.alpha = 1;
+			this.yes.alpha = 0.3;
 		}
 	}
 }

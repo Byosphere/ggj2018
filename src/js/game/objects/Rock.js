@@ -55,14 +55,23 @@ class Rock extends Phaser.Sprite {
         return droppable;
     }
 
+    /**
+     * Action quand le héros est proche de la pierre
+     */
     onContact() {
         this.infoTextGroup.visible = true;
     }
 
+    /**
+     * Action quand le héros est loin de la pierre
+     */
     outContact() {
         this.infoTextGroup.visible = false;
     }
 
+    /**
+     * lors de la destruction de la pierre
+     */
     destroy() {
         this.infoTextGroup.destroy();
         super.destroy();
