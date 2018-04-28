@@ -99,6 +99,8 @@ class Parameters extends Phaser.State {
 		} else if (gameParam) {
 			if (gameParam.tempVal > gameParam.min) {
 				gameParam.tempVal--;
+			} else {
+				gameParam.tempVal = gameParam.max;
 			}
 			text.text = this.game.translate(gameParam.nameKey) + ' ' + gameParam.tempVal;
 		}
@@ -117,6 +119,8 @@ class Parameters extends Phaser.State {
 		} else if (gameParam) {
 			if (gameParam.tempVal < gameParam.max) {
 				gameParam.tempVal++;
+			} else {
+				gameParam.tempVal = gameParam.min;
 			}
 			text.text = this.game.translate(gameParam.nameKey) + ' ' + gameParam.tempVal;
 		}
