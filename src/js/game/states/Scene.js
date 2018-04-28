@@ -233,6 +233,10 @@ class Scene extends Phaser.State {
             hole.sendItem(rock);
         });
 
+        this.game.physics.arcade.overlap(this.holesGroup, this.rocksGroup, (hole, rock) => {
+            hole.sendItem(rock);
+        });
+
         if (!this.character.hasItem()) {
             for (let child in this.rocksGroup.children) {
                 if (this.game.physics.arcade.distanceBetween(this.character, this.rocksGroup.children[child], true, true) <= 80) {

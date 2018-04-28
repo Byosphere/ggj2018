@@ -76,7 +76,7 @@ var TEXT_FR = {
         '',
         'Forêt de Brocolande',
         'Porte de Saint Laser',
-        'Monde 3'
+        'monde 3'
     ],
     LEVEL: 'niveau',
     LEVEL_COMPLETED: 'Niveau terminé !',
