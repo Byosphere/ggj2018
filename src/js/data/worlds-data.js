@@ -25,6 +25,7 @@ const WORLDS_DATA = [
         id: 3,
         name: '',
         unlock_pattern: [],
+        backgroundColor: '#00000e',
         to_unlock: 16,
         world_position: { x: 338, y: 300 },
     },

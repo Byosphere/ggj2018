@@ -85,7 +85,7 @@ const TITLE_ANIMATIONS = {
 }
 
 const HOLE_ANIMATIONS = {
-    DEFAULT: { NAME: 'hole-default', FRAMES: [0, 1, 2, 3, 4, 5, 6, 7] }
+    DEFAULT: { NAME: 'hole-default', FRAMES: [0, 1, 2] }
 }
 
 const MENU_BACKGROUND_ANIMATIONS = {
