@@ -147,11 +147,11 @@ class Scene extends Phaser.State {
             this.map.addTilesetImage('decor', 'tileset-1');
         }
 
-        this.layer = this.map.createLayer('Walls');
-        this.layer.resizeWorld();
-
         this.floor = this.map.createLayer('Floor');
         this.floor.resizeWorld();
+
+        this.layer = this.map.createLayer('Walls');
+        this.layer.resizeWorld();
         
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();

@@ -211,13 +211,13 @@ class LevelSelect extends Phaser.State {
 	 * Récupère les mondes locked et affiche le cadenas
 	 */
 	setLockedWorld() {
+		if (this.game.parameters.debugMode.value) return;
 		WORLDS_DATA.some(world => {
 			if (this.finishedLevels < world.to_unlock) {
 				this.lockedWorlds.push(world);
 
 			} else if (world.to_unlock === -1) {
 				this.lockedWorlds.push(world);
-
 			}
 		});
 	}
