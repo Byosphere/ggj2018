@@ -76,7 +76,7 @@ class Character extends Phaser.Sprite {
 	 * @param {Object} item 
 	 */
 	contactItem(item) {
-		if(!this.itemOnContact) {
+		if (!this.itemOnContact) {
 			this.itemOnContact = item;
 			item.onContact();
 		}
@@ -98,6 +98,7 @@ class Character extends Phaser.Sprite {
 	 * @param {Sprite} item
 	 */
 	catchItem() {
+		if (!this.itemOnContact.canBeTaken()) return;
 		this.carry = this.itemOnContact;
 		this.noContactItem(this.carry);
 		this.itemOnContact = null;

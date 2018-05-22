@@ -152,7 +152,7 @@ class Scene extends Phaser.State {
 
         this.layer = this.map.createLayer('Walls');
         this.layer.resizeWorld();
-        
+
         this.background = this.map.createLayer('Background');
         this.background.resizeWorld();
 
@@ -253,7 +253,9 @@ class Scene extends Phaser.State {
             this.doorsGroup.forEach(door => {
                 this.game.debug.body(door);
             });
-
+            this.holesGroup.forEach(hole => {
+                this.game.debug.body(hole);
+            });
             this.rocksGroup.forEach(rock => {
                 this.game.debug.body(rock);
             });
@@ -261,7 +263,6 @@ class Scene extends Phaser.State {
             this.buttonsGroup.forEach(button => {
                 this.game.debug.body(button);
             });
-
         }
 
         if (this.game.physics.arcade.overlap(this.character, this.doorsGroup)) {
@@ -375,7 +376,8 @@ class Scene extends Phaser.State {
             case 'rock':
                 for (let i = 0; i < this.holesGroup.children.length; i++) {
                     if (this.holesGroup.children[i].linkedHoleId === itemData.id) {
-                        this.rocksGroup.add(new Rock(this.game, { x: this.holesGroup.children[i].x, y: this.holesGroup.children[i].y, invisible: false }));
+                        let rock = new Rock(this.game, { x: this.holesGroup.children[i].x, y: this.holesGroup.children[i].y, invisible: false });
+                        this.rocksGroup.add(rock);
                         rock.alpha = 0;
                         let tween = this.game.add.tween(rock).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0);
                     }

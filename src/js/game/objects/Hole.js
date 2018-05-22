@@ -17,6 +17,7 @@ class Hole extends Phaser.Sprite {
 	 */
 	sendItem(item) {
 		item.body.enable = false;
+		item.available = false;
 		let tween = this.game.add.tween(item).to({ alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 0);
 		tween.onComplete.add(() => {
 			item.destroy();

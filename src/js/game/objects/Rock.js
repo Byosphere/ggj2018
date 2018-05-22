@@ -14,6 +14,7 @@ class Rock extends Phaser.Sprite {
         this.weight = 100;
         this.skin = 'STONE';
         this.infoTextGroup = this.game.add.group();
+        this.available = true;
 
         let button = this.game.add.sprite(0, 0, this.game.controlsManager.getSpriteName(ACTION));
         button.animations.add('default', [0, 1, 2], 6, true).play();
@@ -33,6 +34,10 @@ class Rock extends Phaser.Sprite {
         this.uid = Math.floor(Date.now() + (Math.random() * 10));
     }
 
+
+    canBeTaken() {
+        return this.available;
+    }
     /**
      * Vérifie si la pierre peut être déposée à l'endroit voulu
      * @param {Object} scene 

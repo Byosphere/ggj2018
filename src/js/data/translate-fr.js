@@ -70,13 +70,23 @@ var TEXT_FR = {
         'On the rocks',
         'Pots de Fleur',
         'Bro Coli Itératif',
-        'Physique des solides'
+        'Physique des solides',
+        'Bête comme chou',
+        'Faire son trou',
+        'Le passage se créé',
+        'Trou de mémoire ?',
+        'Passage à niveaux',
+        'Fleur bleu et torti-Coli',
+        'Bouche-trou',
+        ' - ',
+        'Passage à vide',
+        'Un trou noir troublant'
     ],
     WORLD_NAMES: [
         '',
         'Forêt de Brocolande',
         'Porte de Saint Laser',
-        'monde 3'
+        'Troisième dimension'
     ],
     LEVEL: 'niveau',
     LEVEL_COMPLETED: 'Niveau terminé !',
