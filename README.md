@@ -35,6 +35,9 @@ haut, bas, gauche, droite : déplacer le personnage.
 
 Il suffit de se placer sur un interrupteur pour l'activer.
 
+### lien du jeu
+http://choufleur-brocoli.herokuapp.com/
+
 ### How to contribute
 
 **TODO**
