@@ -1,8 +1,8 @@
-const electron = require('electron')
+const electron = require('electron');
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path')
 const url = require('url')
@@ -17,7 +17,7 @@ function createWindow() {
 	mainWindow.setMenu(null);
 	// and load the index.html of the app.
 	mainWindow.loadURL(url.format({
-		pathname: path.join(__dirname + '/public', 'index.html'),
+		pathname: path.join(__dirname + '/public', 'game.html'),
 		protocol: 'file:',
 		slashes: true
 	}));
